@@ -142,3 +142,82 @@ function getBooks() {
 function getBook(id) {
   return data.find((d) => d.id === id);
 }
+
+const books = getBooks();
+
+// const titles = books.map((book) => book.title);
+// titles;
+
+// const essentials = books.map((book) => ({
+//   title: book.title,
+//   author: book.author,
+// }));
+// essentials;
+
+// const gt500 = books
+//   .filter((book) => book.pages > 500)
+//   .map((book) => ({ title: book.title, pages: book.pages }));
+// gt500;
+
+// const adventureBooks = books
+//   .filter((book) => book.genres.includes("adventure"))
+//   .map((book) => ({ title: book.title, genre: book.genres.join(" ,") }));
+// adventureBooks;
+
+// const allPages = books.reduce((acc, book) => {
+//   acc.push(book.publicationDate);
+//   return acc;
+// }, []);
+// allPages;
+
+// const allReviews = books.reduce((sum, book) => {
+//   const count =
+//     book.reviews.goodreads.ratingsCount ??
+//     0 + book.reviews.librarything.ratingsCount ??
+//     0;
+//   sum = sum + count;
+//   return sum;
+// }, 0);
+// allReviews;
+
+// const x = 0 || "foo";
+// const y = 0 ?? "bar";
+// x;
+// y;
+
+// const x = [3, 7, 5, 1, 9, 8];
+// const sorted = x.sort((curV, nextV) => curV - nextV);
+// sorted;
+
+// const sortedByPages = books
+//   .slice()
+//   .sort((a, b) => b.pages - a.pages)
+//   .map((book) => [book.title, book.pages]);
+// sortedByPages;
+
+// const newBook = {
+//   id: 6,
+//   title: "Fuck",
+//   author: "You",
+// };
+
+// const booksNew = [...books, newBook];
+
+// const booksAfterDelete = booksNew.filter((book) => book.id !== 1);
+
+// const booksAfterUpdate = booksAfterDelete.map((book) => {
+//   if (book.id === 6) book.pages = 666;
+//   return book;
+// });
+// booksAfterUpdate;
+
+// fetch("https://jsonplaceholder.typicode.com/todos/")
+//   .then((res) => res.json())
+//   .then((data) => console.log(data));
+
+async function getTodos() {
+  const resp = await fetch("https://jsonplaceholder.typicode.com/todos/");
+  const data = await resp.json();
+  console.log(data.slice(0, 5));
+}
+getTodos();
