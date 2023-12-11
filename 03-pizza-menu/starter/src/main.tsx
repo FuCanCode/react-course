@@ -51,20 +51,58 @@ const pizzaData = [
 function App() {
   return (
     <div>
-      <h1>Hello Hommelahommela</h1>
-      <Pizza />
-      <Pizza />
-      <Pizza />
+      <Header />
+      <Menu />
+      <Footer />
     </div>
   );
 }
 
-function Pizza() {
+function Header() {
   return (
-    <div>
-      <img src="./pizzas/prosciutto.jpg" alt="Pizza Prosciutto" />
-      <h2>Pizza Prosciutto</h2>
-      <p>Tomato, mozarella, ham, aragula, and burrata cheese</p>
+    <div className="header">
+      <h1>massimo's deep clone</h1>
+    </div>
+  );
+}
+
+function Menu() {
+  return (
+    <div className="menu">
+      <h2>our menu</h2>
+      <p>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis
+        illum quia necessitatibus.
+      </p>
+      <div className="pizzas">
+        <Pizza />
+      </div>
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      {new Date().toLocaleString("de", { hour: "2-digit", minute: "2-digit" })}{" "}
+      We are currently open!
+    </footer>
+    // return React.createElement(
+    //   "footer",
+    //   { className: "footer" },
+    //   "We are currently open!"
+  );
+}
+
+function Pizza() {
+  const testPizza = pizzaData[0];
+  return (
+    <div className="pizza">
+      <img src={testPizza.photoName} alt={testPizza.name} />
+      <div>
+        <h3>{testPizza.name}</h3>
+        <p>{testPizza.ingredients}</p>
+      </div>
     </div>
   );
 }
