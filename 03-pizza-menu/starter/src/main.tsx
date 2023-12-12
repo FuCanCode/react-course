@@ -50,7 +50,7 @@ const pizzaData = [
 
 function App() {
   return (
-    <div>
+    <div className="container">
       <Header />
       <Menu />
       <Footer />
@@ -60,15 +60,15 @@ function App() {
 
 function Header() {
   return (
-    <div className="header">
+    <header className="header">
       <h1>massimo's deep clone</h1>
-    </div>
+    </header>
   );
 }
 
 function Menu() {
   return (
-    <div className="menu">
+    <main className="menu">
       <h2>our menu</h2>
       <p>
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis
@@ -77,15 +77,23 @@ function Menu() {
       <div className="pizzas">
         <Pizza />
       </div>
-    </div>
+    </main>
   );
 }
 
 function Footer() {
+  const hour = new Date().getHours();
+  const openHour = 12;
+  const closeHour = 22;
+  const openOrClose = hour >= openHour && hour <= closeHour ? "open" : "close";
+
   return (
-    <footer className="footer">
-      {new Date().toLocaleString("de", { hour: "2-digit", minute: "2-digit" })}{" "}
-      We are currently open!
+    // use camelCase notation for inline css
+    <footer
+      className="footer"
+      style={{ color: "orangered", fontSize: "large" }}
+    >
+      {hour} We are currently {openOrClose}!
     </footer>
     // return React.createElement(
     //   "footer",
