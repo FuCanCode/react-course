@@ -1,9 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// import App from './App.tsx'
 import "./index.css";
 
-const pizzaData = [
+interface IPizza {
+  name: string;
+  ingredients: string;
+  price: number | string;
+  photoName: string;
+  soldOut?: boolean | string;
+}
+
+const pizzaData: IPizza[] = [
   {
     name: "Focaccia",
     ingredients: "Bread with italian olive oil and rosemary",
@@ -69,15 +76,38 @@ function Header() {
 function Menu() {
   return (
     <main className="menu">
-      <h2>our menu</h2>
+      <h2>our great menu</h2>
       <p>
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis
         illum quia necessitatibus.
       </p>
       <div className="pizzas">
-        <Pizza />
+        {pizzaData.map((pizza) => {
+          return (
+            <Pizza
+              name={pizza.name}
+              ingredients={pizza.ingredients}
+              photoName={pizza.photoName}
+              price={!pizza.soldOut ? pizza.price : "Sold Out :("}
+            />
+          );
+        })}
       </div>
     </main>
+  );
+}
+
+function Pizza(props: IPizza) {
+  console.log(props);
+  return (
+    <div className="pizza">
+      <img src={props.photoName} alt={props.name} />
+      <div>
+        <h3>{props.name}</h3>
+        <p>{props.ingredients}</p>
+        <span>{props.price.toString()}</span>
+      </div>
+    </div>
   );
 }
 
@@ -99,19 +129,6 @@ function Footer() {
     //   "footer",
     //   { className: "footer" },
     //   "We are currently open!"
-  );
-}
-
-function Pizza() {
-  const testPizza = pizzaData[0];
-  return (
-    <div className="pizza">
-      <img src={testPizza.photoName} alt={testPizza.name} />
-      <div>
-        <h3>{testPizza.name}</h3>
-        <p>{testPizza.ingredients}</p>
-      </div>
-    </div>
   );
 }
 
