@@ -5,9 +5,9 @@ import "./index.css";
 interface IPizza {
   name: string;
   ingredients: string;
-  price: number | string;
+  price: number;
   photoName: string;
-  soldOut?: boolean | string;
+  soldOut: boolean;
 }
 
 const pizzaData: IPizza[] = [
@@ -74,6 +74,8 @@ function Header() {
 }
 
 function Menu() {
+  const pizzaDataEmpty = [];
+
   return (
     <main className="menu">
       <h2>our great menu</h2>
@@ -81,49 +83,47 @@ function Menu() {
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis
         illum quia necessitatibus.
       </p>
-      <div className="pizzas">
-        {pizzaData.map((pizza) => {
-          return (
-            <Pizza
-              name={pizza.name}
-              ingredients={pizza.ingredients}
-              photoName={pizza.photoName}
-              price={!pizza.soldOut ? pizza.price : "Sold Out :("}
-            />
-          );
-        })}
-      </div>
+      {(pizzaData.length > 0 && (
+        <ul className="pizzas">
+          {pizzaData.map((pizza: IPizza) => {
+            return <Pizza pizzaObj={pizza} key={pizza.name} />;
+          })}
+        </ul>
+      )) || <p>Sorry Pizza is out!</p>}
     </main>
   );
 }
 
-function Pizza(props: IPizza) {
-  console.log(props);
+function Pizza(props: { pizzaObj: IPizza }) {
   return (
-    <div className="pizza">
-      <img src={props.photoName} alt={props.name} />
+    <li className={`pizza ${props.pizzaObj.soldOut && "sold-out"}`}>
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price.toString()}</span>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>
+          {(props.pizzaObj.soldOut && "SOLD OUT") || props.pizzaObj.price}
+        </span>
       </div>
-    </div>
+    </li>
   );
 }
 
 function Footer() {
-  const hour = new Date().getHours();
+  const hour = 13; //new Date().getHours();
   const openHour = 12;
   const closeHour = 22;
-  const openOrClose = hour >= openHour && hour <= closeHour ? "open" : "close";
+  const isOpen = hour >= openHour && hour <= closeHour;
 
   return (
     // use camelCase notation for inline css
-    <footer
-      className="footer"
-      style={{ color: "orangered", fontSize: "large" }}
-    >
-      {hour} We are currently {openOrClose}!
+    <footer className="footer">
+      {isOpen && (
+        <div className="order">
+          <p>{`We are currently open until ${closeHour}:00!`}</p>
+          <button className="btn">Order now</button>
+        </div>
+      )}
     </footer>
     // return React.createElement(
     //   "footer",
