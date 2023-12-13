@@ -74,7 +74,7 @@ function Header() {
 }
 
 function Menu() {
-  const pizzaDataEmpty = [];
+  // const pizzaDataEmpty = [];
 
   return (
     <main className="menu">
@@ -83,18 +83,22 @@ function Menu() {
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis
         illum quia necessitatibus.
       </p>
-      {(pizzaData.length > 0 && (
+      {pizzaData.length > 0 ? (
         <ul className="pizzas">
           {pizzaData.map((pizza: IPizza) => {
             return <Pizza pizzaObj={pizza} key={pizza.name} />;
           })}
         </ul>
-      )) || <p>Sorry Pizza is out!</p>}
+      ) : (
+        <p>Sorry Pizza is out!</p>
+      )}
     </main>
   );
 }
 
 function Pizza(props: { pizzaObj: IPizza }) {
+  if (props.pizzaObj.soldOut) return; // return null actually
+
   return (
     <li className={`pizza ${props.pizzaObj.soldOut && "sold-out"}`}>
       <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
@@ -110,20 +114,24 @@ function Pizza(props: { pizzaObj: IPizza }) {
 }
 
 function Footer() {
-  const hour = 13; //new Date().getHours();
+  const hour = 11; //new Date().getHours();
   const openHour = 12;
   const closeHour = 22;
   const isOpen = hour >= openHour && hour <= closeHour;
 
+  if (!isOpen) {
+    return (
+      <p>
+        Sorry we're closed. Please come back between {openHour}:00 and{" "}
+        {closeHour}
+        :00.
+      </p>
+    );
+  }
+
   return (
-    // use camelCase notation for inline css
     <footer className="footer">
-      {isOpen && (
-        <div className="order">
-          <p>{`We are currently open until ${closeHour}:00!`}</p>
-          <button className="btn">Order now</button>
-        </div>
-      )}
+      {isOpen && <Order {...{ openHour, closeHour }} />}
     </footer>
     // return React.createElement(
     //   "footer",
@@ -132,7 +140,17 @@ function Footer() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+function Order(props: { openHour: number; closeHour: number }) {
+  return (
+    <div className="order">
+      <p>{`We are currently open until ${props.closeHour}:00!`}</p>
+      <div className="btn">Order now!</div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root")!);
+root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
