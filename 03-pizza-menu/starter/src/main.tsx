@@ -79,16 +79,20 @@ function Menu() {
   return (
     <main className="menu">
       <h2>our great menu</h2>
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis
-        illum quia necessitatibus.
-      </p>
+
       {pizzaData.length > 0 ? (
-        <ul className="pizzas">
-          {pizzaData.map((pizza: IPizza) => {
-            return <Pizza pizzaObj={pizza} key={pizza.name} />;
-          })}
-        </ul>
+        <React.Fragment key="keyIfNeeded">
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+            Perspiciatis illum quia necessitatibus.
+          </p>
+
+          <ul className="pizzas">
+            {pizzaData.map((pizza: IPizza) => {
+              return <Pizza pizzaObj={pizza} key={pizza.name} />;
+            })}
+          </ul>
+        </React.Fragment>
       ) : (
         <p>Sorry Pizza is out!</p>
       )}
@@ -96,25 +100,25 @@ function Menu() {
   );
 }
 
-function Pizza(props: { pizzaObj: IPizza }) {
-  if (props.pizzaObj.soldOut) return; // return null actually
+function Pizza({ pizzaObj }: { pizzaObj: IPizza }) {
+  const { soldOut, name, photoName, ingredients, price } = pizzaObj;
+
+  if (soldOut) return; // return null actually
 
   return (
-    <li className={`pizza ${props.pizzaObj.soldOut && "sold-out"}`}>
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+    <li className={`pizza ${soldOut && "sold-out"}`}>
+      <img src={photoName} alt={name} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>
-          {(props.pizzaObj.soldOut && "SOLD OUT") || props.pizzaObj.price}
-        </span>
+        <h3>{name}</h3>
+        <p>{ingredients}</p>
+        <span>{(soldOut && "SOLD OUT") || price}</span>
       </div>
     </li>
   );
 }
 
 function Footer() {
-  const hour = 11; //new Date().getHours();
+  const hour = 13; //new Date().getHours();
   const openHour = 12;
   const closeHour = 22;
   const isOpen = hour >= openHour && hour <= closeHour;
@@ -130,8 +134,9 @@ function Footer() {
   }
 
   return (
+    // <footer className="footer">{isOpen && <Order {...{ closeHour, openhour }} />}</footer>
     <footer className="footer">
-      {isOpen && <Order {...{ openHour, closeHour }} />}
+      {isOpen && <Order openHour={openHour} closeHour={closeHour} />}
     </footer>
     // return React.createElement(
     //   "footer",
@@ -140,10 +145,11 @@ function Footer() {
   );
 }
 
-function Order(props: { openHour: number; closeHour: number }) {
+// prettier-ignore
+function Order({ openHour, closeHour, }: { openHour: number; closeHour: number;}) {
   return (
     <div className="order">
-      <p>{`We are currently open until ${props.closeHour}:00!`}</p>
+      <p>{`We are currently open from ${openHour}:00 to ${closeHour}:00!`}</p>
       <div className="btn">Order now!</div>
     </div>
   );
