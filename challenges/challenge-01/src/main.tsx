@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { skills, ISkill } from "./skills";
 import "./index.css";
 
 function App() {
@@ -33,24 +34,28 @@ function Intro() {
 function SkillList() {
   return (
     <div className="skill-list">
-      <Skill skill="HTML5" emoji="👍" backgroundColor="orangered" />
+      {skills.map((skill) => {
+        return <Skill {...skill} key={skill.skill} />;
+      })}
+
+      {/* <Skill skill="HTML5" emoji="👍" backgroundColor="orangered" />
       <Skill skill="CSS3" emoji="👍" backgroundColor="blue" />
       <Skill skill="JavaScript" emoji="💪🏾" backgroundColor="yellow" />
-      <Skill skill="React" emoji="🫳" backgroundColor="lightskyblue" />
+      <Skill skill="React" emoji="🫳" backgroundColor="lightskyblue" /> */}
     </div>
   );
 }
 
-interface ISkillProps {
-  skill: string;
-  emoji: string;
-  backgroundColor: string;
-}
-
-function Skill(props: ISkillProps) {
+function Skill({ skill, level, color }: ISkill) {
   return (
-    <div className="skill" style={{ backgroundColor: props.backgroundColor }}>
-      {props.skill} {props.emoji}
+    <div className="skill" style={{ backgroundColor: color }}>
+      <span>{skill}</span>
+      <span>
+        {level === "noob" && "🫳"}
+        {level === "intermediate" && "👍"}
+        {level === "advanced" && "💪🏾"}
+        {level === "expert" && "🧑‍💻"}
+      </span>
     </div>
   );
 }
