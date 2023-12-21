@@ -97,3 +97,41 @@ h3 {
 .close:hover {
   color: #7950f2;
 }
+
+/* Wild grid experiments */
+.color {
+  background-color: hsl(17, 78%, 51%);
+}
+
+.grid-play {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.item {
+  /* margin: 1.5rem; */
+}
+
+.item-1 {
+  grid-column: span 3;
+  height: 3rem;
+}
+
+.item-2 {
+  grid-column: span 2;
+  /* height: 4rem; */
+}
+
+.item-3 {
+  grid-column: span 2;
+  grid-row: 3/4;
+  height: 7rem;
+}
+
+.item-4 {
+  grid-column: 3/4;
+  grid-row: 2;
+  height: 11rem;
+}
