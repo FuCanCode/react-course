@@ -3,7 +3,7 @@ import setRdmColor from "./rdmColor";
 
 export default function Item4() {
   const [bgc, setBgc] = useState({ backgroundColor: "hsl(17, 78%, 51%)" });
-  setInterval(() => {
+  setTimeout(() => {
     setBgc(() => setRdmColor());
   }, 3000);
   return (
