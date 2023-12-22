@@ -10,6 +10,8 @@ function App() {
   return (
     <>
       <Steps />
+      <Steps />
+      <Steps />
       <div className="grid-play">
         <Item1 />
         <Item2 />
