@@ -7,8 +7,9 @@ export default function Counter() {
   const today = new Date();
   const calcDate = new Date(today.getTime() + 24 * count * 60 * 60 * 1000);
 
-  const printMessage = function (): string {
+  /* const printMessage = function (): string {
     let firstPart: string = "";
+    const datePart: string = calcDate.toDateString();
 
     switch (true) {
       case count < -1:
@@ -32,44 +33,33 @@ export default function Counter() {
         break;
     }
 
-    return `${firstPart} ${calcDate.toLocaleDateString("de-de")}`;
-  };
+    return `${firstPart} ${datePart}`;
+  }; */
 
   return (
     <>
       <div className="controls">
-        <button
-          className="decrease"
-          onClick={() => setSteps((step) => (step > 1 ? step - 1 : 1))}
-        >
+        <button onClick={() => setSteps((step) => (step > 1 ? step - 1 : 1))}>
           -
         </button>
-        <p className="text">{`Steps: ${steps}`}</p>
-        <button
-          className="increase"
-          onClick={() => setSteps((step) => step + 1)}
-        >
-          +
-        </button>
+        <p>{`Steps: ${steps}`}</p>
+        <button onClick={() => setSteps((step) => step + 1)}>+</button>
       </div>
 
       <div className="controls">
-        <button
-          className="decrease"
-          onClick={() => setCount((count) => count - steps)}
-        >
-          -
-        </button>
-        <p className="text">{`Counter: ${count}`}</p>
-        <button
-          className="increase"
-          onClick={() => setCount((count) => count + steps)}
-        >
-          +
-        </button>
+        <button onClick={() => setCount((count) => count - steps)}>-</button>
+        <p>{`Counter: ${count}`}</p>
+        <button onClick={() => setCount((count) => count + steps)}>+</button>
       </div>
 
-      <p className="message">{printMessage()}</p>
+      <p className="message">
+        {count < -1 && `${Math.abs(count)} days ago was `}
+        {count === -1 && `Yesterday was `}
+        {count === 0 && `Today is `}
+        {count === 1 && `Tomorrow is `}
+        {count > 1 && `In ${Math.abs(count)} days will be `}
+        {calcDate.toDateString() + "."}
+      </p>
     </>
   );
 }
