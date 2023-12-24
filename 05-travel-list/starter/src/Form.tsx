@@ -8,11 +8,17 @@ export default function Form() {
   return (
     <div className="add-form">
       <h3>What do you need for your trip?</h3>
+
       <select>
         {options.map((opt) => (
-          <option value={opt}>{opt}</option>
+          <option value={opt} key={opt}>
+            {opt}
+          </option>
         ))}
       </select>
+
+      <input type="text" placeholder="Item..." />
+      <button>add</button>
     </div>
   );
 }
