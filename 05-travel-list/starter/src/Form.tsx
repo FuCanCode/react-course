@@ -1,3 +1,5 @@
+import { globalState } from "./App";
+
 export default function Form() {
   const numOptions = 10;
   const options = [];
@@ -5,8 +7,18 @@ export default function Form() {
     options.push(index + 1);
   }
 
+  function addItem(formData) {
+    const x = formData.get("item");
+    alert(x);
+
+    // if (!descr) return alert("Please enter a Description");
+
+    // add item to state
+    // globalState.addItem(qty, descr);
+  }
+
   return (
-    <div className="add-form">
+    <form action={addItem} className="add-form">
       <h3>What do you need for your trip?</h3>
 
       <select>
@@ -17,8 +29,8 @@ export default function Form() {
         ))}
       </select>
 
-      <input type="text" placeholder="Item..." />
-      <button>add</button>
-    </div>
+      <input name="item" type="text" placeholder="Item..." />
+      <button type="submit">add</button>
+    </form>
   );
 }

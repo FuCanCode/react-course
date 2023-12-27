@@ -1,4 +1,3 @@
-import { items } from "./itemsData";
 import Item from "./Item";
 import { globalState } from "./App";
 
