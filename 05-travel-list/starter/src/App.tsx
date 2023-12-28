@@ -10,6 +10,7 @@ export const globalState = new ItemList(items);
 function App() {
   const [item, setItem] = useState("");
   const [qty, setQty] = useState(1);
+  const [list, setList] = useState(globalState.getList());
 
   // Handler functions
   function submitHandler(ev: React.FormEvent<HTMLFormElement>) {
@@ -37,7 +38,7 @@ function App() {
     <>
       <Heading />
       <Form {...{ submitHandler, qty, item, qtyHandler, itemHandler }} />
-      <List />
+      <List {...{ list }} />
     </>
   );
 }

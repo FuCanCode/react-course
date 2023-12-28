@@ -1,15 +1,12 @@
 import Item from "./Item";
-import { globalState } from "./App";
-import { useState } from "react";
+import { iItem } from "./itemsData";
 
-export default function List() {
-  const [list, setList] = useState(globalState.getList());
-
+export default function List({ list }: { list: iItem[] }) {
   return (
     <div className="list">
       <ul>
         {list.map((item) => (
-          <Item {...item} />
+          <Item {...item} key={item.id} />
         ))}
       </ul>
     </div>

@@ -19,7 +19,7 @@ export default function Item(item: iItem) {
         name="isPacked"
         id={String(item.id)}
         checked={checked ? true : false}
-        onClick={setPackStatus}
+        onChange={setPackStatus}
       />
       <span>{item.quantity}</span>
       <span>{item.description}</span>
