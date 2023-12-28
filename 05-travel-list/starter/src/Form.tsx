@@ -1,11 +1,15 @@
-import { globalState } from "./App";
-
 export default function Form({
   submitHandler,
   qty,
   item,
   qtyHandler,
   itemHandler,
+}: {
+  submitHandler: (ev: React.FormEvent<HTMLFormElement>) => void;
+  qty: number;
+  item: string;
+  qtyHandler: (ev: React.ChangeEvent<HTMLSelectElement>) => void;
+  itemHandler: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   // Select options
   const numOptions = 10;

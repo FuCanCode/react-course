@@ -11,6 +11,7 @@ function App() {
   const [item, setItem] = useState("");
   const [qty, setQty] = useState(1);
 
+  // Handler functions
   function submitHandler(ev: React.FormEvent<HTMLFormElement>) {
     ev.preventDefault();
 
