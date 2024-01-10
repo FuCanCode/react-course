@@ -1,28 +1,37 @@
+import { useState } from "react";
+
+// Select options
+const numOptions = 10;
+const options: number[] = [];
+for (let index = 0; index < numOptions; index++) {
+  options.push(index + 1);
+}
+
 export default function Form({
   submitHandler,
-  qty,
-  item,
-  qtyHandler,
-  itemHandler,
 }: {
-  submitHandler: (ev: React.FormEvent<HTMLFormElement>) => void;
-  qty: number;
-  item: string;
-  qtyHandler: (ev: React.ChangeEvent<HTMLSelectElement>) => void;
-  itemHandler: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  submitHandler(
+    e: React.FormEvent<HTMLFormElement>,
+    name: string,
+    quantity: number
+  ): void;
 }) {
-  // Select options
-  const numOptions = 10;
-  const options = [];
-  for (let index = 0; index < numOptions; index++) {
-    options.push(index + 1);
+  // state
+  const [qty, setQty] = useState(1);
+  const [input, setInput] = useState("");
+
+  // handler
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    submitHandler(e, input, qty);
+    setInput("");
+    setQty(1);
   }
 
   return (
-    <form className="add-form" onSubmit={submitHandler}>
+    <form className="add-form" onSubmit={onSubmit}>
       <h3>What do you need for your trip?</h3>
 
-      <select value={qty} onChange={qtyHandler}>
+      <select value={qty} onChange={(e) => setQty(Number(e.target.value))}>
         {options.map((opt) => (
           <option value={opt} key={opt}>
             {opt}
@@ -34,10 +43,12 @@ export default function Form({
         name="item"
         type="text"
         placeholder="Item..."
-        value={item}
-        onChange={itemHandler}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
       />
-      <button type="submit">add</button>
+      <button type="submit" disabled={input.length === 0}>
+        add
+      </button>
     </form>
   );
 }

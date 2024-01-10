@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { iItem } from "./itemsData";
-import { globalState } from "./App";
 
 export default function Item(item: iItem) {
   const [checked, setChecked] = useState(item.packed);
@@ -10,9 +9,6 @@ export default function Item(item: iItem) {
 
   const setPackStatus = function () {
     setChecked(() => (checked ? false : true));
-
-    globalState.togglePackStatus(item.id);
-    console.log(globalState);
   };
 
   return (

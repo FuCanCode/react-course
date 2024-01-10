@@ -2,45 +2,40 @@ import { useState } from "react";
 import Form from "./Form";
 import Heading from "./Heading";
 import List from "./List";
-import { ItemList } from "./ClassItemList";
 import { items } from "./itemsData";
 
-export const globalState = new ItemList(items);
+const initialList = items;
 
 function App() {
-  const [item, setItem] = useState("");
-  const [qty, setQty] = useState(1);
-  const [list, setList] = useState(globalState.getList());
+  const [list, setList] = useState(initialList);
 
   /////////////////////
   // Handler functions
-  function submitHandler(ev: React.FormEvent<HTMLFormElement>) {
-    ev.preventDefault();
+  function submitHandler(
+    e: React.FormEvent<HTMLFormElement>,
+    name: string,
+    quantity: number
+  ) {
+    e.preventDefault();
 
-    if (!item) return alert("Please enter a Description!");
+    setList([
+      {
+        id: crypto.randomUUID(),
+        description: name,
+        quantity: quantity,
+        packed: false,
+      },
+      ...list,
+    ]);
 
-    // add item to state
-    globalState.addItem(qty, item);
-
-    // at the end clear input
-    setItem(() => "");
-    setQty(() => 1);
     console.log(list);
-  }
-
-  function qtyHandler(ev: React.ChangeEvent<HTMLSelectElement>) {
-    setQty(Number(ev.target.value));
-  }
-
-  function itemHandler(ev: React.ChangeEvent<HTMLInputElement>) {
-    setItem(ev.target.value);
   }
 
   return (
     <>
       <Heading />
-      <Form {...{ submitHandler, qty, item, qtyHandler, itemHandler }} />
-      <List {...{ list }} />
+      <Form submitHandler={submitHandler} />
+      <List list={list} />
     </>
   );
 }
