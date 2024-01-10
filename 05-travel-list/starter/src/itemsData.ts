@@ -1,11 +1,22 @@
 export interface iItem {
-  id: number;
+  id: string;
   description: string;
   quantity: number;
   packed: boolean;
+  deleted?: boolean;
 }
 
 export const items: iItem[] = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: false },
+  {
+    id: crypto.randomUUID(),
+    description: "Passports",
+    quantity: 2,
+    packed: false,
+  },
+  {
+    id: crypto.randomUUID(),
+    description: "Socks",
+    quantity: 12,
+    packed: false,
+  },
 ];

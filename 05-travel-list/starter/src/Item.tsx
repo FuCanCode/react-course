@@ -5,6 +5,9 @@ import { globalState } from "./App";
 export default function Item(item: iItem) {
   const [checked, setChecked] = useState(item.packed);
 
+  // skip render on deleted items
+  if (item.deleted) return;
+
   const setPackStatus = function () {
     setChecked(() => (checked ? false : true));
 

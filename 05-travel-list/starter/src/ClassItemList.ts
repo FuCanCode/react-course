@@ -14,7 +14,7 @@ export class ItemList {
   // ADD
   public addItem(qty: number, descr: string): iItem {
     const newItem: iItem = {
-      id: this.items.length + 1,
+      id: crypto.randomUUID(),
       description: descr,
       quantity: qty,
       packed: false,
@@ -25,7 +25,7 @@ export class ItemList {
   }
 
   // Pack
-  public togglePackStatus(id: number): void {
+  public togglePackStatus(id: string): void {
     const itemToToggle = this.items.find((item) => item.id === id);
 
     if (!itemToToggle) return;

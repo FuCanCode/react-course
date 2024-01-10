@@ -12,6 +12,7 @@ function App() {
   const [qty, setQty] = useState(1);
   const [list, setList] = useState(globalState.getList());
 
+  /////////////////////
   // Handler functions
   function submitHandler(ev: React.FormEvent<HTMLFormElement>) {
     ev.preventDefault();
@@ -24,6 +25,7 @@ function App() {
     // at the end clear input
     setItem(() => "");
     setQty(() => 1);
+    console.log(list);
   }
 
   function qtyHandler(ev: React.ChangeEvent<HTMLSelectElement>) {
