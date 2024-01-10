@@ -31,11 +31,41 @@ function App() {
     console.log(list);
   }
 
+  function deleteHandler(itemId: string) {
+    setList(
+      list.map((item) => {
+        if (itemId === item.id) {
+          return {
+            ...item,
+            deleted: true,
+          };
+        } else return item;
+      })
+    );
+  }
+
+  function packHandler(itemId: string) {
+    setList(
+      list.map((item) => {
+        if (itemId === item.id) {
+          return {
+            ...item,
+            packed: !item.packed,
+          };
+        } else return item;
+      })
+    );
+  }
+
   return (
     <>
       <Heading />
       <Form submitHandler={submitHandler} />
-      <List list={list} />
+      <List
+        list={list}
+        deleteHandler={deleteHandler}
+        packHandler={packHandler}
+      />
     </>
   );
 }
