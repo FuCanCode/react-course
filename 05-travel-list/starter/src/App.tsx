@@ -5,6 +5,7 @@ import List from "./List";
 import { items } from "./itemsData";
 
 const initialList = items;
+let nextItem = initialList.length + 1;
 
 function App() {
   const [list, setList] = useState(initialList);
@@ -20,7 +21,7 @@ function App() {
 
     setList([
       {
-        id: crypto.randomUUID(),
+        id: nextItem++,
         description: name,
         quantity: quantity,
         packed: false,
@@ -31,29 +32,19 @@ function App() {
     console.log(list);
   }
 
-  function deleteHandler(itemId: string) {
+  function deleteHandler(itemId: number) {
     setList(
-      list.map((item) => {
-        if (itemId === item.id) {
-          return {
-            ...item,
-            deleted: true,
-          };
-        } else return item;
-      })
+      list.map((item) =>
+        itemId === item.id ? { ...item, deleted: true } : item
+      )
     );
   }
 
-  function packHandler(itemId: string) {
+  function packHandler(itemId: number) {
     setList(
-      list.map((item) => {
-        if (itemId === item.id) {
-          return {
-            ...item,
-            packed: !item.packed,
-          };
-        } else return item;
-      })
+      list.map((item) =>
+        itemId === item.id ? { ...item, packed: !item.packed } : item
+      )
     );
   }
 

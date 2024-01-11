@@ -1,5 +1,5 @@
 export interface iItem {
-  id: string;
+  id: number;
   description: string;
   quantity: number;
   packed: boolean;
@@ -8,13 +8,13 @@ export interface iItem {
 
 export const items: iItem[] = [
   {
-    id: crypto.randomUUID(),
+    id: 2,
     description: "Passports",
     quantity: 2,
     packed: false,
   },
   {
-    id: crypto.randomUUID(),
+    id: 1,
     description: "Socks",
     quantity: 12,
     packed: false,
