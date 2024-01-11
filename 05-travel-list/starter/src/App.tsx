@@ -3,6 +3,7 @@ import Form from "./Form";
 import Heading from "./Heading";
 import List from "./List";
 import { items } from "./itemsData";
+import Stats from "./Stats";
 
 const initialList = items;
 let nextItem = initialList.length + 1;
@@ -48,6 +49,10 @@ function App() {
     );
   }
 
+  function clearHandler() {
+    setList([]);
+  }
+
   return (
     <>
       <Heading />
@@ -56,6 +61,11 @@ function App() {
         list={list}
         deleteHandler={deleteHandler}
         packHandler={packHandler}
+        clearHandler={clearHandler}
+      />
+      <Stats
+        numItems={list.filter((i) => !i.deleted).length}
+        numPacked={list.filter((i) => !i.deleted && i.packed).length}
       />
     </>
   );
