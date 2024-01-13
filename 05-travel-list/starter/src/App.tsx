@@ -20,6 +20,8 @@ function App() {
   ) {
     e.preventDefault();
 
+    // if (!name) return;
+
     setList([
       {
         id: nextItem++,
@@ -54,7 +56,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className="app">
       <Heading />
       <Form submitHandler={submitHandler} />
       <List
@@ -67,7 +69,7 @@ function App() {
         numItems={list.filter((i) => !i.deleted).length}
         numPacked={list.filter((i) => !i.deleted && i.packed).length}
       />
-    </>
+    </div>
   );
 }
 

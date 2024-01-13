@@ -1,3 +1,3 @@
 export default function Heading() {
-  return <h1>far away</h1>;
+  return <h1>🏖️ far away 🧳</h1>;
 }

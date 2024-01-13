@@ -23,7 +23,7 @@ export default function Item({
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button onClick={() => deleteHandler(item.id)}>&times;</button>
+      <button onClick={() => deleteHandler(item.id)}>❌</button>
     </li>
   );
 }

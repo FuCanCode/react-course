@@ -1,11 +1,12 @@
 import { useState } from "react";
 
 // Select options
-const numOptions = 10;
-const options: number[] = [];
-for (let index = 0; index < numOptions; index++) {
-  options.push(index + 1);
-}
+const numOptions = 15;
+// const options: number[] = [];
+// for (let index = 0; index < numOptions; index++) {
+//   options.push(index + 1);
+// }
+const options = Array.from({ length: numOptions }, (_, i) => i + 1);
 
 export default function Form({
   submitHandler,
@@ -41,6 +42,8 @@ export default function Form({
 
       <input
         name="item"
+        autoFocus={true}
+        autoComplete="off"
         type="text"
         placeholder="Item..."
         value={input}
