@@ -2,6 +2,13 @@ import { useState } from "react";
 import { questions, ICard } from "./cardsData";
 
 export default function FlashCards() {
+  const [activeID, setActiveID] = useState<number | null>(null);
+
+  function handleClick(id: number) {
+    if (id === activeID) return setActiveID(null);
+    setActiveID(id);
+  }
+
   const containerStyles: React.CSSProperties = {
     display: "flex",
     gap: "15px",
@@ -12,19 +19,35 @@ export default function FlashCards() {
   return (
     <div className="cards-container" style={containerStyles}>
       {questions.map((card: ICard) => (
-        <Card key={card.id} {...card} />
+        <Card
+          key={card.id}
+          {...card}
+          activeID={activeID}
+          handleClick={handleClick}
+        />
       ))}
     </div>
   );
 }
 
-function Card({ question, answer }: { question: string; answer: string }) {
-  const [isAnswer, setIsAnswer] = useState(false);
-
-  const content = isAnswer ? answer : question;
+function Card({
+  id,
+  question,
+  answer,
+  activeID,
+  handleClick,
+}: {
+  id: number;
+  question: string;
+  answer: string;
+  activeID: number | null;
+  handleClick: (id: number) => void;
+}) {
+  const isActive = id === activeID;
+  const content = isActive ? answer : question;
 
   const cardStyle: React.CSSProperties = {
-    backgroundColor: isAnswer ? "green" : "orangered",
+    backgroundColor: isActive ? "green" : "orangered",
     height: "10rem",
     width: "18rem",
     border: "2px solid white",
@@ -37,11 +60,7 @@ function Card({ question, answer }: { question: string; answer: string }) {
   };
 
   return (
-    <div
-      className="card"
-      style={cardStyle}
-      onClick={() => setIsAnswer(!isAnswer)}
-    >
+    <div className="card" style={cardStyle} onClick={() => handleClick(id)}>
       <h2>{content}</h2>
     </div>
   );
