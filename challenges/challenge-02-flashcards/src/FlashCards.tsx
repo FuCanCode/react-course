@@ -5,8 +5,7 @@ export default function FlashCards() {
   const [activeID, setActiveID] = useState<number | null>(null);
 
   function handleClick(id: number) {
-    if (id === activeID) return setActiveID(null);
-    setActiveID(id);
+    setActiveID(id === activeID ? null : id);
   }
 
   const containerStyles: React.CSSProperties = {
@@ -57,6 +56,7 @@ function Card({
     alignItems: "center",
     textAlign: "center",
     padding: "20px",
+    cursor: "pointer",
   };
 
   return (
