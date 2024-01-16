@@ -53,17 +53,24 @@ export default function Counter() {
         <label htmlFor="slider">{steps} Steps</label>
       </div>
 
-      <div className="controls">
+      {/* <div className="controls">
         <button onClick={() => setSteps((step) => (step > 1 ? step - 1 : 1))}>
           -
         </button>
         <p>{`Steps: ${steps}`}</p>
         <button onClick={() => setSteps((step) => step + 1)}>+</button>
-      </div>
+      </div> */}
 
       <div className="controls">
         <button onClick={() => setCount((count) => count - steps)}>-</button>
-        <p>{`Counter: ${count}`}</p>
+        <input
+          type="number"
+          name="input"
+          id="input"
+          value={count === 0 ? "" : count}
+          placeholder="Type number of days..."
+          onChange={(e) => setCount(+e.target.value)}
+        />
         <button onClick={() => setCount((count) => count + steps)}>+</button>
       </div>
 
