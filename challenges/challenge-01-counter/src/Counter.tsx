@@ -39,6 +39,21 @@ export default function Counter() {
   return (
     <>
       <div className="controls">
+        <input
+          type="range"
+          name="slider"
+          id="slider"
+          min={0}
+          max={20}
+          value={steps}
+          onChange={(e) => setSteps(+e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="slider">{steps} Steps</label>
+      </div>
+
+      <div className="controls">
         <button onClick={() => setSteps((step) => (step > 1 ? step - 1 : 1))}>
           -
         </button>
@@ -51,6 +66,19 @@ export default function Counter() {
         <p>{`Counter: ${count}`}</p>
         <button onClick={() => setCount((count) => count + steps)}>+</button>
       </div>
+
+      {count !== 0 && (
+        <div className="controls">
+          <button
+            onClick={() => {
+              setCount(0);
+              setSteps(1);
+            }}
+          >
+            Reset
+          </button>
+        </div>
+      )}
 
       <p className="message">
         {count < -1 && `${Math.abs(count)} days ago was `}
