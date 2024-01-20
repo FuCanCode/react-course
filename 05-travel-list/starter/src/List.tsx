@@ -16,18 +16,12 @@ export default function List({
   type SortBy = "input" | "description" | "packed";
   const [sortBy, setSortBy] = useState<SortBy>("input");
 
-  function sortList(sortBy: string): iItem[] {
+  function sortList(sortBy: SortBy): iItem[] {
     switch (sortBy) {
       case "description":
-        return list.slice().sort((a, b) => {
-          if (a.description < b.description) {
-            return -1;
-          }
-          if (a.description > b.description) {
-            return 1;
-          }
-          return 0;
-        });
+        return list
+          .slice()
+          .sort((a, b) => a.description.localeCompare(b.description));
 
       case "packed":
         //
@@ -52,7 +46,7 @@ export default function List({
   return (
     <div className="list">
       <ul>{itemList}</ul>
-      {list.length !== 0 && (
+      {list.filter((item) => !item.deleted).length !== 0 && (
         <div>
           <select
             name="sort"

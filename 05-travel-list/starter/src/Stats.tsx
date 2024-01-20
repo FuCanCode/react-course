@@ -5,12 +5,19 @@ export default function Stats({
   numItems: number;
   numPacked: number;
 }) {
-  return (
-    numItems !== 0 && (
+  if (numItems === 0)
+    return (
       <div className="stats">
-        You have {numItems} items on your list, and already packed {numPacked} (
-        {Math.ceil((numPacked / numItems) * 100)}%)
+        <em>Start by adding some Items to your packing list!</em>
       </div>
-    )
+    );
+
+  return (
+    <div className="stats">
+      {numPacked / numItems === 1
+        ? `Everything packed, ready to go! 🛫`
+        : `You have ${numItems} items on your list, and already packed ${numPacked} (
+      ${Math.round((numPacked / numItems) * 100)}%)`}
+    </div>
   );
 }
