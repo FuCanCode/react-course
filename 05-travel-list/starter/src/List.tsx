@@ -16,32 +16,24 @@ export default function List({
   type SortBy = "input" | "description" | "packed";
   const [sortBy, setSortBy] = useState<SortBy>("input");
 
-  function sortList(sortBy: SortBy): iItem[] {
-    switch (sortBy) {
-      case "description":
-        return list
-          .slice()
-          .sort((a, b) => a.description.localeCompare(b.description));
+  const sortFunctions = {
+    input: (a: iItem, b: iItem) => b.id - a.id,
+    packed: (a: iItem, b: iItem) =>
+      Number(a.packed) - Number(b.packed) || b.id - a.id,
+    description: (a: iItem, b: iItem) =>
+      a.description.localeCompare(b.description) || b.id - a.id,
+  };
 
-      case "packed":
-        //
-        return [
-          ...list.filter((item) => !item.packed),
-          ...list.filter((item) => item.packed),
-        ];
-      default:
-        return list.slice().sort((a, b) => b.id - a.id);
-    }
-  }
-
-  const itemList = sortList(sortBy).map((item) => (
-    <Item
-      item={item}
-      key={item.id}
-      deleteHandler={deleteHandler}
-      packHandler={packHandler}
-    />
-  ));
+  const itemList = [...list]
+    .sort(sortFunctions[sortBy])
+    .map((item) => (
+      <Item
+        item={item}
+        key={item.id}
+        deleteHandler={deleteHandler}
+        packHandler={packHandler}
+      />
+    ));
 
   return (
     <div className="list">
