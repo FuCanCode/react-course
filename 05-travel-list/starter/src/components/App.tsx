@@ -2,7 +2,7 @@ import { useState } from "react";
 import Form from "./Form";
 import Heading from "./Heading";
 import List from "./List";
-import { items } from "./itemsData";
+import { items } from "../itemsData";
 import Stats from "./Stats";
 
 const initialList = items;
@@ -52,6 +52,8 @@ function App() {
   }
 
   function clearHandler() {
+    const confirmed = window.confirm("Are you sure to delete everything?");
+    if (!confirmed) return;
     setList([]);
   }
 

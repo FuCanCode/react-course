@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Item from "./Item";
-import { iItem } from "./itemsData";
+import { iItem } from "../itemsData";
 
 export default function List({
   list,
@@ -39,7 +39,7 @@ export default function List({
     <div className="list">
       <ul>{itemList}</ul>
       {list.filter((item) => !item.deleted).length !== 0 && (
-        <div>
+        <div className="actions">
           <select
             name="sort"
             onChange={(e) => setSortBy(e.target.value as SortBy)}

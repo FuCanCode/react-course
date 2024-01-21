@@ -1,4 +1,4 @@
-import { iItem } from "./itemsData";
+import { iItem } from "../itemsData";
 
 export default function Item({
   item,
