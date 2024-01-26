@@ -37,23 +37,28 @@ export default function Steps() {
           <p className="message">{`Step: ${step} ${messages[step - 1]}`}</p>
 
           <div className="buttons">
-            <button
-              className="previous"
-              style={{ backgroundColor: "#7950f2", color: "#fff" }}
-              onClick={previous}
-            >
-              Previous
-            </button>
-            <button
-              className="next"
-              style={{ backgroundColor: "#7950f2", color: "#fff" }}
-              onClick={next}
-            >
-              Next
-            </button>
+            <Button handleClick={previous}>Das davor!</Button>
+            <Button handleClick={next}>Dis näschte!</Button>
           </div>
         </div>
       )}
     </>
+  );
+}
+
+function Button({
+  handleClick,
+  children,
+}: {
+  handleClick: () => void;
+  children: string;
+}) {
+  return (
+    <button
+      style={{ backgroundColor: "#7950f2", color: "#fff" }}
+      onClick={handleClick}
+    >
+      {children}
+    </button>
   );
 }
