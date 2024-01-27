@@ -6,18 +6,26 @@
 }
 
 #root {
+  background-color: rgb(243, 243, 243);
+
+  padding: 3rem;
   display: flex;
+  height: 100vh;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
 }
 
 .accordion {
-  margin-top: 10rem;
   width: 40rem;
-  padding: 2rem;
-  background-color: burlywood;
+  padding: 1rem;
+  border-radius: 25px;
 }
 
 .panel {
-  margin: 2rem;
+  background-color: #fff;
+  border-top: 2px solid green;
+  padding: 1rem;
+  margin: 1rem;
+  box-shadow: 15px 10px 20px rgb(172, 172, 172);
 }
