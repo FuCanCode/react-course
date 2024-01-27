@@ -1,4 +1,10 @@
-import { useState } from "react";
+import {
+  JSXElementConstructor,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useState,
+} from "react";
 
 export default function Steps() {
   const [step, setStep] = useState(1);
@@ -34,7 +40,7 @@ export default function Steps() {
             <div className={`step-3 ${step === 3 ? "active" : ""}`}>3</div>
           </div>
 
-          <p className="message">{`Step: ${step} ${messages[step - 1]}`}</p>
+          <StepMessage step={step}>{messages[step - 1]}</StepMessage>
 
           <div className="buttons">
             <Button handleClick={previous}>Das davor!</Button>
@@ -46,19 +52,22 @@ export default function Steps() {
   );
 }
 
-function Button({
-  handleClick,
-  children,
-}: {
-  handleClick: () => void;
-  children: string;
-}) {
+function StepMessage(props: { children: string; step: number }) {
+  return (
+    <div className="message">
+      <h3>Step {props.step}: </h3>
+      {props.children}
+    </div>
+  );
+}
+
+function Button(props: { handleClick: () => void; children: string }) {
   return (
     <button
       style={{ backgroundColor: "#7950f2", color: "#fff" }}
-      onClick={handleClick}
+      onClick={props.handleClick}
     >
-      {children}
+      {props.children}
     </button>
   );
 }
