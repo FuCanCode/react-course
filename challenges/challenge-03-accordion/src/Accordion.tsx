@@ -5,20 +5,32 @@ export default function Accordion({ questions }: { questions: IQuestion[] }) {
   return (
     <div className="accordion">
       {questions.map((q) => (
-        <Panel key={q.id} title={q.title} text={q.text} />
+        <Panel key={q.id} title={q.title} text={q.text} number={q.id} />
       ))}
     </div>
   );
 }
 
-function Panel({ title, text }: { title: string; text: string }) {
+function Panel({
+  title,
+  text,
+  number,
+}: {
+  title: string;
+  text: string;
+  number: number;
+}) {
   const [showText, setShowText] = useState(false);
+
+  const leadingNumber: string = number < 10 ? `0${number}` : String(number + 1);
   return (
     <div className="panel">
-      <h3>
-        {title} <span onClick={() => setShowText(!showText)}>⌄</span>
-      </h3>
-      {showText && <p>{text}</p>}
+      <span className="number">{leadingNumber}</span>
+      <h3>{title}</h3>
+      <div className="btn" onClick={() => setShowText(!showText)}>
+        {showText ? "-" : "+"}
+      </div>
+      <p className="answer">{showText ? text : ""}</p>
     </div>
   );
 }

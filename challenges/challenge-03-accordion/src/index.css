@@ -28,4 +28,29 @@
   padding: 1rem;
   margin: 1rem;
   box-shadow: 15px 10px 20px rgb(172, 172, 172);
+  display: grid;
+  grid-template-columns: 1fr 8fr 1fr;
+  align-items: center;
+  transition: all 1s;
+}
+
+.panel .number {
+  grid-column: 1;
+}
+
+.panel h3 {
+  grid-column: 2;
+}
+
+.panel .btn {
+  text-align: center;
+  grid-column: 3;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.panel .answer {
+  grid-column: 2;
+  margin-top: 0.5rem;
+  transition: all 1s;
 }
