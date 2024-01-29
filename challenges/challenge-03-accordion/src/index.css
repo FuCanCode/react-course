@@ -31,7 +31,6 @@
   display: grid;
   grid-template-columns: 1fr 8fr 1fr;
   align-items: center;
-  transition: all 1s;
 }
 
 .panel .number {
@@ -52,5 +51,4 @@
 .panel .answer {
   grid-column: 2;
   margin-top: 0.5rem;
-  transition: all 1s;
 }
