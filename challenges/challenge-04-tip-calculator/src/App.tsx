@@ -18,23 +18,26 @@ function App() {
       <Bill onInput={setBill} input={bill}>
         How much was the bill?
       </Bill>
-      <Rating onChange={setMyRating}>How did you like the service?</Rating>
-      <Rating onChange={setFriendRating}>
+      <Rating curRating={myRating} onChange={setMyRating}>
+        How did you like the service?
+      </Rating>
+      <Rating curRating={friendRating} onChange={setFriendRating}>
         How did your friend like the service
       </Rating>
       {bill && (
-        <h2>
-          You pay ${sum} (${bill} + ${tip})
-        </h2>
+        <div>
+          <h2>
+            You pay ${sum} (${bill} + ${tip})
+          </h2>
+          <Reset
+            onReset={() => {
+              setBill("");
+              setMyRating(10);
+              setFriendRating(10);
+            }}
+          />
+        </div>
       )}
-
-      <Reset
-        onReset={() => {
-          setBill("");
-          setMyRating(10);
-          setFriendRating(10);
-        }}
-      />
     </>
   );
 }

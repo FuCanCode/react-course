@@ -1,7 +1,7 @@
 export default function Bill(props: {
   children: string;
   input: string;
-  onInput: () => void;
+  onInput: React.Dispatch<React.SetStateAction<string>>;
 }) {
   return (
     <div>
