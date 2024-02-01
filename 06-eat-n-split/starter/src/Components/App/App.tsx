@@ -1,7 +1,5 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import Button from "../Button/Button";
+import "./app.css";
 
 const initialFriends = [
   {
@@ -25,7 +23,14 @@ const initialFriends = [
 ];
 
 function App() {
-  return <></>;
+  return (
+    <>
+      {initialFriends.map((f) => (
+        <Button key={f.id}>{f.name}</Button>
+      ))}
+      <Button>Add Friend</Button>
+    </>
+  );
 }
 
 export default App;

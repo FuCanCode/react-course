@@ -1,0 +1,7 @@
+button {
+  min-width: 7rem;
+  min-height: 2rem;
+  background-color: gold;
+  border-radius: 12px;
+  font-weight: bold;
+}
