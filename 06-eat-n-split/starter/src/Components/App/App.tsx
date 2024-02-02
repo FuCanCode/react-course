@@ -1,7 +1,15 @@
 import Button from "../Button/Button";
+import People from "../People/People";
 import "./app.css";
 
-const initialFriends = [
+export interface iPeople {
+  id: number;
+  name: string;
+  image: string;
+  balance: number;
+}
+
+const initialFriends: iPeople[] = [
   {
     id: 118836,
     name: "Clark",
@@ -25,9 +33,7 @@ const initialFriends = [
 function App() {
   return (
     <>
-      {initialFriends.map((f) => (
-        <Button key={f.id}>{f.name}</Button>
-      ))}
+      <People list={initialFriends} />
       <Button>Add Friend</Button>
     </>
   );

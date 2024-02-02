@@ -3,5 +3,6 @@ button {
   min-height: 2rem;
   background-color: gold;
   border-radius: 12px;
+  border-style: none;
   font-weight: bold;
 }
