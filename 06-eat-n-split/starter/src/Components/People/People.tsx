@@ -14,7 +14,7 @@ export default function People(props: { list: iPeople[] }) {
 
 function Card(props: { person: iPeople }) {
   return (
-    <div>
+    <div className="card">
       <img
         src={props.person.image}
         alt={`The portrait of ${props.person.name}`}
