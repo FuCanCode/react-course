@@ -14,16 +14,16 @@ export default function People(props: { list: iPeople[] }) {
 
 function Card(props: { person: iPeople }) {
   return (
-    <div className="card">
+    <li className="card">
       <img
         src={props.person.image}
         alt={`The portrait of ${props.person.name}`}
       />
-      <div>
-        <h2>{props.person.name}</h2>
-        <p>TBA {props.person.balance}</p>
-      </div>
+
+      <h3>{props.person.name}</h3>
+      <p>TBA {props.person.balance}</p>
+
       <Button>TBA</Button>
-    </div>
+    </li>
   );
 }

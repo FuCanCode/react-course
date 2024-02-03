@@ -32,10 +32,12 @@ const initialFriends: iPeople[] = [
 
 function App() {
   return (
-    <>
-      <People list={initialFriends} />
-      <Button>Add Friend</Button>
-    </>
+    <div className="app">
+      <div className="left">
+        <People list={initialFriends} />
+        <Button>Add Friend</Button>
+      </div>
+    </div>
   );
 }
 
