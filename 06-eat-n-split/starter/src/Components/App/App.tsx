@@ -1,3 +1,4 @@
+import BillForm from "../BillForm/BillForm";
 import Button from "../Button/Button";
 import People from "../People/People";
 import "./app.css";
@@ -37,6 +38,7 @@ function App() {
         <People list={initialFriends} />
         <Button>Add Friend</Button>
       </div>
+      <BillForm />
     </div>
   );
 }
