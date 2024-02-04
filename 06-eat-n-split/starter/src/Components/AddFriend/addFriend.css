@@ -1,0 +1,22 @@
+.add-friend > button {
+  float: right;
+  margin-right: 1rem;
+}
+/* .add-friend {
+  
+} */
+
+.add-friend form {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 7px;
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 15rem;
+  row-gap: 2rem;
+}
+
+.add-friend button {
+  margin-top: 1rem;
+  grid-column: 2;
+}

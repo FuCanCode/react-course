@@ -1,7 +1,9 @@
+import { useState } from "react";
 import BillForm from "../BillForm/BillForm";
 import Button from "../Button/Button";
 import People from "../People/People";
 import "./app.css";
+import AddFriend from "../AddFriend/AddFriend";
 
 export interface iPeople {
   id: number;
@@ -32,12 +34,19 @@ const initialFriends: iPeople[] = [
 ];
 
 function App() {
+  const [selectedPerson, setSelectedPerson] = useState<number | null>(null);
+
   return (
     <div className="app">
       <div className="left">
-        <People list={initialFriends} />
-        <Button>Add Friend</Button>
+        <People
+          list={initialFriends}
+          selectedPerson={selectedPerson}
+          onSelect={setSelectedPerson}
+        />
+        <AddFriend />
       </div>
+
       <BillForm />
     </div>
   );
