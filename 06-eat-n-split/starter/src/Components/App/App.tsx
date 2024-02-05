@@ -1,6 +1,5 @@
 import { useState } from "react";
 import BillForm from "../BillForm/BillForm";
-import Button from "../Button/Button";
 import People from "../People/People";
 import "./app.css";
 import AddFriend from "../AddFriend/AddFriend";
@@ -35,19 +34,36 @@ const initialFriends: iPeople[] = [
 
 function App() {
   const [selectedPerson, setSelectedPerson] = useState<number | null>(null);
+  const [list, setList] = useState<iPeople[]>(initialFriends);
+
+  function handleAddFriend(name: string, imageURL?: string) {
+    const id = Math.round(Math.random() * 99999);
+    const newUrl = imageURL ? imageURL : `https://i.pravatar.cc/48?u=${id}`;
+
+    const newFriend: iPeople = {
+      id: id,
+      name: name,
+      image: newUrl,
+      balance: 0,
+    };
+
+    setList([...list, newFriend]);
+
+    console.log(newFriend);
+  }
 
   return (
     <div className="app">
       <div className="left">
         <People
-          list={initialFriends}
+          list={list}
           selectedPerson={selectedPerson}
           onSelect={setSelectedPerson}
         />
-        <AddFriend />
+        <AddFriend onAddFriend={handleAddFriend} />
       </div>
 
-      <BillForm />
+      {selectedPerson && <BillForm />}
     </div>
   );
 }

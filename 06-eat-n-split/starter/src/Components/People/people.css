@@ -20,6 +20,7 @@ ul {
 .card img {
   grid-row: span 2;
   border-radius: 50%;
+  width: 48px;
 }
 
 .card h3 {

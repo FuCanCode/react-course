@@ -1,8 +1,11 @@
+import { ReactNode } from "react";
 import "./button.css";
 
-export default function Button(props: {
-  children: string;
-  onClickHandler: () => void;
-}) {
-  return <button onClick={props.onClickHandler}>{props.children}</button>;
+interface ButtonProps {
+  children: ReactNode;
+  eventHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export default function Button(props: ButtonProps) {
+  return <button onClick={props.eventHandler}>{props.children}</button>;
 }

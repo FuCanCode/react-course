@@ -57,7 +57,7 @@ function Card(props: {
 
       <h3>{props.person.name}</h3>
       {getDebtMessage()}
-      <Button onClickHandler={handleClick}>
+      <Button eventHandler={handleClick}>
         {props.isSelected ? "Close" : "Select"}
       </Button>
     </li>
