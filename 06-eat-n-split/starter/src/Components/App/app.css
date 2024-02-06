@@ -19,10 +19,37 @@ body {
   background-color: #ebebeb;
 }
 
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
 .app {
   min-height: 66vh;
   display: grid;
   grid-template-columns: 34rem 44rem;
   column-gap: 4rem;
   align-items: start;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary {
+  padding: 1rem;
+  margin-top: 2rem;
+  background-color: #fff;
+  border-radius: 7px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.summary span {
+  letter-spacing: 2px;
+  margin-left: 0.2rem;
 }
