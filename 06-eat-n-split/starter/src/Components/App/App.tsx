@@ -50,8 +50,8 @@ function App() {
     const newUrl = imageURL ? imageURL : `https://i.pravatar.cc/48?u=${id}`;
 
     const newFriend: iPeople = {
-      id: id,
-      name: name,
+      id,
+      name,
       image: newUrl,
       balance: 0,
     };
@@ -59,12 +59,16 @@ function App() {
     setList([...list, newFriend]);
   }
 
-  function handleSplitBill(updatedDebtor: iPeople) {
+  function handleSplitBill(value: number) {
     setList(
       list.map((debitor) => {
-        return debitor.id === selectedPerson ? updatedDebtor : debitor;
+        return debitor.id === selectedPerson
+          ? { ...debitor, balance: debitor.balance + value }
+          : debitor;
       })
     );
+
+    setSelectedPerson(null);
   }
 
   return (
@@ -75,7 +79,9 @@ function App() {
           selectedPerson={selectedPerson}
           onSelect={setSelectedPerson}
         />
+
         <AddFriend onAddFriend={handleAddFriend} />
+
         <div className="summary">
           <p>
             Debts: <span className="red">{debts}€</span>
@@ -94,6 +100,7 @@ function App() {
 
       {selectedPerson && (
         <BillForm
+          key={selectedPerson}
           debtor={list.find((debtor) => debtor.id === selectedPerson)!}
           onSplitBill={handleSplitBill}
         />

@@ -5,37 +5,40 @@ import "./billForm.css";
 
 interface BillFormProps {
   debtor: iPeople;
-  onSplitBill: (param: iPeople) => void;
+  onSplitBill: (param: number) => void;
 }
 
 export default function BillForm(props: BillFormProps) {
   const [billInput, setBillInput] = useState<string>("");
   const [isOwnBill, setIsOwnBill] = useState(true);
-  const [activeInput, setActiveInput] = useState<string>("");
+  const [ownExpenseInput, setOwnExpenseInput] = useState<string>("");
 
   const bill = Number(billInput);
-  const lockedInput = Number(billInput) - Number(activeInput);
+  const ownExpense = Number(ownExpenseInput);
+  const debtorValue = bill - ownExpense;
 
-  function handleSplitSubmit(e: React.MouseEvent<HTMLButtonElement>) {
+  function handleSplitSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const zeroBalance = bill / 2;
-    const debt: number =
-      zeroBalance - (isOwnBill ? lockedInput : Number(activeInput));
 
-    const updatedDebtor: iPeople = {
-      ...props.debtor,
-      balance: props.debtor.balance + debt,
-    };
-    props.onSplitBill(updatedDebtor);
+    if (!bill) return;
 
-    setActiveInput("");
+    const value = isOwnBill ? debtorValue : -ownExpense;
+
+    props.onSplitBill(value);
+
+    setOwnExpenseInput("");
     setBillInput("");
+  }
+
+  function checkValidInput(input: string): string {
+    return Number(input) > Number(billInput) ? ownExpenseInput : input;
   }
 
   return (
     <div className="bill">
       <h1>Split a Bill with {props.debtor.name}</h1>
-      <form>
+
+      <form onSubmit={handleSplitSubmit}>
         <label htmlFor="bill">💰 Bill value</label>
         <input
           type="text"
@@ -43,22 +46,24 @@ export default function BillForm(props: BillFormProps) {
           value={billInput}
           onChange={(e) => setBillInput(e.target.value)}
         />
+
         <label htmlFor="own">🫰 Your expense</label>
         <input
           type="text"
           name="own"
-          disabled={!isOwnBill}
-          value={!isOwnBill ? lockedInput : activeInput}
-          onChange={(e) => setActiveInput(e.target.value)}
+          value={ownExpenseInput}
+          onChange={(e) => setOwnExpenseInput(checkValidInput(e.target.value))}
         />
+
         <label htmlFor="other">🫵 {props.debtor.name}'s expense</label>
         <input
           type="text"
           name="other"
-          disabled={isOwnBill}
-          value={isOwnBill ? lockedInput : activeInput}
-          onChange={(e) => setActiveInput(e.target.value)}
+          disabled
+          value={debtorValue}
+          onChange={(e) => setOwnExpenseInput(checkValidInput(e.target.value))}
         />
+
         <label htmlFor="decide">❓ Who is paying the bill?</label>
         <select
           name="decide"
@@ -68,7 +73,8 @@ export default function BillForm(props: BillFormProps) {
           <option value="own">You</option>
           <option value="other">{props.debtor.name}</option>
         </select>
-        <Button eventHandler={handleSplitSubmit}>Split Bill</Button>
+
+        <Button>Split Bill</Button>
       </form>
     </div>
   );
