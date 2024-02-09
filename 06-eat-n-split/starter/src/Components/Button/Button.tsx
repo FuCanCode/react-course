@@ -3,7 +3,7 @@ import "./button.css";
 
 interface ButtonProps {
   children: ReactNode;
-  eventHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  eventHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function Button(props: ButtonProps) {
