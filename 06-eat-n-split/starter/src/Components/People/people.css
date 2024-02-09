@@ -17,6 +17,10 @@ ul {
   background-color: #fff;
 }
 
+.selected {
+  background-color: #ffe4bc;
+}
+
 .card img {
   grid-row: span 2;
   border-radius: 50%;

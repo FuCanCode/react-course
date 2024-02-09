@@ -49,7 +49,7 @@ function Card(props: {
   }
 
   return (
-    <li className="card">
+    <li className={props.isSelected ? "card selected" :"card"}>
       <img
         src={props.person.image}
         alt={`The portrait of ${props.person.name}`}
