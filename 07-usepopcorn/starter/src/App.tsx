@@ -1,6 +1,13 @@
 import { useState } from "react";
 
-const tempMovieData = [
+interface iMovie {
+  imdbID: string;
+  Title: string;
+  Year: string;
+  Poster: string;
+}
+
+const tempMovieData: iMovie[] = [
   {
     imdbID: "tt1375666",
     Title: "Inception",
@@ -51,8 +58,17 @@ const average = (arr: number[]) =>
   arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
 
 export default function App() {
-  const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState<iMovie[] | null>(tempMovieData);
+
+  return (
+    <>
+      <SearchHeader results={movies ? movies.length : null} />
+      <Main movieList={movies}></Main>
+    </>
+  );
+}
+
+function Main(props: { movieList: iMovie[] | null }) {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
@@ -62,107 +78,128 @@ export default function App() {
   const avgRuntime = average(watched.map((movie) => movie.runtime));
 
   return (
-    <>
-      <nav className="nav-bar">
-        <div className="logo">
-          <span role="img">🍿</span>
-          <h1>usePopcorn</h1>
-        </div>
-        <input
-          className="search"
-          type="text"
-          placeholder="Search movies..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <p className="num-results">
-          Found <strong>{movies.length}</strong> results
-        </p>
-      </nav>
+    <main className="main">
+      <div className="box">
+        <button
+          className="btn-toggle"
+          onClick={() => setIsOpen1((open) => !open)}
+        >
+          {isOpen1 ? "–" : "+"}
+        </button>
+        {isOpen1 && (
+          <ul className="list">
+            {props.movieList?.map((movie) => (
+              <li key={movie.imdbID}>
+                <img src={movie.Poster} alt={`${movie.Title} poster`} />
+                <h3>{movie.Title}</h3>
+                <div>
+                  <p>
+                    <span>🗓</span>
+                    <span>{movie.Year}</span>
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
-      <main className="main">
-        <div className="box">
-          <button
-            className="btn-toggle"
-            onClick={() => setIsOpen1((open) => !open)}
-          >
-            {isOpen1 ? "–" : "+"}
-          </button>
-          {isOpen1 && (
+      <div className="box">
+        <button
+          className="btn-toggle"
+          onClick={() => setIsOpen2((open) => !open)}
+        >
+          {isOpen2 ? "–" : "+"}
+        </button>
+        {isOpen2 && (
+          <>
+            <div className="summary">
+              <h2>Movies you watched</h2>
+              <div>
+                <p>
+                  <span>#️⃣</span>
+                  <span>{watched.length} movies</span>
+                </p>
+                <p>
+                  <span>⭐️</span>
+                  <span>{avgImdbRating}</span>
+                </p>
+                <p>
+                  <span>🌟</span>
+                  <span>{avgUserRating}</span>
+                </p>
+                <p>
+                  <span>⏳</span>
+                  <span>{avgRuntime} min</span>
+                </p>
+              </div>
+            </div>
+
             <ul className="list">
-              {movies?.map((movie) => (
+              {watched.map((movie) => (
                 <li key={movie.imdbID}>
                   <img src={movie.Poster} alt={`${movie.Title} poster`} />
                   <h3>{movie.Title}</h3>
                   <div>
                     <p>
-                      <span>🗓</span>
-                      <span>{movie.Year}</span>
+                      <span>⭐️</span>
+                      <span>{movie.imdbRating}</span>
+                    </p>
+                    <p>
+                      <span>🌟</span>
+                      <span>{movie.userRating}</span>
+                    </p>
+                    <p>
+                      <span>⏳</span>
+                      <span>{movie.runtime} min</span>
                     </p>
                   </div>
                 </li>
               ))}
             </ul>
-          )}
-        </div>
+          </>
+        )}
+      </div>
+    </main>
+  );
+}
 
-        <div className="box">
-          <button
-            className="btn-toggle"
-            onClick={() => setIsOpen2((open) => !open)}
-          >
-            {isOpen2 ? "–" : "+"}
-          </button>
-          {isOpen2 && (
-            <>
-              <div className="summary">
-                <h2>Movies you watched</h2>
-                <div>
-                  <p>
-                    <span>#️⃣</span>
-                    <span>{watched.length} movies</span>
-                  </p>
-                  <p>
-                    <span>⭐️</span>
-                    <span>{avgImdbRating}</span>
-                  </p>
-                  <p>
-                    <span>🌟</span>
-                    <span>{avgUserRating}</span>
-                  </p>
-                  <p>
-                    <span>⏳</span>
-                    <span>{avgRuntime} min</span>
-                  </p>
-                </div>
-              </div>
+function SearchHeader(props: { results: number | null }) {
+  const [query, setQuery] = useState("");
 
-              <ul className="list">
-                {watched.map((movie) => (
-                  <li key={movie.imdbID}>
-                    <img src={movie.Poster} alt={`${movie.Title} poster`} />
-                    <h3>{movie.Title}</h3>
-                    <div>
-                      <p>
-                        <span>⭐️</span>
-                        <span>{movie.imdbRating}</span>
-                      </p>
-                      <p>
-                        <span>🌟</span>
-                        <span>{movie.userRating}</span>
-                      </p>
-                      <p>
-                        <span>⏳</span>
-                        <span>{movie.runtime} min</span>
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
-      </main>
-    </>
+  function handlePressEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      // Do something with input
+
+      setQuery("");
+    }
+  }
+
+  return (
+    <nav className="nav-bar">
+      <div className="logo">
+        <span role="img">🍿</span>
+        <h1>usePopcorn</h1>
+      </div>
+      <input
+        className="search"
+        type="text"
+        placeholder="Search movies..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={handlePressEnter}
+      />
+      <p className="num-results">
+        {props.results ? (
+          <>
+            Found <strong>{props.results}</strong> results
+          </>
+        ) : (
+          <>
+            <strong>Search for a movie!</strong>
+          </>
+        )}
+      </p>
+    </nav>
   );
 }
