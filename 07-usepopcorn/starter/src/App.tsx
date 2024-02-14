@@ -93,12 +93,13 @@ function Main(props: { children: ReactNode[] }) {
 }
 
 function ListDetails(props: { details: string[] }) {
+  let key = 0;
   return (
     <div>
       {props.details.map((d: string) => (
-        <p>
+        <p key={key++}>
           <span>{d.split(" ")[0]}</span>
-          <span>{d.split(" ").slice(1)}</span>
+          <span>{d.split(" ").slice(1).join(" ")}</span>
         </p>
       ))}
     </div>
@@ -116,16 +117,21 @@ function List(props: { list: iWatchedMovies[] | iMovie[] }) {
                 "🌟 " + movie.userRating,
                 "⏳ " + movie.runtime,
               ]
-            : ["🗓️" + movie.Year];
-        return (
-          <li key={movie.imdbID}>
-            <img src={movie.Poster} alt={`${movie.Title} poster`} />
-            <h3>{movie.Title}</h3>
-            <ListDetails details={details} />
-          </li>
-        );
+            : ["🗓️ " + movie.Year];
+
+        return <ListItem key={movie.imdbID} item={movie} details={details} />;
       })}
     </ul>
+  );
+}
+
+function ListItem(props: { item: iMovie | iWatchedMovies; details: string[] }) {
+  return (
+    <li>
+      <img src={props.item.Poster} alt={`${props.item.Title} poster`} />
+      <h3>{props.item.Title}</h3>
+      <ListDetails details={props.details} />
+    </li>
   );
 }
 
@@ -178,24 +184,6 @@ function Summary(props: { summaryProps: iSummary | null }) {
     <div className="summary">
       <h2>Movies you watched</h2>
       <ListDetails details={details} />
-      <div>
-        <p>
-          <span>#️⃣</span>
-          <span>{numMovies} movies</span>
-        </p>
-        <p>
-          <span>⭐️</span>
-          <span>{imdbRating}</span>
-        </p>
-        <p>
-          <span>🌟</span>
-          <span>{userRating}</span>
-        </p>
-        <p>
-          <span>⏳</span>
-          <span>{runtime} min</span>
-        </p>
-      </div>
     </div>
   );
 }
@@ -211,22 +199,7 @@ function ListBox(props: { movieList: iMovie[] | null }) {
       >
         {isOpen1 ? "–" : "+"}
       </button>
-      {isOpen1 && (
-        <ul className="list">
-          {props.movieList?.map((movie) => (
-            <li key={movie.imdbID}>
-              <img src={movie.Poster} alt={`${movie.Title} poster`} />
-              <h3>{movie.Title}</h3>
-              <div>
-                <p>
-                  <span>🗓</span>
-                  <span>{movie.Year}</span>
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      {isOpen1 && props.movieList && <List list={props.movieList} />}
     </div>
   );
 }
