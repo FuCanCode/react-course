@@ -6,7 +6,18 @@ interface iMovie {
   Year: string;
   Poster: string;
 }
+interface iWatchedMovies extends iMovie {
+  runtime: number;
+  imdbRating: number;
+  userRating: number;
+}
 
+interface iSummary {
+  numMovies: number;
+  imdbRating: number;
+  userRating: number;
+  runtime: number;
+}
 const tempMovieData: iMovie[] = [
   {
     imdbID: "tt1375666",
@@ -31,15 +42,6 @@ const tempMovieData: iMovie[] = [
   },
 ];
 
-interface iWatchedMovies {
-  imdbID: string;
-  Title: string;
-  Year: string;
-  Poster: string;
-  runtime: number;
-  imdbRating: number;
-  userRating: number;
-}
 const tempWatchedData: iWatchedMovies[] = [
   {
     imdbID: "tt1375666",
@@ -63,8 +65,7 @@ const tempWatchedData: iWatchedMovies[] = [
   },
 ];
 
-const average = (arr: number[] | null): number | null => {
-  if (!arr) return null;
+const average = (arr: number[]): number => {
   return arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
 };
 
@@ -91,8 +92,54 @@ function Main(props: { children: ReactNode[] }) {
   return <main className="main">{props.children}</main>;
 }
 
+function ListDetails(props: { details: string[] }) {
+  return (
+    <div>
+      {props.details.map((d: string) => (
+        <p>
+          <span>{d.split(" ")[0]}</span>
+          <span>{d.split(" ").slice(1)}</span>
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function List(props: { list: iWatchedMovies[] | iMovie[] }) {
+  return (
+    <ul className="list">
+      {props.list.map((movie) => {
+        const details =
+          "userRating" in movie
+            ? [
+                "⭐️ " + movie.imdbRating,
+                "🌟 " + movie.userRating,
+                "⏳ " + movie.runtime,
+              ]
+            : ["🗓️" + movie.Year];
+        return (
+          <li key={movie.imdbID}>
+            <img src={movie.Poster} alt={`${movie.Title} poster`} />
+            <h3>{movie.Title}</h3>
+            <ListDetails details={details} />
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 function WatchedBox(props: { watchedList: iWatchedMovies[] | null }) {
   const [isOpen2, setIsOpen2] = useState(true);
+
+  const summaryProps: iSummary | null = !props.watchedList
+    ? null
+    : {
+        numMovies: props.watchedList.length,
+        imdbRating: average(props.watchedList.map((movie) => movie.imdbRating)),
+        userRating: average(props.watchedList.map((movie) => movie.userRating)),
+        runtime: average(props.watchedList.map((movie) => movie.runtime)),
+      };
 
   return (
     <div className="box">
@@ -104,58 +151,51 @@ function WatchedBox(props: { watchedList: iWatchedMovies[] | null }) {
       </button>
       {isOpen2 && props.watchedList && (
         <>
-          <div className="summary">
-            <h2>Movies you watched</h2>
-            <div>
-              <p>
-                <span>#️⃣</span>
-                <span>{props.watchedList.length} movies</span>
-              </p>
-              <p>
-                <span>⭐️</span>
-                <span>
-                  {average(props.watchedList.map((movie) => movie.imdbRating))}
-                </span>
-              </p>
-              <p>
-                <span>🌟</span>
-                <span>
-                  {average(props.watchedList.map((movie) => movie.userRating))}
-                </span>
-              </p>
-              <p>
-                <span>⏳</span>
-                <span>
-                  {average(props.watchedList.map((movie) => movie.runtime))} min
-                </span>
-              </p>
-            </div>
-          </div>
-
-          <ul className="list">
-            {props.watchedList.map((movie) => (
-              <li key={movie.imdbID}>
-                <img src={movie.Poster} alt={`${movie.Title} poster`} />
-                <h3>{movie.Title}</h3>
-                <div>
-                  <p>
-                    <span>⭐️</span>
-                    <span>{movie.imdbRating}</span>
-                  </p>
-                  <p>
-                    <span>🌟</span>
-                    <span>{movie.userRating}</span>
-                  </p>
-                  <p>
-                    <span>⏳</span>
-                    <span>{movie.runtime} min</span>
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <Summary summaryProps={summaryProps} />
+          <List list={props.watchedList} />
         </>
       )}
+    </div>
+  );
+}
+
+function Summary(props: { summaryProps: iSummary | null }) {
+  if (!props.summaryProps)
+    return (
+      <div className="summary">
+        <h2>no videos watched yet?!</h2>
+      </div>
+    );
+
+  const { numMovies, imdbRating, userRating, runtime } = props.summaryProps;
+  const details = [
+    "#️⃣ " + numMovies + " movies",
+    "⭐️ " + imdbRating,
+    "🌟 " + userRating,
+    "⏳ " + runtime + " min",
+  ];
+  return (
+    <div className="summary">
+      <h2>Movies you watched</h2>
+      <ListDetails details={details} />
+      <div>
+        <p>
+          <span>#️⃣</span>
+          <span>{numMovies} movies</span>
+        </p>
+        <p>
+          <span>⭐️</span>
+          <span>{imdbRating}</span>
+        </p>
+        <p>
+          <span>🌟</span>
+          <span>{userRating}</span>
+        </p>
+        <p>
+          <span>⏳</span>
+          <span>{runtime} min</span>
+        </p>
+      </div>
     </div>
   );
 }
