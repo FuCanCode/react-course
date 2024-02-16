@@ -73,6 +73,15 @@ export default function App() {
   const [movies, setMovies] = useState<iMovie[] | null>(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
 
+  const summaryProps: iSummary | null = !watched
+    ? null
+    : {
+        numMovies: watched.length,
+        imdbRating: average(watched.map((movie) => movie.imdbRating)),
+        userRating: average(watched.map((movie) => movie.userRating)),
+        runtime: average(watched.map((movie) => movie.runtime)),
+      };
+
   return (
     <>
       <NavBar>
@@ -80,9 +89,15 @@ export default function App() {
         <SearchInput />
         <Results results={movies ? movies.length : null} />
       </NavBar>
+
       <Main>
-        <ListBox movieList={movies} />
-        <WatchedBox watchedList={watched} />
+        <ListBox>
+          <List list={movies} />
+        </ListBox>
+        <WatchedBox>
+          <Summary summaryProps={summaryProps} />
+          <List list={watched} />
+        </WatchedBox>
       </Main>
     </>
   );
@@ -106,7 +121,9 @@ function ListDetails(props: { details: string[] }) {
   );
 }
 
-function List(props: { list: iWatchedMovies[] | iMovie[] }) {
+function List(props: { list: iWatchedMovies[] | iMovie[] | null }) {
+  if (!props.list) return null;
+
   return (
     <ul className="list">
       {props.list.map((movie) => {
@@ -135,17 +152,8 @@ function ListItem(props: { item: iMovie | iWatchedMovies; details: string[] }) {
   );
 }
 
-function WatchedBox(props: { watchedList: iWatchedMovies[] | null }) {
+function WatchedBox(props: { children: ReactNode }) {
   const [isOpen2, setIsOpen2] = useState(true);
-
-  const summaryProps: iSummary | null = !props.watchedList
-    ? null
-    : {
-        numMovies: props.watchedList.length,
-        imdbRating: average(props.watchedList.map((movie) => movie.imdbRating)),
-        userRating: average(props.watchedList.map((movie) => movie.userRating)),
-        runtime: average(props.watchedList.map((movie) => movie.runtime)),
-      };
 
   return (
     <div className="box">
@@ -155,12 +163,7 @@ function WatchedBox(props: { watchedList: iWatchedMovies[] | null }) {
       >
         {isOpen2 ? "–" : "+"}
       </button>
-      {isOpen2 && props.watchedList && (
-        <>
-          <Summary summaryProps={summaryProps} />
-          <List list={props.watchedList} />
-        </>
-      )}
+      {isOpen2 && <>{props.children}</>}
     </div>
   );
 }
@@ -188,7 +191,7 @@ function Summary(props: { summaryProps: iSummary | null }) {
   );
 }
 
-function ListBox(props: { movieList: iMovie[] | null }) {
+function ListBox(props: { children: ReactNode }) {
   const [isOpen1, setIsOpen1] = useState(true);
 
   return (
@@ -199,7 +202,7 @@ function ListBox(props: { movieList: iMovie[] | null }) {
       >
         {isOpen1 ? "–" : "+"}
       </button>
-      {isOpen1 && props.movieList && <List list={props.movieList} />}
+      {isOpen1 && props.children}
     </div>
   );
 }
