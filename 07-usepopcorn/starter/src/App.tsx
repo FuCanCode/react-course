@@ -91,13 +91,11 @@ export default function App() {
       </NavBar>
 
       <Main>
-        <ListBox>
-          <List list={movies} />
-        </ListBox>
-        <WatchedBox>
+        <Box explicitProp={<List list={movies} />} />
+        <Box>
           <Summary summaryProps={summaryProps} />
           <List list={watched} />
-        </WatchedBox>
+        </Box>
       </Main>
     </>
   );
@@ -152,18 +150,20 @@ function ListItem(props: { item: iMovie | iWatchedMovies; details: string[] }) {
   );
 }
 
-function WatchedBox(props: { children: ReactNode }) {
-  const [isOpen2, setIsOpen2] = useState(true);
+function Box(props: { children?: ReactNode; explicitProp?: ReactNode }) {
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? "–" : "+"}
+      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
+        {isOpen ? "–" : "+"}
       </button>
-      {isOpen2 && <>{props.children}</>}
+      {isOpen && (
+        <>
+          {props.explicitProp}
+          {props.children}
+        </>
+      )}
     </div>
   );
 }
@@ -187,22 +187,6 @@ function Summary(props: { summaryProps: iSummary | null }) {
     <div className="summary">
       <h2>Movies you watched</h2>
       <ListDetails details={details} />
-    </div>
-  );
-}
-
-function ListBox(props: { children: ReactNode }) {
-  const [isOpen1, setIsOpen1] = useState(true);
-
-  return (
-    <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen1((open) => !open)}
-      >
-        {isOpen1 ? "–" : "+"}
-      </button>
-      {isOpen1 && props.children}
     </div>
   );
 }
