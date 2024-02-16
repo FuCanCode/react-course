@@ -339,6 +339,35 @@ body {
   justify-content: center;
 }
 
+.stars {
+  display: flex;
+  background-color: var(--color-background-100);
+  padding: 1.8rem;
+  margin: 2rem 6rem;
+  justify-content: center;
+  border-radius: 5rem;
+  gap: 1rem;
+  align-items: center;
+}
+
+.stars ul {
+  display: flex;
+  list-style: none;
+}
+
+.stars svg {
+  width: 2.2rem;
+  color: gold;
+  cursor: pointer;
+}
+
+.stars p {
+  color: gold;
+  font-size: 1.8rem;
+  font-weight: bold;
+  transform: translateY(-2px);
+}
+
 /*
 SPACING SYSTEM (px)
 2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 64 / 80 / 96 / 128

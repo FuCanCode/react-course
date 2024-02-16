@@ -1,4 +1,5 @@
 import { ReactNode, useState } from "react";
+import Stars from "./Stars";
 
 interface iMovie {
   imdbID: string;
@@ -95,6 +96,7 @@ export default function App() {
         <Box>
           <Summary summaryProps={summaryProps} />
           <List list={watched} />
+          <Stars />
         </Box>
       </Main>
     </>
