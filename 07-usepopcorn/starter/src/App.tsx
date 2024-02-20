@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import Stars from "./Stars";
+import StarRating from "./StarRating";
 
 interface iMovie {
   imdbID: string;
@@ -70,6 +70,17 @@ const average = (arr: number[]): number => {
   return arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
 };
 
+function Test() {
+  const [movieRating, setMovieRating] = useState(0);
+
+  return (
+    <div>
+      <StarRating color="red" defaultRating={2} getRating={setMovieRating} />
+      <p>This movie was rated {movieRating} Stars.</p>
+    </div>
+  );
+}
+
 export default function App() {
   const [movies, setMovies] = useState<iMovie[] | null>(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
@@ -91,12 +102,19 @@ export default function App() {
         <Results results={movies ? movies.length : null} />
       </NavBar>
 
+      <Test />
+      <StarRating
+        starsAmount={5}
+        defaultRating={2}
+        messages={["Terrible", "Bad", "Okay", "Good", "Amazing"]}
+      />
+      <StarRating starsAmount={6} messages={["Bad", "Better", "Best"]} />
+
       <Main>
         <Box explicitProp={<List list={movies} />} />
         <Box>
           <Summary summaryProps={summaryProps} />
           <List list={watched} />
-          <Stars />
         </Box>
       </Main>
     </>
