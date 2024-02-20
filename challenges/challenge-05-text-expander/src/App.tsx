@@ -19,6 +19,7 @@ function App() {
         color="orange"
         wording={["Hit me", "Close me"]}
         wordsCollapsed={30}
+        extended
       >
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore
         doloribus, voluptate vitae expedita fugiat voluptates iure officia
