@@ -1,0 +1,15 @@
+button {
+  padding: 0.8rem 1.2rem;
+  background-color: gold;
+  border-radius: 7px;
+  border-style: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  border: solid 1px gold;
+  background-color: black;
+  color: gold;
+}
