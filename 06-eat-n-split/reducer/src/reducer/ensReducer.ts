@@ -28,6 +28,8 @@ export type SplittedBill = {
 
 export type AppAction = AddedFriend | SelectedFriend | SplittedBill;
 
+export type ReducerSignature = (state: AppState, action: AppAction) => AppState;
+
 export function eNsReducer(state: AppState, action: AppAction): AppState {
   const selectedFriendName = state.friends.find(
     (f) => f.id === state.selectedFriend

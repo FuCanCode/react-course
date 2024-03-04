@@ -5,7 +5,7 @@ import "./app.css";
 import AddFriend from "../AddFriend/AddFriend";
 import { AppState, iPeople, eNsReducer } from "../../reducer/ensReducer";
 
-const initialFriends: iPeople[] = [
+export const initialFriends: iPeople[] = [
   {
     id: 118836,
     name: "Clark",
@@ -26,7 +26,7 @@ const initialFriends: iPeople[] = [
   },
 ];
 
-const initialState: AppState = {
+export const initialState: AppState = {
   selectedFriend: null,
   friends: initialFriends,
   error: null,

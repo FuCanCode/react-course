@@ -18,6 +18,9 @@ const content = [
   },
 ];
 
+// console.log(<DifferentContent />); // Instance
+// console.log(DifferentContent()); // Raw Element
+
 export default function App() {
   return (
     <div>
@@ -39,7 +42,7 @@ function Tabbed({ content }) {
       </div>
 
       {activeTab <= 2 ? (
-        <TabContent item={content.at(activeTab)} />
+        <TabContent key={activeTab} item={content.at(activeTab)} />
       ) : (
         <DifferentContent />
       )}
@@ -61,9 +64,25 @@ function Tab({ num, activeTab, onClick }) {
 function TabContent({ item }) {
   const [showDetails, setShowDetails] = useState(true);
   const [likes, setLikes] = useState(0);
+  console.log("RENDER");
 
   function handleInc() {
     setLikes(likes + 1);
+  }
+
+  function handle3Inc() {
+    setLikes((l) => l + 1);
+    setLikes((l) => l + 1);
+    setLikes((l) => l + 1);
+  }
+
+  function handleUndo() {
+    setLikes((l) => 0);
+    setShowDetails(true);
+  }
+
+  function handleUndoIn2s() {
+    setTimeout(handleUndo, 2000);
   }
 
   return (
@@ -79,13 +98,13 @@ function TabContent({ item }) {
         <div className="hearts-counter">
           <span>{likes} ❤️</span>
           <button onClick={handleInc}>+</button>
-          <button>+++</button>
+          <button onClick={handle3Inc}>+++</button>
         </div>
       </div>
 
       <div className="tab-undo">
-        <button>Undo</button>
-        <button>Undo in 2s</button>
+        <button onClick={handleUndo}>Undo</button>
+        <button onClick={handleUndoIn2s}>Undo in 2s</button>
       </div>
     </div>
   );
