@@ -2,13 +2,14 @@ import { useState } from "react";
 import Button from "../Button/Button";
 import "./addFriend.css";
 import { AddedFriend, iPeople } from "../../reducer/ensReducer";
+import { useAppDispatchContext } from "../../context/AppProvider";
 
-export default function AddFriend(props: {
-  dispatch: React.Dispatch<AddedFriend>;
-}) {
+export default function AddFriend() {
   const [formIsOpen, setFormIsOpen] = useState<boolean>(false);
   const [nameInput, setNameInput] = useState<string>("");
   const [imgURLInput, setImgURLInput] = useState<string>("");
+
+  const dispatch: React.Dispatch<AddedFriend> = useAppDispatchContext();
 
   function submitAddFriend(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -22,7 +23,7 @@ export default function AddFriend(props: {
       balance: 0,
     };
 
-    props.dispatch({
+    dispatch({
       type: "added_friend",
       newFriend,
     });

@@ -21,12 +21,12 @@ export type SelectedFriend = {
   selectedFriendId: number | null;
 };
 
-export type SplittedBill = {
-  type: "splitted_bill";
+export type SplitBill = {
+  type: "split_bill";
   bill: number;
 };
 
-export type AppAction = AddedFriend | SelectedFriend | SplittedBill;
+export type AppAction = AddedFriend | SelectedFriend | SplitBill;
 
 export type ReducerSignature = (state: AppState, action: AppAction) => AppState;
 
@@ -42,18 +42,10 @@ export function eNsReducer(state: AppState, action: AppAction): AppState {
     }
 
     case "selected_friend": {
-      const newFriendSelected = state.friends.find(
-        (f) => f.id === action.selectedFriendId
-      );
-      console.log(
-        newFriendSelected
-          ? `You selected ${newFriendSelected.name}...`
-          : `You've cancelled the selection of ${selectedFriendName}...`
-      );
       return { ...state, selectedFriend: action.selectedFriendId };
     }
 
-    case "splitted_bill": {
+    case "split_bill": {
       console.log(
         `Splitted bill with ${selectedFriendName} for ${action.bill}€...`
       );

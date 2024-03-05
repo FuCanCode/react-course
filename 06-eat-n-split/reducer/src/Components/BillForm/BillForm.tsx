@@ -1,17 +1,21 @@
 import { Dispatch, useState } from "react";
-import { iPeople, SplittedBill } from "../../reducer/ensReducer";
+import { iPeople, SplitBill } from "../../reducer/ensReducer";
 import Button from "../Button/Button";
 import "./billForm.css";
+import {
+  useAppDispatchContext,
+  useAppStateContext,
+} from "../../context/AppProvider";
 
-interface BillFormProps {
-  debtor: iPeople;
-  dispatch: Dispatch<SplittedBill>;
-}
-
-export default function BillForm(props: BillFormProps) {
+export default function BillForm() {
   const [billInput, setBillInput] = useState<string>("");
   const [isOwnBill, setIsOwnBill] = useState(true);
   const [ownExpenseInput, setOwnExpenseInput] = useState<string>("");
+
+  const dispatch: Dispatch<SplitBill> = useAppDispatchContext();
+  const { friends, selectedFriend } = useAppStateContext();
+  const debtor: iPeople | null =
+    friends.find((f) => f.id === selectedFriend) || null;
 
   const bill = Number(billInput);
   const ownExpense = Number(ownExpenseInput);
@@ -24,7 +28,7 @@ export default function BillForm(props: BillFormProps) {
 
     const value = isOwnBill ? debtorValue : -ownExpense;
 
-    props.dispatch({ type: "splitted_bill", bill: value });
+    dispatch({ type: "split_bill", bill: value });
 
     setOwnExpenseInput("");
     setBillInput("");
@@ -34,9 +38,11 @@ export default function BillForm(props: BillFormProps) {
     return Number(input) > Number(billInput) ? ownExpenseInput : input;
   }
 
+  if (!debtor) return;
+
   return (
     <div className="bill">
-      <h1>Split a Bill with {props.debtor.name}</h1>
+      <h1>Split a Bill with {debtor.name}</h1>
 
       <form onSubmit={handleSplitSubmit}>
         <label htmlFor="bill">💰 Bill value</label>
@@ -55,7 +61,7 @@ export default function BillForm(props: BillFormProps) {
           onChange={(e) => setOwnExpenseInput(checkValidInput(e.target.value))}
         />
 
-        <label htmlFor="other">🫵 {props.debtor.name}'s expense</label>
+        <label htmlFor="other">🫵 {debtor.name}'s expense</label>
         <input
           type="text"
           name="other"
@@ -71,7 +77,7 @@ export default function BillForm(props: BillFormProps) {
           onChange={() => setIsOwnBill(!isOwnBill)}
         >
           <option value="own">You</option>
-          <option value="other">{props.debtor.name}</option>
+          <option value="other">{debtor.name}</option>
         </select>
 
         <Button>Split Bill</Button>
