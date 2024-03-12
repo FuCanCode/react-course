@@ -1,5 +1,5 @@
-const key = "9ab7e87f";
-const URL = `http://www.omdbapi.com/?apikey=${key}&`;
+const KEY = "9ab7e87f";
+const URL = `http://www.omdbapi.com/?apikey=${KEY}&`;
 
 export interface iMovie {
   imdbID: string;
@@ -87,6 +87,8 @@ export async function getSearchResults(query: string) {
     if (json.Error) throw new Error(json.Error);
 
     const searchResults: ApiSearchResults[] = json.Search;
+    console.log(json.totalResults);
+    console.log(searchResults);
 
     const appResults: iMovie[] = searchResults.map(
       ({ imdbID, Title, Year, Poster }) => ({ imdbID, Title, Year, Poster })

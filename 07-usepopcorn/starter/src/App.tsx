@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import StarRating from "./StarRating";
 import {
   getSearchResults,
@@ -25,8 +25,23 @@ function Test() {
 }
 
 export default function App() {
-  const [movies, setMovies] = useState<iMovie[] | null>(tempMovieData);
+  const [movies, setMovies] = useState<iMovie[] | null>(null);
   const [watched, setWatched] = useState(tempWatchedData);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const getData = async function () {
+      const initData = await getSearchResults("inception");
+      setMovies(initData ? initData : null);
+    };
+
+    if (!ignore) getData();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const summaryProps: iSummary | null = !watched
     ? null
@@ -41,17 +56,17 @@ export default function App() {
     <>
       <NavBar>
         <Logo />
-        <SearchInput />
+        <SearchInput onSearch={setMovies} />
         <Results results={movies ? movies.length : null} />
       </NavBar>
 
       <Test />
-      <StarRating
+      {/* <StarRating
         starsAmount={5}
         defaultRating={2}
         messages={["Terrible", "Bad", "Okay", "Good", "Amazing"]}
       />
-      <StarRating starsAmount={6} messages={["Bad", "Better", "Best"]} />
+      <StarRating starsAmount={6} messages={["Bad", "Better", "Best"]} /> */}
 
       <Main>
         <Box explicitProp={<List list={movies} />} />
@@ -183,14 +198,30 @@ function Logo() {
   );
 }
 
-function SearchInput() {
+function SearchInput({
+  onSearch,
+}: {
+  onSearch: React.Dispatch<React.SetStateAction<iMovie[] | null>>;
+}) {
   const [query, setQuery] = useState("");
 
-  function handlePressEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+  async function handlePressEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      getSearchResults(query);
+      const newMovieList = await getSearchResults(query);
 
       setQuery("");
+
+      if (!newMovieList)
+        return onSearch([
+          {
+            Title: "Couldn't find any movie!",
+            imdbID: "",
+            Poster: "",
+            Year: "",
+          },
+        ]);
+
+      onSearch(newMovieList);
     }
   }
 
