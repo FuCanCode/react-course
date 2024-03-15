@@ -21,7 +21,7 @@ export interface iSummary {
   runtime: number;
 }
 
-interface ApiSearchResults {
+interface ApiSearchResult {
   Title: string;
   Year: string;
   imdbID: string;
@@ -29,29 +29,15 @@ interface ApiSearchResults {
   Poster: string;
 }
 
-export const tempMovieData: iMovie[] = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0133093",
-    Title: "The Matrix",
-    Year: "1999",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt6751668",
-    Title: "Parasite",
-    Year: "2019",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  },
-];
+interface ApiMovieObject extends ApiSearchResult {
+  Genre: string;
+  imdBRating: string;
+  Runtime: string;
+  Released: string;
+  Plot: string;
+  Actors: string;
+  Director: string;
+}
 
 export const tempWatchedData: iWatchedMovies[] = [
   {
@@ -79,23 +65,29 @@ export const tempWatchedData: iWatchedMovies[] = [
 export async function getSearchResults(query: string) {
   try {
     const response = await fetch(`${URL}s=${query}`);
-    console.log(response);
 
-    if (!response.ok) throw new Error("Something went wrong: " + response);
+    if (!response || !response.ok)
+      throw new Error("Server Error! Aaaarlarm!!!");
 
     const json = await response.json();
     if (json.Error) throw new Error(json.Error);
 
-    const searchResults: ApiSearchResults[] = json.Search;
-    console.log(json.totalResults);
-    console.log(searchResults);
-
+    const searchResults: ApiSearchResult[] = json.Search;
     const appResults: iMovie[] = searchResults.map(
       ({ imdbID, Title, Year, Poster }) => ({ imdbID, Title, Year, Poster })
     );
 
     return appResults;
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      console.log(error.message);
+
+      return error.message;
+    } else {
+      console.log(error);
+    }
   }
 }
+export const average = (arr: number[]): number => {
+  return arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
+};
