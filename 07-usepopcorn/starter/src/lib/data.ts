@@ -62,15 +62,19 @@ export const tempWatchedData: iWatchedMovies[] = [
   },
 ];
 
-export async function getSearchResults(query: string) {
+export async function getApiResult(query: string, type: "search" | "item") {
   try {
-    const response = await fetch(`${URL}s=${query}`);
+    const response = await fetch(
+      `${URL}${type === "search" ? "s" : "i"}=${query}`
+    );
 
     if (!response || !response.ok)
       throw new Error("Server Error! Aaaarlarm!!!");
 
     const json = await response.json();
     if (json.Error) throw new Error(json.Error);
+
+    if (type === "item") return json as ApiMovieObject;
 
     const searchResults: ApiSearchResult[] = json.Search;
     const appResults: iMovie[] = searchResults.map(

@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 
-import {
-  getSearchResults,
-  iMovie,
-  iSummary,
-  tempWatchedData,
-} from "./lib/data";
+import { getApiResult, iMovie, iSummary, tempWatchedData } from "./lib/data";
 import { SearchInput } from "./components/SearchInput/SearchInput";
 import { average } from "./lib/data";
 import { List } from "./components/List/List";
@@ -39,7 +34,7 @@ export default function App() {
       setIsLoading(true);
       setError("");
 
-      const fetchResult = await getSearchResults(query);
+      const fetchResult = await getApiResult(query, "search");
 
       setIsLoading(false);
       if (typeof fetchResult === "string") {
