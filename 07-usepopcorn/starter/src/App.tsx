@@ -6,6 +6,8 @@ import {
   iSummary,
   tempWatchedData,
   average,
+  getMovieDetails,
+  ApiMovieObject,
 } from "./lib/data";
 import { SearchInput } from "./components/SearchInput/SearchInput";
 
@@ -14,9 +16,13 @@ import { NavBar, Logo, Results } from "./components/NavBar/NavBar";
 import { Summary } from "./components/Summary/Summary";
 import { Main } from "./components/Layout/Main";
 import { Box } from "./components/Layout/Box";
+import MovieDetails from "./components/MovieDetails/MovieDetails";
 
 export default function App() {
   const [movies, setMovies] = useState<iMovie[] | null>(null);
+  const [selectedMovie, setSelectedMovie] = useState<ApiMovieObject | null>(
+    null
+  );
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -76,6 +82,21 @@ export default function App() {
     }
   };
 
+  /////// TEST //
+  ///////////////
+
+  useEffect(() => {
+    async function getMovie() {
+      const movie = await getMovieDetails("tt1375666");
+      if (typeof movie === "string") return;
+      console.log(movie);
+
+      setSelectedMovie(movie);
+    }
+
+    getMovie();
+  }, []);
+
   return (
     <>
       <NavBar>
@@ -86,20 +107,12 @@ export default function App() {
         />
         <Results results={movies ? movies.length : null} />
       </NavBar>
-
-      {/* <Test /> */}
-      {/* <StarRating
-        starsAmount={5}
-        defaultRating={2}
-        messages={["Terrible", "Bad", "Okay", "Good", "Amazing"]}
-      />
-      <StarRating starsAmount={6} messages={["Bad", "Better", "Best"]} /> */}
-
       <Main>
         <Box explicitProp={getBoxContent()} />
         <Box>
-          <Summary summaryProps={summaryProps} />
-          <List list={watched} />
+          {selectedMovie && <MovieDetails movie={selectedMovie} />}
+          {/* <Summary summaryProps={summaryProps} /> */}
+          {/* <List list={watched} /> */}
         </Box>
       </Main>
     </>
