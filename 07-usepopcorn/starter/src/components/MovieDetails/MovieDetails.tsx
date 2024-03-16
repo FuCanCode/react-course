@@ -17,12 +17,12 @@ export default function MovieDetails(props: {
           <p>{movie.Genre}</p>
           <p>
             <span>⭐️</span>
-            {movie.imdBRating + " IMDb rating"}
+            {movie.imdbRating + " IMDb rating"}
           </p>
         </div>
       </header>
       <section>
-        <StarRating className="rating" />
+        <StarRating className="rating" size={24} />
         <p>{movie.Plot}</p>
         <p>{"Starring: " + movie.Actors}</p>
         <p>{"Directed by: " + movie.Director}</p>
