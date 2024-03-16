@@ -29,7 +29,11 @@ interface ApiSearchResult {
   Poster: string;
 }
 
-interface ApiMovieObject extends ApiSearchResult {
+interface ApiSearchObject {
+  Search: ApiSearchResult[];
+}
+
+export interface ApiMovieObject extends ApiSearchResult {
   Genre: string;
   imdBRating: string;
   Runtime: string;
@@ -62,11 +66,42 @@ export const tempWatchedData: iWatchedMovies[] = [
   },
 ];
 
-export async function getApiResult(query: string, type: "search" | "item") {
+export async function getSearchResult(
+  query: string
+): Promise<iMovie[] | string> {
+  const json = await fetchOMDB(`${URL}s=${query}`);
+
+  if (json instanceof Error) return json.message;
+
+  if (!("Search" in json)) return "Something's wrong with the search object";
+
+  const apiData: ApiSearchResult[] = json.Search;
+  const appData: iMovie[] = apiData.map(({ imdbID, Title, Year, Poster }) => ({
+    imdbID,
+    Title,
+    Year,
+    Poster,
+  }));
+
+  return appData;
+}
+
+export async function getMovieDetails(
+  query: string
+): Promise<ApiMovieObject | string> {
+  const json = await fetchOMDB(`${URL}i=${query}`);
+
+  if (json instanceof Error) return json.message;
+
+  if ("Search" in json)
+    return "Something's wrong with the movie details object";
+
+  return json;
+}
+
+async function fetchOMDB(URL: string) {
   try {
-    const response = await fetch(
-      `${URL}${type === "search" ? "s" : "i"}=${query}`
-    );
+    const response = await fetch(URL);
 
     if (!response || !response.ok)
       throw new Error("Server Error! Aaaarlarm!!!");
@@ -74,24 +109,16 @@ export async function getApiResult(query: string, type: "search" | "item") {
     const json = await response.json();
     if (json.Error) throw new Error(json.Error);
 
-    if (type === "item") return json as ApiMovieObject;
-
-    const searchResults: ApiSearchResult[] = json.Search;
-    const appResults: iMovie[] = searchResults.map(
-      ({ imdbID, Title, Year, Poster }) => ({ imdbID, Title, Year, Poster })
-    );
-
-    return appResults;
+    return json as ApiMovieObject | ApiSearchObject;
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error.message);
-
-      return error.message;
+      return error;
     } else {
-      console.log(error);
+      throw error;
     }
   }
 }
+
 export const average = (arr: number[]): number => {
   return arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
 };

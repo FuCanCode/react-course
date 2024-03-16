@@ -1,24 +1,19 @@
 import { useEffect, useState } from "react";
 
-import { getApiResult, iMovie, iSummary, tempWatchedData } from "./lib/data";
+import {
+  getSearchResult,
+  iMovie,
+  iSummary,
+  tempWatchedData,
+  average,
+} from "./lib/data";
 import { SearchInput } from "./components/SearchInput/SearchInput";
-import { average } from "./lib/data";
+
 import { List } from "./components/List/List";
 import { NavBar, Logo, Results } from "./components/NavBar/NavBar";
 import { Summary } from "./components/Summary/Summary";
 import { Main } from "./components/Layout/Main";
 import { Box } from "./components/Layout/Box";
-
-// function Test() {
-//   const [movieRating, setMovieRating] = useState(0);
-
-//   return (
-//     <div>
-//       <StarRating color="red" defaultRating={2} getRating={setMovieRating} />
-//       <p>This movie was rated {movieRating} Stars.</p>
-//     </div>
-//   );
-// }
 
 export default function App() {
   const [movies, setMovies] = useState<iMovie[] | null>(null);
@@ -29,12 +24,13 @@ export default function App() {
 
   useEffect(() => {
     let ignore = false;
+    setMovies(null);
+    setError("");
 
     const getData = async function () {
       setIsLoading(true);
-      setError("");
 
-      const fetchResult = await getApiResult(query, "search");
+      const fetchResult = await getSearchResult(query);
 
       setIsLoading(false);
       if (typeof fetchResult === "string") {
@@ -45,7 +41,7 @@ export default function App() {
       setMovies(fetchResult ? fetchResult : null);
     };
 
-    if (!ignore && query.length > 3) {
+    if (!ignore && query.length >= 3) {
       getData();
     }
 
@@ -73,7 +69,7 @@ export default function App() {
             <span>⛔</span> {error}
           </p>
         );
-      case query === "":
+      case query.length < 3:
         return <p className="error">📽️ Search for a movie! 🎬</p>;
       default:
         return <List list={movies} />;
