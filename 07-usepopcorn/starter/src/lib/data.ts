@@ -35,7 +35,7 @@ interface ApiSearchObject {
 
 export interface ApiMovieObject extends ApiSearchResult {
   Genre: string;
-  imdBRating: string;
+  imdbRating: string;
   Runtime: string;
   Released: string;
   Plot: string;
