@@ -20,9 +20,7 @@ import MovieDetails from "./components/MovieDetails/MovieDetails";
 
 export default function App() {
   const [movies, setMovies] = useState<iMovie[] | null>(null);
-  const [selectedMovie, setSelectedMovie] = useState<ApiMovieObject | null>(
-    null
-  );
+  const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -65,37 +63,9 @@ export default function App() {
         runtime: average(watched.map((movie) => movie.runtime)),
       };
 
-  const getBoxContent = () => {
-    switch (true) {
-      case isLoading:
-        return <Loader />;
-      case error.length > 0:
-        return (
-          <p className="error">
-            <span>⛔</span> {error}
-          </p>
-        );
-      case query.length < 3:
-        return <p className="error">📽️ Search for a movie! 🎬</p>;
-      default:
-        return <List list={movies} />;
-    }
-  };
-
-  /////// TEST //
-  ///////////////
-
-  useEffect(() => {
-    async function getMovie() {
-      const movie = await getMovieDetails("tt1375666");
-      if (typeof movie === "string") return;
-      console.log(movie);
-
-      setSelectedMovie(movie);
-    }
-
-    getMovie();
-  }, []);
+  function handleMovieSelect(id: string) {
+    setSelectedMovie((currentID) => (id === currentID ? null : id));
+  }
 
   return (
     <>
@@ -108,17 +78,41 @@ export default function App() {
         <Results results={movies ? movies.length : null} />
       </NavBar>
       <Main>
-        <Box explicitProp={getBoxContent()} />
+        {/* <Box explicitProp={getBoxContent()} /> */}
         <Box>
-          {selectedMovie && <MovieDetails movie={selectedMovie} />}
-          {/* <Summary summaryProps={summaryProps} /> */}
-          {/* <List list={watched} /> */}
+          {isLoading && <Loader />}
+          {error && <ErrorMessage error={error} />}
+          {query.length < 3 && (
+            <p className="error">📽️ Search for a movie! 🎬</p>
+          )}
+          {movies && <List list={movies} onItemSelect={handleMovieSelect} />}
+        </Box>
+        <Box>
+          {selectedMovie && (
+            <MovieDetails movieID={selectedMovie} onSelect={setSelectedMovie} />
+          )}
+          {!selectedMovie && (
+            <>
+              <Summary summaryProps={summaryProps} />
+              <List list={watched} onItemSelect={setSelectedMovie} />
+            </>
+          )}
         </Box>
       </Main>
     </>
   );
 }
 
-function Loader() {
+export function Loader() {
   return <p className="loader">Loading in progress...</p>;
+}
+
+export function ErrorMessage(props: { error?: string }) {
+  const { error = "Error (not specified)" } = props;
+
+  return (
+    <p className="error">
+      <span>⛔</span> {error}
+    </p>
+  );
 }

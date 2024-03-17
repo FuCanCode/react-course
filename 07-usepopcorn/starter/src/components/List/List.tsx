@@ -1,10 +1,13 @@
 import { iMovie, iWatchedMovies } from "../../lib/data";
 
-export function List(props: { list: iWatchedMovies[] | iMovie[] | null }) {
+export function List(props: {
+  list: iWatchedMovies[] | iMovie[] | null;
+  onItemSelect: React.Dispatch<React.SetStateAction<string | null>>;
+}) {
   if (!props.list) return null;
 
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {props.list.map((movie) => {
         const details =
           "userRating" in movie
@@ -15,14 +18,25 @@ export function List(props: { list: iWatchedMovies[] | iMovie[] | null }) {
               ]
             : ["🗓️ " + movie.Year];
 
-        return <ListItem key={movie.imdbID} item={movie} details={details} />;
+        return (
+          <ListItem
+            key={movie.imdbID}
+            item={movie}
+            details={details}
+            onItemSelect={props.onItemSelect}
+          />
+        );
       })}
     </ul>
   );
 }
-function ListItem(props: { item: iMovie | iWatchedMovies; details: string[] }) {
+function ListItem(props: {
+  item: iMovie | iWatchedMovies;
+  details: string[];
+  onItemSelect: React.Dispatch<React.SetStateAction<string | null>>;
+}) {
   return (
-    <li>
+    <li onClick={() => props.onItemSelect(props.item.imdbID)}>
       <img src={props.item.Poster} alt={`${props.item.Title} poster`} />
       <h3>{props.item.Title}</h3>
       <ListDetails details={props.details} />
