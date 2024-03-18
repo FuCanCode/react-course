@@ -1,17 +1,17 @@
 const KEY = "9ab7e87f";
 const URL = `http://www.omdbapi.com/?apikey=${KEY}&`;
 
-export interface iMovie {
+export interface Movie {
   imdbID: string;
   Title: string;
   Year: string;
   Poster: string;
 }
 
-export interface iWatchedMovies extends iMovie {
+export interface WatchedMovie extends Movie {
   runtime: number;
   imdbRating: number;
-  userRating: number;
+  userRating?: number;
 }
 
 export interface iSummary {
@@ -43,7 +43,7 @@ export interface ApiMovieObject extends ApiSearchResult {
   Director: string;
 }
 
-export const tempWatchedData: iWatchedMovies[] = [
+export const tempWatchedData: WatchedMovie[] = [
   {
     imdbID: "tt1375666",
     Title: "Inception",
@@ -68,7 +68,7 @@ export const tempWatchedData: iWatchedMovies[] = [
 
 export async function getSearchResult(
   query: string
-): Promise<iMovie[] | string> {
+): Promise<Movie[] | string> {
   const json = await fetchOMDB(`${URL}s=${query}`);
 
   if (json instanceof Error) return json.message;
@@ -76,7 +76,7 @@ export async function getSearchResult(
   if (!("Search" in json)) return "Something's wrong with the search object";
 
   const apiData: ApiSearchResult[] = json.Search;
-  const appData: iMovie[] = apiData.map(({ imdbID, Title, Year, Poster }) => ({
+  const appData: Movie[] = apiData.map(({ imdbID, Title, Year, Poster }) => ({
     imdbID,
     Title,
     Year,
@@ -117,6 +117,19 @@ async function fetchOMDB(URL: string) {
       throw error;
     }
   }
+}
+
+export function convertToWatchedMovie(movie: ApiMovieObject): WatchedMovie {
+  const { imdbID, imdbRating, Title, Year, Poster } = movie;
+  return {
+    imdbID,
+    Title,
+    Year,
+    Poster,
+    runtime: Number(movie.Runtime.split(" ")[0]),
+    imdbRating: Number(imdbRating),
+    userRating: 10,
+  };
 }
 
 export const average = (arr: number[]): number => {

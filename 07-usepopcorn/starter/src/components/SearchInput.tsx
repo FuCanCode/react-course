@@ -1,7 +1,7 @@
-import { getSearchResults, iMovie } from "../../lib/data";
+import { getSearchResults, Movie } from "../lib/data";
 
 interface SearchInputProps {
-  // onSearch: React.Dispatch<React.SetStateAction<iMovie[] | null>>;
+  // onSearch: React.Dispatch<React.SetStateAction<Movie[] | null>>;
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
 }

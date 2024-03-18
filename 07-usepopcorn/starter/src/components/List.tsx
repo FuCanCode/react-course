@@ -1,8 +1,9 @@
-import { iMovie, iWatchedMovies } from "../../lib/data";
+import { useState } from "react";
+import { Movie, WatchedMovie } from "../lib/data";
 
 export function List(props: {
-  list: iWatchedMovies[] | iMovie[] | null;
-  onItemSelect: React.Dispatch<React.SetStateAction<string | null>>;
+  list: WatchedMovie[] | Movie[] | null;
+  onItemSelect: (id: string) => void;
 }) {
   if (!props.list) return null;
 
@@ -31,13 +32,20 @@ export function List(props: {
   );
 }
 function ListItem(props: {
-  item: iMovie | iWatchedMovies;
+  item: Movie | WatchedMovie;
   details: string[];
-  onItemSelect: React.Dispatch<React.SetStateAction<string | null>>;
+  onItemSelect: (id: string) => void;
 }) {
+  const [imgErr, setImgErr] = useState(false);
+  const fallback = "./src/assets/fallBack.png";
+
   return (
     <li onClick={() => props.onItemSelect(props.item.imdbID)}>
-      <img src={props.item.Poster} alt={`${props.item.Title} poster`} />
+      <img
+        src={!imgErr ? props.item.Poster : fallback}
+        onError={() => setImgErr(true)}
+        alt={`${props.item.Title} poster`}
+      />
       <h3>{props.item.Title}</h3>
       <ListDetails details={props.details} />
     </li>

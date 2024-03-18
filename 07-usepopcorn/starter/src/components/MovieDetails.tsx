@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { ApiMovieObject, getMovieDetails } from "../../lib/data";
-import StarRating from "../StarRating/StarRating";
-import { Loader } from "../../App";
+import { ApiMovieObject, getMovieDetails } from "../lib/data";
+import StarRating from "./StarRating";
+import { Loader } from "../App";
 
 export default function MovieDetails(props: {
   movieID: string;
   onSelect: React.Dispatch<React.SetStateAction<string | null>>;
-}): JSX.Element {
+}): JSX.Element | null {
   const [movie, setMovie] = useState<null | ApiMovieObject>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -23,6 +23,20 @@ export default function MovieDetails(props: {
     loadMovie();
   }, [movieID]);
 
+  if (!movie) return null;
+
+  const {
+    Poster: poster,
+    Title: title,
+    Released: released,
+    Runtime: runtime,
+    Genre: genre,
+    imdbRating,
+    Plot: plot,
+    Actors: actors,
+    Director: director,
+  } = movie;
+
   return (
     <>
       {isLoading ? (
@@ -32,24 +46,26 @@ export default function MovieDetails(props: {
           <div className="details">
             <header>
               <button className="btn-back" onClick={() => onSelect(null)}>
-                ←
+                &larr;
               </button>
-              <img src={movie.Poster} alt={`Poster of movie ${movie.Title}`} />
+              <img src={poster} alt={`Poster of movie ${title}`} />
               <div className="details-overview">
-                <h2>{movie.Title}</h2>
-                <p>{`${movie.Released} • ${movie.Runtime} min`}</p>
-                <p>{movie.Genre}</p>
+                <h2>{title}</h2>
+                <p>
+                  {released} &bull; {runtime}
+                </p>
+                <p>{genre}</p>
                 <p>
                   <span>⭐️</span>
-                  {movie.imdbRating + " IMDb rating"}
+                  {imdbRating} IMDb rating
                 </p>
               </div>
             </header>
             <section>
               <StarRating className="rating" size={24} />
-              <p>{movie.Plot}</p>
-              <p>{"Starring: " + movie.Actors}</p>
-              <p>{"Directed by: " + movie.Director}</p>
+              <p>{plot}</p>
+              <p>Starring: {actors}</p>
+              <p>Directed by: {director}</p>
             </section>
           </div>
         )

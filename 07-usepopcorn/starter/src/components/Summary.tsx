@@ -1,4 +1,4 @@
-import { iSummary } from "../../lib/data";
+import { iSummary } from "../lib/data";
 import { ListDetails } from "../List/List";
 
 export function Summary(props: { summaryProps: iSummary | null }) {

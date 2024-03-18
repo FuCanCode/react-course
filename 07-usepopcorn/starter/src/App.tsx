@@ -2,24 +2,22 @@ import { useEffect, useState } from "react";
 
 import {
   getSearchResult,
-  iMovie,
+  Movie,
   iSummary,
   tempWatchedData,
   average,
-  getMovieDetails,
-  ApiMovieObject,
 } from "./lib/data";
-import { SearchInput } from "./components/SearchInput/SearchInput";
+import { SearchInput } from "./components/SearchInput";
 
-import { List } from "./components/List/List";
-import { NavBar, Logo, Results } from "./components/NavBar/NavBar";
-import { Summary } from "./components/Summary/Summary";
-import { Main } from "./components/Layout/Main";
-import { Box } from "./components/Layout/Box";
-import MovieDetails from "./components/MovieDetails/MovieDetails";
+import { List } from "./components/List";
+import { NavBar, Logo, Results } from "./components/NavBar";
+import { Summary } from "./components/Summary";
+import { Main } from "./components/Main";
+import { Box } from "./components/Box";
+import MovieDetails from "./components/MovieDetails";
 
 export default function App() {
-  const [movies, setMovies] = useState<iMovie[] | null>(null);
+  const [movies, setMovies] = useState<Movie[] | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,12 +57,12 @@ export default function App() {
     : {
         numMovies: watched.length,
         imdbRating: average(watched.map((movie) => movie.imdbRating)),
-        userRating: average(watched.map((movie) => movie.userRating)),
+        userRating: average(watched.map((movie) => movie.userRating || 0)),
         runtime: average(watched.map((movie) => movie.runtime)),
       };
 
   function handleMovieSelect(id: string) {
-    setSelectedMovie((currentID) => (id === currentID ? null : id));
+    setSelectedMovie(id === selectedMovie ? null : id);
   }
 
   return (
