@@ -1,5 +1,5 @@
 import { iSummary } from "../lib/data";
-import { ListDetails } from "../List/List";
+import { ListDetails } from "./List";
 
 export function Summary(props: { summaryProps: iSummary | null }) {
   if (!props.summaryProps)
@@ -12,8 +12,8 @@ export function Summary(props: { summaryProps: iSummary | null }) {
   const { numMovies, imdbRating, userRating, runtime } = props.summaryProps;
   const details = [
     "#️⃣ " + numMovies + " movies",
-    "⭐️ " + imdbRating,
-    "🌟 " + userRating,
+    "⭐️ " + imdbRating.toFixed(1),
+    "🌟 " + userRating.toFixed(1),
     "⏳ " + runtime + " min",
   ];
   return (

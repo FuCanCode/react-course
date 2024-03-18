@@ -54,23 +54,21 @@ export default function StarRating(props: IStarRatingProps) {
 
   return (
     <div className={className} style={containerStyle}>
-      <div style={containerStyle}>
-        <div style={starContainerStyle}>
-          {Array.from({ length: starsAmount }, (_, i) => {
-            return (
-              <Star
-                key={i}
-                settings={{ color, size }}
-                full={stars >= i + 1}
-                onStarClick={() => handleClick(stars)}
-                onHoverIn={() => setStars(i + 1)}
-                onHoverOut={() => setStars(lockedStars || 0)}
-              />
-            );
-          })}
-        </div>
-        <p style={textStyle}>{message}</p>
+      <div style={starContainerStyle}>
+        {Array.from({ length: starsAmount }, (_, i) => {
+          return (
+            <Star
+              key={i}
+              settings={{ color, size }}
+              full={stars >= i + 1}
+              onStarClick={() => handleClick(stars)}
+              onHoverIn={() => setStars(i + 1)}
+              onHoverOut={() => setStars(lockedStars || 0)}
+            />
+          );
+        })}
       </div>
+      <p style={textStyle}>{message}</p>
     </div>
   );
 }

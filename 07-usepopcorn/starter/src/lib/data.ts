@@ -11,7 +11,7 @@ export interface Movie {
 export interface WatchedMovie extends Movie {
   runtime: number;
   imdbRating: number;
-  userRating?: number;
+  userRating: number;
 }
 
 export interface iSummary {

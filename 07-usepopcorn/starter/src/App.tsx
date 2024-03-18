@@ -6,6 +6,7 @@ import {
   iSummary,
   tempWatchedData,
   average,
+  WatchedMovie,
 } from "./lib/data";
 import { SearchInput } from "./components/SearchInput";
 
@@ -19,7 +20,7 @@ import MovieDetails from "./components/MovieDetails";
 export default function App() {
   const [movies, setMovies] = useState<Movie[] | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState<WatchedMovie[] | []>(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
@@ -61,6 +62,13 @@ export default function App() {
         runtime: average(watched.map((movie) => movie.runtime)),
       };
 
+  function checkIsWatched() {
+    const searchResult = watched.find((w) => w.imdbID === selectedMovie);
+    return searchResult ? searchResult.userRating : false;
+  }
+
+  const userRating = checkIsWatched();
+
   function handleMovieSelect(id: string) {
     setSelectedMovie(id === selectedMovie ? null : id);
   }
@@ -87,7 +95,12 @@ export default function App() {
         </Box>
         <Box>
           {selectedMovie && (
-            <MovieDetails movieID={selectedMovie} onSelect={setSelectedMovie} />
+            <MovieDetails
+              userRating={userRating}
+              onRate={setWatched}
+              movieID={selectedMovie}
+              onSelect={setSelectedMovie}
+            />
           )}
           {!selectedMovie && (
             <>

@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
-import { ApiMovieObject, getMovieDetails } from "../lib/data";
+import {
+  ApiMovieObject,
+  convertToWatchedMovie,
+  getMovieDetails,
+  WatchedMovie,
+} from "../lib/data";
 import StarRating from "./StarRating";
 import { Loader } from "../App";
 
 export default function MovieDetails(props: {
+  userRating: number | false;
   movieID: string;
   onSelect: React.Dispatch<React.SetStateAction<string | null>>;
+  onRate: React.Dispatch<React.SetStateAction<WatchedMovie[] | []>>;
 }): JSX.Element | null {
   const [movie, setMovie] = useState<null | ApiMovieObject>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [rating, setRating] = useState<number>(0);
 
-  const { movieID, onSelect } = props;
+  const { movieID, onSelect, onRate, userRating } = props;
 
   useEffect(() => {
     const loadMovie = async () => {
@@ -24,6 +32,14 @@ export default function MovieDetails(props: {
   }, [movieID]);
 
   if (!movie) return null;
+
+  const handleAddWatchedMovie = () => {
+    const newWatched = convertToWatchedMovie(movie);
+    onRate((watchedArr) => {
+      return [...watchedArr, { ...newWatched, userRating: rating }];
+    });
+    onSelect(null);
+  };
 
   const {
     Poster: poster,
@@ -62,7 +78,18 @@ export default function MovieDetails(props: {
               </div>
             </header>
             <section>
-              <StarRating className="rating" size={24} />
+              <div className="rating">
+                {userRating ? (
+                  <p>🌟 {userRating}</p>
+                ) : (
+                  <StarRating getRating={setRating} size={24} />
+                )}
+                {rating !== 0 && (
+                  <button onClick={handleAddWatchedMovie} className="btn-add">
+                    + Add To List
+                  </button>
+                )}
+              </div>
               <p>{plot}</p>
               <p>Starring: {actors}</p>
               <p>Directed by: {director}</p>
