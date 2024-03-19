@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ApiMovieObject,
   convertToWatchedMovie,
@@ -9,7 +9,7 @@ import StarRating from "./StarRating";
 import { Loader } from "../App";
 
 export default function MovieDetails(props: {
-  userRating: number | false;
+  watchedList: WatchedMovie[] | [];
   movieID: string;
   onSelect: React.Dispatch<React.SetStateAction<string | null>>;
   onRate: React.Dispatch<React.SetStateAction<WatchedMovie[] | []>>;
@@ -18,7 +18,19 @@ export default function MovieDetails(props: {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(0);
 
-  const { movieID, onSelect, onRate, userRating } = props;
+  const { movieID, onSelect, onRate, watchedList } = props;
+
+  const isWatched = useMemo(
+    () => watchedList.map((w) => w.imdbID).includes(movieID),
+    [watchedList, movieID]
+  );
+  const userRating = useMemo(
+    () =>
+      isWatched
+        ? watchedList.find((w) => w.imdbID === movieID)?.userRating
+        : null,
+    [movieID, watchedList, isWatched]
+  );
 
   useEffect(() => {
     const loadMovie = async () => {
@@ -34,9 +46,9 @@ export default function MovieDetails(props: {
   if (!movie) return null;
 
   const handleAddWatchedMovie = () => {
-    const newWatched = convertToWatchedMovie(movie);
+    const newWatched = convertToWatchedMovie(movie, rating);
     onRate((watchedArr) => {
-      return [...watchedArr, { ...newWatched, userRating: rating }];
+      return [...watchedArr, newWatched];
     });
     onSelect(null);
   };
@@ -79,8 +91,8 @@ export default function MovieDetails(props: {
             </header>
             <section>
               <div className="rating">
-                {userRating ? (
-                  <p>🌟 {userRating}</p>
+                {isWatched ? (
+                  <p>Your personal rating: 🌟 {userRating}</p>
                 ) : (
                   <StarRating getRating={setRating} size={24} />
                 )}

@@ -119,7 +119,10 @@ async function fetchOMDB(URL: string) {
   }
 }
 
-export function convertToWatchedMovie(movie: ApiMovieObject): WatchedMovie {
+export function convertToWatchedMovie(
+  movie: ApiMovieObject,
+  rating: number
+): WatchedMovie {
   const { imdbID, imdbRating, Title, Year, Poster } = movie;
   return {
     imdbID,
@@ -128,7 +131,7 @@ export function convertToWatchedMovie(movie: ApiMovieObject): WatchedMovie {
     Poster,
     runtime: Number(movie.Runtime.split(" ")[0]),
     imdbRating: Number(imdbRating),
-    userRating: 10,
+    userRating: rating,
   };
 }
 
