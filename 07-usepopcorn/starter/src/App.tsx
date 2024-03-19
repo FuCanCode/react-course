@@ -62,13 +62,6 @@ export default function App() {
         runtime: average(watched.map((movie) => movie.runtime)),
       };
 
-  function checkIsWatched() {
-    const searchResult = watched.find((w) => w.imdbID === selectedMovie);
-    return searchResult ? searchResult.userRating : false;
-  }
-
-  const userRating = checkIsWatched();
-
   function handleMovieSelect(id: string) {
     setSelectedMovie(id === selectedMovie ? null : id);
   }
@@ -96,7 +89,7 @@ export default function App() {
         <Box>
           {selectedMovie && (
             <MovieDetails
-              userRating={userRating}
+              watchedList={watched}
               onRate={setWatched}
               movieID={selectedMovie}
               onSelect={setSelectedMovie}
