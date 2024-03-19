@@ -66,6 +66,12 @@ export default function App() {
     setSelectedMovie(id === selectedMovie ? null : id);
   }
 
+  function handleDeleteMovie(movieID: string) {
+    const nextMovies = watched.filter((w) => w.imdbID !== movieID);
+    setWatched(nextMovies);
+    setSelectedMovie(null);
+  }
+
   return (
     <>
       <NavBar>
@@ -98,7 +104,11 @@ export default function App() {
           {!selectedMovie && (
             <>
               <Summary summaryProps={summaryProps} />
-              <List list={watched} onItemSelect={setSelectedMovie} />
+              <List
+                list={watched}
+                onItemSelect={setSelectedMovie}
+                onItemDelete={handleDeleteMovie}
+              />
             </>
           )}
         </Box>

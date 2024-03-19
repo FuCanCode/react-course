@@ -4,6 +4,7 @@ import { Movie, WatchedMovie } from "../lib/data";
 export function List(props: {
   list: WatchedMovie[] | Movie[] | null;
   onItemSelect: (id: string) => void;
+  onItemDelete?: (id: string) => void;
 }) {
   if (!props.list) return null;
 
@@ -25,6 +26,7 @@ export function List(props: {
             item={movie}
             details={details}
             onItemSelect={props.onItemSelect}
+            onItemDelete={props.onItemDelete}
           />
         );
       })}
@@ -35,19 +37,31 @@ function ListItem(props: {
   item: Movie | WatchedMovie;
   details: string[];
   onItemSelect: (id: string) => void;
+  onItemDelete: (id: string) => void;
 }) {
   const [imgErr, setImgErr] = useState(false);
+
+  const { details, item, onItemDelete, onItemSelect } = props;
+
   const fallback = "./src/assets/fallBack.png";
 
+  function handleDelete(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.stopPropagation();
+    onItemDelete(item.imdbID);
+  }
+
   return (
-    <li onClick={() => props.onItemSelect(props.item.imdbID)}>
+    <li onClick={() => onItemSelect(item.imdbID)}>
       <img
-        src={!imgErr ? props.item.Poster : fallback}
+        src={!imgErr ? item.Poster : fallback}
         onError={() => setImgErr(true)}
-        alt={`${props.item.Title} poster`}
+        alt={`${item.Title} poster`}
       />
-      <h3>{props.item.Title}</h3>
-      <ListDetails details={props.details} />
+      <h3>{item.Title}</h3>
+      <ListDetails details={details} />
+      <button onClick={handleDelete} className="btn-delete">
+        X
+      </button>
     </li>
   );
 }
