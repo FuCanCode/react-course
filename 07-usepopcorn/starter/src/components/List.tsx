@@ -11,14 +11,14 @@ export function List(props: {
   return (
     <ul className="list list-movies">
       {props.list.map((movie) => {
-        const details =
-          "userRating" in movie
-            ? [
-                "⭐️ " + movie.imdbRating,
-                "🌟 " + movie.userRating,
-                "⏳ " + movie.runtime,
-              ]
-            : ["🗓️ " + movie.Year];
+        const isWatched = "userRating" in movie;
+        const details = isWatched
+          ? [
+              "⭐️ " + movie.imdbRating,
+              "🌟 " + movie.userRating,
+              "⏳ " + movie.runtime,
+            ]
+          : ["🗓️ " + movie.Year];
 
         return (
           <ListItem
@@ -37,7 +37,7 @@ function ListItem(props: {
   item: Movie | WatchedMovie;
   details: string[];
   onItemSelect: (id: string) => void;
-  onItemDelete: (id: string) => void;
+  onItemDelete?: (id: string) => void;
 }) {
   const [imgErr, setImgErr] = useState(false);
 
@@ -47,7 +47,7 @@ function ListItem(props: {
 
   function handleDelete(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
-    onItemDelete(item.imdbID);
+    onItemDelete && onItemDelete(item.imdbID);
   }
 
   return (
@@ -59,9 +59,11 @@ function ListItem(props: {
       />
       <h3>{item.Title}</h3>
       <ListDetails details={details} />
-      <button onClick={handleDelete} className="btn-delete">
-        X
-      </button>
+      {typeof onItemDelete === "function" && (
+        <button onClick={handleDelete} className="btn-delete">
+          X
+        </button>
+      )}
     </li>
   );
 }
