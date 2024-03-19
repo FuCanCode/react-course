@@ -33,6 +33,13 @@ export default function MovieDetails(props: {
   );
 
   useEffect(() => {
+    if (movie) document.title = movie.Title;
+    return () => {
+      document.title = "usePopcorn";
+    };
+  }, [movie]);
+
+  useEffect(() => {
     const loadMovie = async () => {
       setIsLoading(true);
       const data = await getMovieDetails(movieID);
