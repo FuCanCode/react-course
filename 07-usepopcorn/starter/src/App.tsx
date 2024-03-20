@@ -40,8 +40,7 @@ export default function App() {
 
       setIsLoading(false);
       if (typeof fetchResult === "string") {
-        setError(fetchResult);
-        return;
+        return setError(fetchResult);
       }
 
       setMovies(fetchResult);
