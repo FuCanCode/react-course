@@ -33,6 +33,15 @@ export default function MovieDetails(props: {
   );
 
   useEffect(() => {
+    const listener = (e: KeyboardEvent) => {
+      if (["Escape", "D"].includes(e.key)) onSelect(null);
+    };
+
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
+  });
+
+  useEffect(() => {
     if (movie) document.title = movie.Title;
     return () => {
       document.title = "usePopcorn";
