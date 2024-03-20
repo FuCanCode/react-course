@@ -27,13 +27,16 @@ export default function App() {
 
   useEffect(() => {
     let ignore = false;
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     setMovies(null);
     setError("");
 
     const getData = async function () {
       setIsLoading(true);
 
-      const fetchResult = await getSearchResult(query);
+      const fetchResult = await getSearchResult(query, signal);
 
       setIsLoading(false);
       if (typeof fetchResult === "string") {
@@ -41,7 +44,7 @@ export default function App() {
         return;
       }
 
-      setMovies(fetchResult ? fetchResult : null);
+      setMovies(fetchResult);
     };
 
     if (!ignore && query.length >= 3) {
@@ -49,6 +52,7 @@ export default function App() {
     }
 
     return () => {
+      controller.abort();
       ignore = true;
     };
   }, [query]);

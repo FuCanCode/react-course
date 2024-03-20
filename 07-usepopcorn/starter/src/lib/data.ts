@@ -67,13 +67,17 @@ export const tempWatchedData: WatchedMovie[] = [
 ];
 
 export async function getSearchResult(
-  query: string
+  query: string,
+  signal: AbortSignal
 ): Promise<Movie[] | string> {
-  const json = await fetchOMDB(`${URL}s=${query}`);
+  const json = await fetchOMDB(`${URL}s=${query}`, signal);
 
   if (json instanceof Error) return json.message;
 
-  if (!("Search" in json)) return "Something's wrong with the search object";
+  if (!json) return "Error on server response";
+
+  if (!("Search" in json) || !json)
+    return "Something's wrong with the search object";
 
   const apiData: ApiSearchResult[] = json.Search;
   const appData: Movie[] = apiData.map(({ imdbID, Title, Year, Poster }) => ({
@@ -91,17 +95,18 @@ export async function getMovieDetails(
 ): Promise<ApiMovieObject | string> {
   const json = await fetchOMDB(`${URL}i=${query}`);
 
-  if (json instanceof Error) return json.message;
+  if (!json || "Search" in json)
+    return "Something's wrong with the server response";
 
-  if ("Search" in json)
-    return "Something's wrong with the movie details object";
+  if (json instanceof Error) return json.message;
 
   return json;
 }
 
-async function fetchOMDB(URL: string) {
+async function fetchOMDB(URL: string, signalArg?: AbortSignal) {
+  const signal = signalArg ? { signal: signalArg } : {};
   try {
-    const response = await fetch(URL);
+    const response = await fetch(URL, signal);
 
     if (!response || !response.ok)
       throw new Error("Server Error! Aaaarlarm!!!");
@@ -112,7 +117,7 @@ async function fetchOMDB(URL: string) {
     return json as ApiMovieObject | ApiSearchObject;
   } catch (error) {
     if (error instanceof Error) {
-      return error;
+      if (error.name !== "AbortError") return error;
     } else {
       throw error;
     }
