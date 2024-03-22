@@ -7,6 +7,7 @@ import {
   tempWatchedData,
   average,
   WatchedMovie,
+  loadFromLocalStorage,
 } from "./lib/data";
 import { SearchInput } from "./components/SearchInput";
 
@@ -20,7 +21,9 @@ import MovieDetails from "./components/MovieDetails";
 export default function App() {
   const [movies, setMovies] = useState<Movie[] | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
-  const [watched, setWatched] = useState<WatchedMovie[] | []>(tempWatchedData);
+  const [watched, setWatched] = useState<WatchedMovie[] | []>(() =>
+    loadFromLocalStorage()
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");

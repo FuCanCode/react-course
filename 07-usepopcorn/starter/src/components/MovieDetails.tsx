@@ -3,6 +3,7 @@ import {
   ApiMovieObject,
   convertToWatchedMovie,
   getMovieDetails,
+  saveToLocalStorage,
   WatchedMovie,
 } from "../lib/data";
 import StarRating from "./StarRating";
@@ -63,9 +64,9 @@ export default function MovieDetails(props: {
 
   const handleAddWatchedMovie = () => {
     const newWatched = convertToWatchedMovie(movie, rating);
-    onRate((watchedArr) => {
-      return [...watchedArr, newWatched];
-    });
+    const nextWatched = [...watchedList, newWatched];
+    onRate(nextWatched);
+    saveToLocalStorage(nextWatched);
     onSelect(null);
   };
 

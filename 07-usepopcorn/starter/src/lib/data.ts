@@ -66,6 +66,15 @@ export const tempWatchedData: WatchedMovie[] = [
   },
 ];
 
+export function saveToLocalStorage(watchList: WatchedMovie[]) {
+  localStorage.setItem("usePopcornWatchedListData", JSON.stringify(watchList));
+}
+
+export function loadFromLocalStorage(): [] | WatchedMovie[] {
+  const data = localStorage.getItem("usePopcornWatchedListData");
+  return data ? (JSON.parse(data) as WatchedMovie[]) : [];
+}
+
 export async function getSearchResult(
   query: string,
   signal: AbortSignal
