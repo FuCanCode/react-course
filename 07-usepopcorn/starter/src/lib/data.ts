@@ -83,7 +83,13 @@ export async function getSearchResult(
 
   if (json instanceof Error) return json.message;
 
-  if (!json) return "Error on server response";
+  if (!json) {
+    if (signal.aborted) {
+      return "Request was aborted";
+    } else {
+      return "Error on server response";
+    }
+  }
 
   if (!("Search" in json) || !json)
     return "Something's wrong with the search object";

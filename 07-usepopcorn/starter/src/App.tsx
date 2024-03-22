@@ -4,7 +4,6 @@ import {
   getSearchResult,
   Movie,
   iSummary,
-  tempWatchedData,
   average,
   WatchedMovie,
   loadFromLocalStorage,
@@ -30,7 +29,10 @@ export default function App() {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    let ignore = false;
+    saveToLocalStorage(watched);
+  }, [watched]);
+
+  useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
 
@@ -40,23 +42,28 @@ export default function App() {
     const getData = async function () {
       setIsLoading(true);
 
-      const fetchResult = await getSearchResult(query, signal);
+      const fetchResult: string | Movie[] = await getSearchResult(
+        query,
+        signal
+      );
 
       setIsLoading(false);
       if (typeof fetchResult === "string") {
-        return setError(fetchResult);
+        setError(() => fetchResult);
+        setMovies(() => null);
+        return;
       }
 
-      setMovies(fetchResult);
+      setMovies(() => fetchResult);
+      setError(() => "");
     };
 
-    if (!ignore && query.length >= 3) {
+    if (query.length >= 3) {
       getData();
     }
 
     return () => {
       controller.abort();
-      ignore = true;
     };
   }, [query]);
 
@@ -76,7 +83,6 @@ export default function App() {
   function handleDeleteMovie(movieID: string) {
     const nextMovies = watched.filter((w) => w.imdbID !== movieID);
     setWatched(nextMovies);
-    saveToLocalStorage(nextMovies);
     setSelectedMovie(null);
   }
 

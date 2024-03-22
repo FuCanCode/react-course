@@ -66,7 +66,6 @@ export default function MovieDetails(props: {
     const newWatched = convertToWatchedMovie(movie, rating);
     const nextWatched = [...watchedList, newWatched];
     onRate(nextWatched);
-    saveToLocalStorage(nextWatched);
     onSelect(null);
   };
 
