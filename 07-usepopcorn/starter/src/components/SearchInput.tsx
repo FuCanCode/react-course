@@ -9,6 +9,20 @@ interface SearchInputProps {
 export function SearchInput({ query, setQuery }: SearchInputProps) {
   const inputRef = useRef<null | HTMLInputElement>(null);
 
+  useEffect(() => {
+    const listenReturn = (e: KeyboardEvent) => {
+      if (document.activeElement === inputRef.current) return;
+
+      if (e.key === "Enter") {
+        setQuery("");
+        inputRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", listenReturn);
+
+    return () => document.removeEventListener("keydown", listenReturn);
+  }, [setQuery]);
+
   useEffect(() => inputRef.current?.focus(), []);
 
   return (
