@@ -8,6 +8,7 @@ import {
   average,
   WatchedMovie,
   loadFromLocalStorage,
+  saveToLocalStorage,
 } from "./lib/data";
 import { SearchInput } from "./components/SearchInput";
 
@@ -75,6 +76,7 @@ export default function App() {
   function handleDeleteMovie(movieID: string) {
     const nextMovies = watched.filter((w) => w.imdbID !== movieID);
     setWatched(nextMovies);
+    saveToLocalStorage(nextMovies);
     setSelectedMovie(null);
   }
 
