@@ -3,7 +3,6 @@ import {
   ApiMovieObject,
   convertToWatchedMovie,
   getMovieDetails,
-  saveToLocalStorage,
   WatchedMovie,
 } from "../lib/data";
 import StarRating from "./StarRating";

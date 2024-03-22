@@ -1,4 +1,4 @@
-import { getSearchResults, Movie } from "../lib/data";
+import { useEffect, useRef } from "react";
 
 interface SearchInputProps {
   // onSearch: React.Dispatch<React.SetStateAction<Movie[] | null>>;
@@ -7,28 +7,13 @@ interface SearchInputProps {
 }
 
 export function SearchInput({ query, setQuery }: SearchInputProps) {
-  // async function handlePressEnter(e: React.KeyboardEvent<HTMLInputElement>) {
-  //   if (e.key === "Enter") {
-  //     const newMovieList = await getSearchResults(query);
+  const inputRef = useRef<null | HTMLInputElement>(null);
 
-  //     setQuery("");
-
-  //     if (!newMovieList)
-  //       return onSearch([
-  //         {
-  //           Title: "Couldn't find any movie!",
-  //           imdbID: "",
-  //           Poster: "",
-  //           Year: "",
-  //         },
-  //       ]);
-
-  //     onSearch(newMovieList);
-  //   }
-  // }
+  useEffect(() => inputRef.current?.focus(), []);
 
   return (
     <input
+      ref={inputRef}
       className="search"
       type="text"
       placeholder="Search movies..."
