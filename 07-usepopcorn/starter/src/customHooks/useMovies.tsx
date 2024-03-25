@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { ApiSearchResult, Movie } from "../lib/data";
 
 export default function useMovies(
-  url: string
-): [data: Movie[] | null, isLoading: boolean, error: string] {
+  initialUrl: string
+): [
+  { data: Movie[] | null; isLoading: boolean; error: string },
+  React.Dispatch<React.SetStateAction<string>>
+] {
+  const [url, setUrl] = useState(initialUrl);
   const [data, setData] = useState<null | Movie[]>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -13,23 +17,23 @@ export default function useMovies(
       setIsLoading(true);
       try {
         const resp = await fetch(url);
-        if (!resp) throw new Error("Server didn't respond");
-        if (!resp.ok) throw new Error("Server throw an error");
 
         const json = await resp.json();
         if (json.Error) throw new Error(json.Error);
 
-        const apiData: ApiSearchResult[] = json.Search;
-        const appData: Movie[] = apiData.map(
-          ({ imdbID, Title, Year, Poster }) => ({
-            imdbID,
-            Title,
-            Year,
-            Poster,
-          })
-        );
+        if ("Search" in json) {
+          const apiData: ApiSearchResult[] = json.Search;
+          const appData: Movie[] = apiData.map(
+            ({ imdbID, Title, Year, Poster }) => ({
+              imdbID,
+              Title,
+              Year,
+              Poster,
+            })
+          );
 
-        setData(appData);
+          setData(appData);
+        }
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
@@ -44,5 +48,5 @@ export default function useMovies(
     fetchMovies;
   }, [url]);
 
-  return [data, isLoading, error];
+  return [{ data, isLoading, error }, setUrl];
 }
