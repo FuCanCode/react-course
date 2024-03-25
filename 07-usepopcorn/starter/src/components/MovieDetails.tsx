@@ -1,10 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import {
-  ApiMovieObject,
-  convertToWatchedMovie,
-  getMovieDetails,
-  WatchedMovie,
-} from "../lib/data";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ApiMovieObject, getMovieDetails, WatchedMovie } from "../lib/data";
 import StarRating from "./StarRating";
 import { Loader } from "../App";
 
@@ -17,6 +12,8 @@ export default function MovieDetails(props: {
   const [movie, setMovie] = useState<null | ApiMovieObject>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(0);
+
+  const clickCountRef = useRef<number>(0);
 
   const { movieID, onSelect, onRate, watchedList } = props;
 
@@ -59,13 +56,34 @@ export default function MovieDetails(props: {
     loadMovie();
   }, [movieID]);
 
+  useEffect(() => {
+    if (!rating) return;
+    clickCountRef.current++;
+  }, [rating]);
+
   if (!movie) return null;
 
   const handleAddWatchedMovie = () => {
-    const newWatched = convertToWatchedMovie(movie, rating);
+    const { imdbID, imdbRating, Title, Year, Poster } = movie;
+
+    const newWatched = {
+      imdbID,
+      Title,
+      Year,
+      Poster,
+      runtime: Number(movie.Runtime.split(" ")[0]),
+      imdbRating: Number(imdbRating),
+      userRating: rating,
+      countUserDecisions: clickCountRef.current,
+    };
+
     const nextWatched = [...watchedList, newWatched];
     onRate(nextWatched);
     onSelect(null);
+  };
+
+  const handleRating = (newRating: number) => {
+    setRating(newRating);
   };
 
   const {
@@ -109,7 +127,7 @@ export default function MovieDetails(props: {
                 {isWatched ? (
                   <p>Your personal rating: 🌟 {userRating}</p>
                 ) : (
-                  <StarRating getRating={setRating} size={24} />
+                  <StarRating getRating={handleRating} size={24} />
                 )}
                 {rating !== 0 && (
                   <button onClick={handleAddWatchedMovie} className="btn-add">

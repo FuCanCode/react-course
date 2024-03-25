@@ -12,6 +12,7 @@ export interface WatchedMovie extends Movie {
   runtime: number;
   imdbRating: number;
   userRating: number;
+  countUserDecisions: number;
 }
 
 export interface iSummary {
@@ -43,7 +44,7 @@ export interface ApiMovieObject extends ApiSearchResult {
   Director: string;
 }
 
-export const tempWatchedData: WatchedMovie[] = [
+/* export const tempWatchedData: WatchedMovie[] = [
   {
     imdbID: "tt1375666",
     Title: "Inception",
@@ -64,7 +65,7 @@ export const tempWatchedData: WatchedMovie[] = [
     imdbRating: 8.5,
     userRating: 9,
   },
-];
+]; */
 
 export function saveToLocalStorage(watchList: WatchedMovie[]) {
   localStorage.setItem("usePopcornWatchedListData", JSON.stringify(watchList));
@@ -137,22 +138,6 @@ async function fetchOMDB(URL: string, signalArg?: AbortSignal) {
       throw error;
     }
   }
-}
-
-export function convertToWatchedMovie(
-  movie: ApiMovieObject,
-  rating: number
-): WatchedMovie {
-  const { imdbID, imdbRating, Title, Year, Poster } = movie;
-  return {
-    imdbID,
-    Title,
-    Year,
-    Poster,
-    runtime: Number(movie.Runtime.split(" ")[0]),
-    imdbRating: Number(imdbRating),
-    userRating: rating,
-  };
 }
 
 export const average = (arr: number[]): number => {
