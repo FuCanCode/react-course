@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 
 interface SearchInputProps {
-  // onSearch: React.Dispatch<React.SetStateAction<Movie[] | null>>;
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -9,6 +8,7 @@ interface SearchInputProps {
 export function SearchInput({ query, setQuery }: SearchInputProps) {
   const inputRef = useRef<null | HTMLInputElement>(null);
 
+  // Focus on Enter and reset query, but not when already focused
   useEffect(() => {
     const listenReturn = (e: KeyboardEvent) => {
       if (document.activeElement === inputRef.current) return;
@@ -23,6 +23,7 @@ export function SearchInput({ query, setQuery }: SearchInputProps) {
     return () => document.removeEventListener("keydown", listenReturn);
   }, [setQuery]);
 
+  // Focus on load
   useEffect(() => inputRef.current?.focus(), []);
 
   return (
@@ -33,7 +34,6 @@ export function SearchInput({ query, setQuery }: SearchInputProps) {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
-      // onKeyDown={handlePressEnter}
     />
   );
 }
