@@ -22,7 +22,7 @@ export interface iSummary {
   runtime: number;
 }
 
-interface ApiSearchResult {
+export interface ApiSearchResult {
   Title: string;
   Year: string;
   imdbID: string;
