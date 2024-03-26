@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ApiMovieObject, getMovieDetails, WatchedMovie } from "../lib/data";
+import { ApiMovieObject, WatchedMovie } from "../lib/data";
 import StarRating from "./StarRating";
 import { Loader } from "../App";
+import { useMovies } from "../customHooks/useMovies";
 
 export default function MovieDetails(props: {
   watchedList: WatchedMovie[] | [];
@@ -9,13 +10,12 @@ export default function MovieDetails(props: {
   onSelect: React.Dispatch<React.SetStateAction<string | null>>;
   onRate: React.Dispatch<React.SetStateAction<WatchedMovie[] | []>>;
 }): JSX.Element | null {
-  const [movie, setMovie] = useState<null | ApiMovieObject>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { movieID, onSelect, onRate, watchedList } = props;
+  const { data: movie, isLoading } = useMovies<ApiMovieObject>("i=" + movieID);
+
   const [rating, setRating] = useState<number>(0);
 
   const clickCountRef = useRef<number>(0);
-
-  const { movieID, onSelect, onRate, watchedList } = props;
 
   const isWatched = useMemo(
     () => watchedList.map((w) => w.imdbID).includes(movieID),
@@ -44,17 +44,6 @@ export default function MovieDetails(props: {
       document.title = "usePopcorn";
     };
   }, [movie]);
-
-  useEffect(() => {
-    const loadMovie = async () => {
-      setIsLoading(true);
-      const data = await getMovieDetails(movieID);
-      setIsLoading(false);
-      if (typeof data === "string") return;
-      setMovie(data);
-    };
-    loadMovie();
-  }, [movieID]);
 
   useEffect(() => {
     if (!rating) return;

@@ -1,5 +1,5 @@
-const KEY = "9ab7e87f";
-const URL = `http://www.omdbapi.com/?apikey=${KEY}&`;
+export const KEY = "9ab7e87f";
+export const BASE_URL = `http://www.omdbapi.com/?apikey=${KEY}&`;
 
 export interface Movie {
   imdbID: string;

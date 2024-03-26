@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
-import { ApiSearchResult, Movie } from "../lib/data";
+import { ApiSearchResult, Movie, BASE_URL } from "../lib/data";
 
-export default function useMovies(
-  initialUrl: string
-): [
-  { data: Movie[] | null; isLoading: boolean; error: string },
-  React.Dispatch<React.SetStateAction<string>>
-] {
-  const [url, setUrl] = useState(initialUrl);
-  const [data, setData] = useState<null | Movie[]>(null);
+export function useMovies<T>(query: string): {
+  data: T | null;
+  isLoading: boolean;
+  error: string;
+} {
+  const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     async function fetchMovies() {
+      if (!query || query.length < 5) return;
+
+      setError("");
       setIsLoading(true);
+
       try {
-        const resp = await fetch(url);
+        const resp = await fetch(BASE_URL + query, { signal });
 
         const json = await resp.json();
         if (json.Error) throw new Error(json.Error);
@@ -32,12 +37,17 @@ export default function useMovies(
             })
           );
 
-          setData(appData);
+          setData(appData as T);
+        } else {
+          setData(json as T);
         }
+        setError("");
       } catch (error) {
+        setData(null);
         if (error instanceof Error) {
           setError(error.message);
         } else {
+          setError("See error in console");
           console.log(error);
         }
       } finally {
@@ -45,8 +55,10 @@ export default function useMovies(
       }
     }
 
-    fetchMovies;
-  }, [url]);
+    fetchMovies();
 
-  return [{ data, isLoading, error }, setUrl];
+    return () => controller.abort();
+  }, [query]);
+
+  return { data, isLoading, error };
 }

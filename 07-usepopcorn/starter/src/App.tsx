@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
+import { useMovies } from "./customHooks/useMovies";
 
 import {
-  getSearchResult,
-  Movie,
   iSummary,
   average,
   WatchedMovie,
   loadFromLocalStorage,
   saveToLocalStorage,
+  Movie,
 } from "./lib/data";
 import { SearchInput } from "./components/SearchInput";
 
@@ -19,53 +19,21 @@ import { Box } from "./components/Box";
 import MovieDetails from "./components/MovieDetails";
 
 export default function App() {
-  const [movies, setMovies] = useState<Movie[] | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
   const [watched, setWatched] = useState<WatchedMovie[] | []>(() =>
     loadFromLocalStorage()
   );
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [query, setQuery] = useState("");
+  const [searchString, setSearchString] = useState("");
+
+  const {
+    data: movies,
+    error,
+    isLoading,
+  } = useMovies<Movie[]>("s=" + searchString);
 
   useEffect(() => {
     saveToLocalStorage(watched);
   }, [watched]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    setMovies(null);
-    setError("");
-
-    const getData = async function () {
-      setIsLoading(true);
-
-      const fetchResult: string | Movie[] = await getSearchResult(
-        query,
-        signal
-      );
-
-      setIsLoading(false);
-      if (typeof fetchResult === "string") {
-        setError(() => fetchResult);
-        setMovies(() => null);
-        return;
-      }
-
-      setMovies(() => fetchResult);
-      setError(() => "");
-    };
-
-    if (query.length >= 3) {
-      getData();
-    }
-
-    return () => {
-      controller.abort();
-    };
-  }, [query]);
 
   const summaryProps: iSummary | null = !watched
     ? null
@@ -91,8 +59,8 @@ export default function App() {
       <NavBar>
         <Logo />
         <SearchInput
-          /* onSearch={setMovies} */ query={query}
-          setQuery={setQuery}
+          searchString={searchString}
+          setSearchString={setSearchString}
         />
         <Results results={movies ? movies.length : null} />
       </NavBar>
@@ -101,7 +69,7 @@ export default function App() {
         <Box>
           {isLoading && <Loader />}
           {error && <ErrorMessage error={error} />}
-          {query.length < 3 && (
+          {!movies && !error && (
             <p className="error">📽️ Search for a movie! 🎬</p>
           )}
           {movies && <List list={movies} onItemSelect={handleMovieSelect} />}
