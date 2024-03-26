@@ -1,14 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useMovies } from "./customHooks/useMovies";
+import { useLocalStorage } from "./customHooks/useLocalStorage";
 
-import {
-  iSummary,
-  average,
-  WatchedMovie,
-  loadFromLocalStorage,
-  saveToLocalStorage,
-  Movie,
-} from "./lib/data";
+import { iSummary, average, Movie } from "./lib/data";
 import { SearchInput } from "./components/SearchInput";
 
 import { List } from "./components/List";
@@ -20,20 +14,17 @@ import MovieDetails from "./components/MovieDetails";
 
 export default function App() {
   const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
-  const [watched, setWatched] = useState<WatchedMovie[] | []>(() =>
-    loadFromLocalStorage()
-  );
+  const [watched, setWatched] = useLocalStorage([]);
   const [searchString, setSearchString] = useState("");
 
   const {
     data: movies,
     error,
     isLoading,
-  } = useMovies<Movie[]>("s=" + searchString);
-
-  useEffect(() => {
-    saveToLocalStorage(watched);
-  }, [watched]);
+  } = useMovies<Movie[]>(
+    "s=" + searchString,
+    useCallback(handleCloseMovie, [])
+  );
 
   const summaryProps: iSummary | null = !watched
     ? null
@@ -44,6 +35,10 @@ export default function App() {
         runtime: average(watched.map((movie) => movie.runtime)),
       };
 
+  function handleCloseMovie() {
+    setSelectedMovie(null);
+  }
+
   function handleMovieSelect(id: string) {
     setSelectedMovie(id === selectedMovie ? null : id);
   }
@@ -51,7 +46,7 @@ export default function App() {
   function handleDeleteMovie(movieID: string) {
     const nextMovies = watched.filter((w) => w.imdbID !== movieID);
     setWatched(nextMovies);
-    setSelectedMovie(null);
+    handleCloseMovie();
   }
 
   return (

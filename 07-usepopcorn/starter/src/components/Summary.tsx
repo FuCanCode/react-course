@@ -14,7 +14,7 @@ export function Summary(props: { summaryProps: iSummary | null }) {
     "#️⃣ " + numMovies + " movies",
     "⭐️ " + imdbRating.toFixed(1),
     "🌟 " + userRating.toFixed(1),
-    "⏳ " + runtime + " min",
+    "⏳ " + Math.round(runtime) + " min",
   ];
   return (
     <div className="summary">

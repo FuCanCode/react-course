@@ -8,7 +8,7 @@ export default function MovieDetails(props: {
   watchedList: WatchedMovie[] | [];
   movieID: string;
   onSelect: React.Dispatch<React.SetStateAction<string | null>>;
-  onRate: React.Dispatch<React.SetStateAction<WatchedMovie[] | []>>;
+  onRate: (newWatchedList: WatchedMovie[]) => void;
 }): JSX.Element | null {
   const { movieID, onSelect, onRate, watchedList } = props;
   const { data: movie, isLoading } = useMovies<ApiMovieObject>("i=" + movieID);

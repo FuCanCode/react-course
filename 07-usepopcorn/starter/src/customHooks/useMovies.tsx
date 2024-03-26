@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { ApiSearchResult, Movie, BASE_URL } from "../lib/data";
 
-export function useMovies<T>(query: string): {
+export function useMovies<T>(
+  query: string,
+  callback?: () => void
+): {
   data: T | null;
   isLoading: boolean;
   error: string;
@@ -9,6 +12,8 @@ export function useMovies<T>(query: string): {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => callback?.(), [callback, query]);
 
   useEffect(() => {
     const controller = new AbortController();
