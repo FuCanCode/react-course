@@ -3,6 +3,7 @@ import { ApiMovieObject, WatchedMovie } from "../lib/data";
 import StarRating from "./StarRating";
 import { Loader } from "../App";
 import { useMovies } from "../customHooks/useMovies";
+import { useKeyboardKey } from "../customHooks/useKey";
 
 export default function MovieDetails(props: {
   watchedList: WatchedMovie[] | [];
@@ -29,13 +30,8 @@ export default function MovieDetails(props: {
     [movieID, watchedList, isWatched]
   );
 
-  useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (["Escape", "D"].includes(e.key)) onSelect(null);
-    };
-
-    document.addEventListener("keydown", listener);
-    return () => document.removeEventListener("keydown", listener);
+  useKeyboardKey("escape", () => {
+    onSelect(null);
   });
 
   useEffect(() => {
