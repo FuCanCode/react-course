@@ -1,6 +1,26 @@
 import React from "react";
 import { getWeather } from "./weatherData";
 
+interface IWeather {
+  name: string;
+  flag: string;
+  weekdays: string[];
+  icons: string[];
+  maxTemps: number[];
+  minTemps: number[];
+}
+
+interface ISevenDays {
+  children?: React.ReactNode;
+  weather: IWeather;
+}
+
+interface IAppState {
+  input: string;
+  error: string;
+  weather: IWeather | null;
+}
+
 const containerStyle = [
   "w-screen",
   "mx-9",
@@ -18,8 +38,8 @@ const containerStyle = [
   "outline-offset-4",
 ].join(" ");
 
-class App extends React.Component {
-  state = { input: "Dresden", error: "", weather: {} };
+class App extends React.Component<unknown, IAppState> {
+  state: IAppState = { input: "Dresden", error: "", weather: null };
 
   handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ input: e.target.value });
@@ -37,7 +57,7 @@ class App extends React.Component {
   };
 
   render() {
-    const isWeather = Object.keys(this.state.weather).length !== 0;
+    const { weather } = this.state;
 
     return (
       <>
@@ -59,24 +79,20 @@ class App extends React.Component {
           >
             Get Weather
           </button>
-          {isWeather && <SevenDays weather={this.state.weather} />}
+          {weather && (
+            <>
+              <h2>
+                Forecast for {weather.name} {weather.flag}
+              </h2>
+              <SevenDays weather={this.state.weather as IWeather} />
+            </>
+          )}
         </div>
       </>
     );
   }
 }
 
-interface ISevenDays {
-  children?: React.ReactNode;
-  weather: {
-    name: string;
-    flag: string;
-    weekdays: string[];
-    icons: string[];
-    maxTemps: number[];
-    minTemps: number[];
-  };
-}
 class SevenDays extends React.Component<ISevenDays> {
   constructor(props: ISevenDays) {
     super(props);
@@ -88,9 +104,12 @@ class SevenDays extends React.Component<ISevenDays> {
     } = this.props;
 
     return (
-      <ul className="flex gap-3">
+      <ul className="flex flex-col sm:flex-row gap-3 font-sans">
         {weekdays.map((weekday, i) => (
-          <li key={i}>
+          <li
+            key={i}
+            className="w-20 bg-white flex flex-col items-center gap-2 p-2"
+          >
             <div>{weekday}</div>
             <div>{icons[i]}</div>
             <div>Max {maxTemps[i]}</div>
