@@ -42,19 +42,17 @@ const containerStyle = [
 
 class App extends React.Component<unknown, IAppState> {
   state: IAppState = {
-    input: "Dresden",
+    input: "",
     error: "",
     weather: null,
     isLoading: false,
   };
 
-  handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ input: e.target.value });
-  };
+  fetchWeather = async () => {
+    if (this.state.input.length < 2) return;
 
-  handleButtonClick = async () => {
     this.setState(() => ({ isLoading: true }));
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const result = await getWeather(this.state.input);
 
     if (!result) return;
@@ -69,6 +67,26 @@ class App extends React.Component<unknown, IAppState> {
     }
   };
 
+  handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    localStorage.setItem("ClassyWeatherInput", e.target.value);
+    this.setState({ input: e.target.value });
+
+    if (e.target.value.length < 2) this.setState({ weather: null });
+  };
+
+  ///// Lifecycle methods
+  componentDidMount(): void {
+    const storedData = localStorage.getItem("ClassyWeatherInput");
+    if (storedData) this.setState({ input: storedData });
+  }
+
+  componentDidUpdate(
+    _prevProps: Readonly<unknown>,
+    prevState: Readonly<IAppState>
+  ): void {
+    if (prevState.input !== this.state.input) this.fetchWeather();
+  }
+
   render() {
     const { weather, isLoading, input } = this.state;
 
@@ -81,18 +99,18 @@ class App extends React.Component<unknown, IAppState> {
             <SearchInput
               input={input}
               onInput={this.handleInput}
-              isDisabled={isLoading}
+              isDisabled={false}
             />
           </div>
-          {!isLoading ? (
-            <button
-              className="border border-solid border-black rounded-md text-lg py-2 px-3"
-              onClick={this.handleButtonClick}
-            >
-              Get Weather
-            </button>
-          ) : (
-            <Bars color="black" visible={isLoading} />
+          {isLoading && (
+            // <button
+            //   className="border border-solid border-black rounded-md text-lg py-2 px-3"
+            //   onClick={this.handleButtonClick}
+            // >
+            //   Get Weather
+            // </button>
+
+            <Bars color="black" visible={isLoading} height="2rem" />
           )}
           {weather && (
             <>
@@ -125,7 +143,7 @@ class SearchInput extends React.Component<ISearchInputProps> {
           onChange={onInput}
           className="p-2 bg-red-100 text-center"
           type="text"
-          placeholder="Search from location"
+          placeholder="Search location"
           disabled={isDisabled}
         />
       </div>
@@ -136,6 +154,10 @@ class SearchInput extends React.Component<ISearchInputProps> {
 class SevenDays extends React.Component<ISevenDays> {
   constructor(props: ISevenDays) {
     super(props);
+  }
+
+  componentWillUnmount(): void {
+    console.log("Weather is out today!");
   }
 
   render() {
