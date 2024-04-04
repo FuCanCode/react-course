@@ -3,7 +3,7 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontFamily: {
-      sans: ["ui-sans-serif"],
+      sans: ["Ubuntu", "sans-serif", "ui-sans-serif"],
       crazy: ["'Cinzel Decorative'", "cursive"],
     },
     extend: {},
