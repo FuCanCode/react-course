@@ -70,7 +70,7 @@ class App extends React.Component<unknown, IAppState> {
   };
 
   render() {
-    const { weather, isLoading } = this.state;
+    const { weather, isLoading, input } = this.state;
 
     return (
       <>
@@ -78,13 +78,10 @@ class App extends React.Component<unknown, IAppState> {
         <div className={containerStyle}>
           <h1 className="text-4xl">Classy Weather</h1>
           <div>
-            <input
-              value={this.state.input}
-              onChange={this.handleInput}
-              className="p-2 bg-red-100 text-center"
-              type="text"
-              placeholder="Search from location"
-              disabled={isLoading}
+            <SearchInput
+              input={input}
+              onInput={this.handleInput}
+              isDisabled={isLoading}
             />
           </div>
           {!isLoading ? (
@@ -107,6 +104,31 @@ class App extends React.Component<unknown, IAppState> {
           )}
         </div>
       </>
+    );
+  }
+}
+
+interface ISearchInputProps {
+  input: string;
+  onInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isDisabled: boolean;
+}
+
+class SearchInput extends React.Component<ISearchInputProps> {
+  render(): React.ReactNode {
+    const { isDisabled, input, onInput } = this.props;
+
+    return (
+      <div>
+        <input
+          value={input}
+          onChange={onInput}
+          className="p-2 bg-red-100 text-center"
+          type="text"
+          placeholder="Search from location"
+          disabled={isDisabled}
+        />
+      </div>
     );
   }
 }
