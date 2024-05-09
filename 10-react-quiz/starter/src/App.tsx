@@ -1,10 +1,14 @@
-function App() {
+import DateCounter from "./DateCounter";
 
+function App() {
   return (
     <>
-      <h1>Hello Quiz</h1>
+      <div className="app">
+        <h1>Hello Quiz</h1>
+        <DateCounter />
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
