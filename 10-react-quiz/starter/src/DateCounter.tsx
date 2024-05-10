@@ -11,7 +11,6 @@ type DateCountAction =
   | { type: "reset"; resetState: DateCountState }
   | { type: "defineCount"; newCount: number }
   | { type: "defineStep"; newStep: number };
-// type: "dec" | "inc" | "defineCount" | "defineStep" | "reset";
 
 function dateCountReducer(
   state: DateCountState,
@@ -47,7 +46,7 @@ function dateCountReducer(
     }
 
     default:
-      throw Error("Unknown action: " + action.type);
+      throw Error("Unknown action type");
   }
 }
 
