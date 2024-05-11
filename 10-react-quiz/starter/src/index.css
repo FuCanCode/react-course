@@ -36,6 +36,24 @@ body {
   justify-content: center;
 }
 
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 66rem;
+  margin-bottom: 4rem;
+}
+
+img {
+  width: 14rem;
+}
+
+h1 {
+  font-family: "Codystar";
+  font-size: 5.6rem;
+}
+
+/* For counter exercise */
 .counter {
   display: flex;
   flex-direction: column;
