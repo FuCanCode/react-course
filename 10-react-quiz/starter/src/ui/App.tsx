@@ -3,7 +3,8 @@ import Main from "./Main";
 import useFakeApi from "../../data/useFakeApi";
 import { quizReducer, QuizState } from "../../data/quizReducer";
 import { useReducer } from "react";
-import Quiz, { ProgressProps } from "./Quiz";
+import Quiz from "./Quiz";
+import { ProgressProps } from "./Progress";
 import QuizIntro from "./QuizIntro";
 
 const initQuizState: QuizState = {

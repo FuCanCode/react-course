@@ -68,6 +68,12 @@ h3 {
   margin-bottom: 4rem;
 }
 
+h4 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 2.4rem;
+}
+
 .start {
   display: flex;
   flex-direction: column;
@@ -113,6 +119,43 @@ progress {
   transition: 0.3s;
 }
 
+.btn:not([disabled]):hover {
+  background-color: var(--color-darkest);
+}
+
+.btn-option:not([disabled]):hover {
+  transform: translateX(1.2rem);
+}
+
+.btn[disabled]:hover {
+  cursor: not-allowed;
+}
+.btn-option {
+  width: 100%;
+  text-align: left;
+}
+
+.btn-ui {
+  float: right;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.btn-option.correct {
+  background-color: var(--color-theme);
+  border: var(--color-theme);
+  color: var(--color-light);
+}
+
+.btn-option.wrong {
+  background-color: var(--color-accent);
+  border: var(--color-accent);
+  color: var(--color-darkest);
+}
 /* For counter exercise */
 .counter {
   display: flex;
