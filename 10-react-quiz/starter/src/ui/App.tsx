@@ -25,7 +25,7 @@ function App() {
         <Header />
         <Main>
           {!hasStarted ? (
-            <QuizIntro />
+            <QuizIntro action={() => dispatch({ type: "startGame" })} />
           ) : (
             <Quiz quizItem={quizItems[currentQuestion]} />
           )}
