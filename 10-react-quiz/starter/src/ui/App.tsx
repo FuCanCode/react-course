@@ -9,7 +9,7 @@ import QuizIntro from "./QuizIntro";
 const initQuizState: QuizState = {
   currentQuestion: 0,
   points: 0,
-  hasStarted: true,
+  hasStarted: false,
 };
 
 function App() {
