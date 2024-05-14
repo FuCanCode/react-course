@@ -10,7 +10,7 @@ import QuizIntro from "./QuizIntro";
 const initQuizState: QuizState = {
   currentQuestion: 0,
   points: 0,
-  hasStarted: false,
+  isStarted: false,
 };
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
 
   const quizItems = useFakeApi();
 
-  const { currentQuestion, points, hasStarted } = quizState;
+  const { currentQuestion, points, isStarted } = quizState;
   const progress: ProgressProps = {
     curQuestion: currentQuestion + 1,
     maxQuestions: quizItems.length,
@@ -26,12 +26,14 @@ function App() {
     maxPoints: quizItems.reduce((sum, question) => sum + question.points, 0),
   };
 
+  const handleClickNext = function () {};
+
   return (
     <>
       <div className="app">
         <Header />
         <Main>
-          {!hasStarted ? (
+          {!isStarted ? (
             <QuizIntro action={() => dispatch({ type: "startGame" })} />
           ) : (
             <Quiz quizItem={quizItems[currentQuestion]} progress={progress} />

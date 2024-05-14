@@ -6,7 +6,7 @@ interface QuestionProps {
 }
 
 export default function Question(props: QuestionProps) {
-  const [isAnswered, setIsAnswered] = useState(true);
+  const [isAnswered, setIsAnswered] = useState(false);
 
   const { question, options, correctOption } = props.question;
 
