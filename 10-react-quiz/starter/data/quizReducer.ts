@@ -3,7 +3,10 @@ export interface QuizState {
   points: number;
   isStarted: boolean;
 }
-export type QuizAction = { type: "startGame" } | { type: "nextQuestion" };
+export type QuizAction =
+  | { type: "startGame" }
+  | { type: "nextQuestion" }
+  | { type: "addPoints"; pointsToAdd: number };
 
 export function quizReducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
@@ -17,6 +20,12 @@ export function quizReducer(state: QuizState, action: QuizAction): QuizState {
       return {
         ...state,
         currentQuestion: state.currentQuestion + 1,
+      };
+
+    case "addPoints":
+      return {
+        ...state,
+        points: state.points + action.pointsToAdd,
       };
 
     default:
