@@ -1,3 +1,4 @@
+import { QuizAction, QuizState } from "../../data/quizReducer";
 import { QuizItem } from "../../data/useFakeApi";
 import Progress, { ProgressProps } from "./Progress";
 import Question from "./Question";
@@ -6,6 +7,7 @@ import Result from "./Result";
 interface QuizProps {
   quizItem: QuizItem;
   progress: ProgressProps;
+  actions: (action: QuizAction) => QuizState;
 }
 
 function Quiz(props: QuizProps) {
@@ -19,7 +21,11 @@ function Quiz(props: QuizProps) {
   return (
     <div>
       <Progress {...props.progress} />
-      <Question question={curQuizItem} />
+      <Question
+        key={curQuizItem.id}
+        question={curQuizItem}
+        actions={props.actions}
+      />
     </div>
   );
 }

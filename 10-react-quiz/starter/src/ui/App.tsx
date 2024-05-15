@@ -26,8 +26,6 @@ function App() {
     maxPoints: quizItems.reduce((sum, question) => sum + question.points, 0),
   };
 
-  const handleClickNext = function () {};
-
   return (
     <>
       <div className="app">
@@ -36,7 +34,11 @@ function App() {
           {!isStarted ? (
             <QuizIntro action={() => dispatch({ type: "startGame" })} />
           ) : (
-            <Quiz quizItem={quizItems[currentQuestion]} progress={progress} />
+            <Quiz
+              quizItem={quizItems[currentQuestion]}
+              progress={progress}
+              actions={dispatch}
+            />
           )}
         </Main>
       </div>
