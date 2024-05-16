@@ -1,4 +1,4 @@
-import { QuizAction, QuizState } from "../../data/quizReducer";
+import { QuizAction } from "../../data/quizReducer";
 import { QuizItem } from "../../data/useFakeApi";
 import Progress, { ProgressProps } from "./Progress";
 import Question from "./Question";
@@ -7,7 +7,7 @@ import Result from "./Result";
 interface QuizProps {
   quizItem: QuizItem;
   progress: ProgressProps;
-  actions: (action: QuizAction) => QuizState;
+  actions: React.Dispatch<QuizAction>;
 }
 
 function Quiz(props: QuizProps) {

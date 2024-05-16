@@ -143,6 +143,7 @@ progress {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  margin-bottom: 3.2rem;
 }
 
 .btn-option.correct {
@@ -155,6 +156,19 @@ progress {
   background-color: var(--color-accent);
   border: var(--color-accent);
   color: var(--color-darkest);
+}
+
+.answer {
+  transform: translateX(2rem);
+}
+
+.timer {
+  float: left;
+  font-size: 1.8rem;
+  color: var(--color-medium);
+  border: 2px solid var(--color-dark);
+  padding: 1.35rem 2.8rem;
+  border-radius: 100px;
 }
 /* For counter exercise */
 .counter {

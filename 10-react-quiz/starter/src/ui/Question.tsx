@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { QuizItem } from "../../data/useFakeApi";
-import { QuizAction, QuizState } from "../../data/quizReducer";
+import { QuizAction } from "../../data/quizReducer";
+import Timer from "./Timer";
 
 interface QuestionProps {
   question: QuizItem;
-  actions: (action: QuizAction) => QuizState;
+  actions: React.Dispatch<QuizAction>;
 }
 
 export default function Question(props: QuestionProps) {
   const [isAnswered, setIsAnswered] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
 
   const { question, options, correctOption, points } = props.question;
 
   const handleClickNext = () => props.actions({ type: "nextQuestion" });
-  const handleClickOption = (points: number) => {
+  const handleClickOption = (points: number, index: number) => {
     setIsAnswered(true);
+    setSelectedAnswer(index);
     props.actions({ type: "addPoints", pointsToAdd: points });
   };
 
@@ -24,20 +27,24 @@ export default function Question(props: QuestionProps) {
       <div className="options">
         {options.map((option, i) => {
           const isCorrectOption = correctOption === i;
-          const answerClass = isCorrectOption ? "correct" : "wrong";
+          const answerClass = `${isCorrectOption ? "correct" : "wrong"} ${
+            selectedAnswer === i ? "answer" : ""
+          }`;
 
           return (
             <button
               key={option}
               disabled={isAnswered}
               className={`btn btn-option ${isAnswered ? answerClass : ""}`}
-              onClick={() => handleClickOption(isCorrectOption ? points : 0)}
+              onClick={() => handleClickOption(isCorrectOption ? points : 0, i)}
+              value={i}
             >
               {option}
             </button>
           );
         })}
       </div>
+      <Timer timeLeft={100} />
       {isAnswered && (
         <button className="btn btn-ui" onClick={handleClickNext}>
           Next
