@@ -6,6 +6,7 @@ import Timer from "./Timer";
 interface QuestionProps {
   question: QuizItem;
   actions: React.Dispatch<QuizAction>;
+  timeLeft: number;
 }
 
 export default function Question(props: QuestionProps) {
@@ -44,7 +45,7 @@ export default function Question(props: QuestionProps) {
           );
         })}
       </div>
-      <Timer timeLeft={100} />
+      <Timer secondsLeft={props.timeLeft} tickAction={props.actions} />
       {isAnswered && (
         <button className="btn btn-ui" onClick={handleClickNext}>
           Next

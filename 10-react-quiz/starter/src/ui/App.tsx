@@ -1,24 +1,19 @@
 import Header from "./Header";
 import Main from "./Main";
 import useFakeApi from "../../data/useFakeApi";
-import { quizReducer, QuizState } from "../../data/quizReducer";
+import { quizReducer } from "../../data/quizReducer";
 import { useReducer } from "react";
 import Quiz from "./Quiz";
 import { ProgressProps } from "./Progress";
 import QuizIntro from "./QuizIntro";
-
-const initQuizState: QuizState = {
-  currentQuestion: 0,
-  points: 0,
-  isStarted: false,
-};
+import { initQuizState } from "../initQuizState";
 
 function App() {
   const [quizState, dispatch] = useReducer(quizReducer, initQuizState);
 
   const quizItems = useFakeApi();
 
-  const { currentQuestion, points, isStarted } = quizState;
+  const { currentQuestion, points, isStarted, timeLeft } = quizState;
   const progress: ProgressProps = {
     curQuestion: currentQuestion + 1,
     maxQuestions: quizItems.length,
@@ -38,6 +33,7 @@ function App() {
               quizItem={quizItems[currentQuestion]}
               progress={progress}
               actions={dispatch}
+              timeLeft={timeLeft}
             />
           )}
         </Main>
