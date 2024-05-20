@@ -10,13 +10,27 @@ function Timer({
 }) {
   const intervalRef = useRef<number>();
 
+  // effect 1 controls behavior on mount/unmount
   useEffect(() => {
-    if (intervalRef.current) return;
-    if (secondsLeft === 0) clearInterval(intervalRef.current);
+    // prevents double tick in strict mode
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
 
     const id = setInterval(() => tickAction({ type: "timerTick" }), 1000);
     intervalRef.current = id;
-  }, [secondsLeft, tickAction]);
+
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, [tickAction]);
+
+  // effect 2 checks for time running out
+  useEffect(() => {
+    if (secondsLeft === 0) {
+      clearInterval(intervalRef.current);
+    }
+  }, [secondsLeft]);
 
   const displayMinutes = Math.trunc(secondsLeft / 60);
   const displaySeconds = secondsLeft % 60;
