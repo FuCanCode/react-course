@@ -1,6 +1,6 @@
 import { QuizState } from "../data/quizReducer";
 
-const defaultQuizMinutes = 0.1;
+const defaultQuizMinutes = 5;
 
 export const initQuizState: QuizState = {
   currentQuestion: 0,
