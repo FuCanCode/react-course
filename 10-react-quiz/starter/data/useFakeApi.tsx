@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
-const QUIZ_URL = "http://localhost:3000/questions";
-
-export interface QuizItem {
-  id: string;
-  question: string;
-  options: string[];
-  correctOption: number;
-  points: number;
-}
+import { QuizItem } from "./quizReducer";
+export const QUIZ_URL = "http://localhost:3000/questions";
 
 function useFakeApi() {
   const [data, setData] = useState<QuizItem[]>([]);

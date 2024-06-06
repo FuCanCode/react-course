@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QuizItem } from "../../data/useFakeApi";
+import { QuizItem } from "../../data/quizReducer";
 import { QuizAction } from "../../data/quizReducer";
 import Timer from "./Timer";
 

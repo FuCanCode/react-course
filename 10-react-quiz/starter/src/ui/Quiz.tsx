@@ -1,5 +1,5 @@
 import { QuizAction } from "../../data/quizReducer";
-import { QuizItem } from "../../data/useFakeApi";
+import { QuizItem } from "../../data/quizReducer";
 import { initQuizState } from "../initQuizState";
 import Progress, { ProgressProps } from "./Progress";
 import Question from "./Question";
