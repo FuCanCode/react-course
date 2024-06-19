@@ -29,8 +29,9 @@ function Timer({
   useEffect(() => {
     if (secondsLeft === 0) {
       clearInterval(intervalRef.current);
+      tickAction({ type: "finish" });
     }
-  }, [secondsLeft]);
+  }, [secondsLeft, tickAction]);
 
   const displayMinutes = Math.trunc(secondsLeft / 60);
   const displaySeconds = secondsLeft % 60;
