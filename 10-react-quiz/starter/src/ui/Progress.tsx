@@ -3,18 +3,22 @@ export interface ProgressProps {
   maxQuestions: number;
   curPoints: number;
   maxPoints: number;
+  isAnswered: boolean;
 }
 export default function Progress(props: ProgressProps) {
-  const { curQuestion, maxQuestions, curPoints, maxPoints } = props;
+  const { curQuestion, maxQuestions, curPoints, maxPoints, isAnswered } = props;
 
   return (
     <div className="progress">
-      <progress max={maxQuestions} value={curQuestion}></progress>
+      <progress
+        max={maxQuestions}
+        value={curQuestion + Number(isAnswered)}
+      ></progress>
       <p>
-        Question {curQuestion}/{maxQuestions}
+        Question <strong>{curQuestion + 1}</strong>/{maxQuestions}
       </p>
       <p>
-        {curPoints}/{maxPoints} points
+        <strong>{curPoints}</strong>/{maxPoints} points
       </p>
     </div>
   );

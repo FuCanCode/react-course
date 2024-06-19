@@ -4,18 +4,24 @@ import Main from "./Main";
 import { QUIZ_URL } from "../../data/useFakeApi";
 import { QuizItem, quizReducer } from "../../data/quizReducer";
 import { useEffect, useReducer } from "react";
-import Quiz from "./Quiz";
-import { ProgressProps } from "./Progress";
+import Progress, { ProgressProps } from "./Progress";
 import QuizIntro from "./QuizIntro";
 import { initQuizState } from "../initQuizState";
 import Loader from "./Loader";
 import Error from "./Error";
+import Question from "./Question";
+import Result from "./Result";
+import NextButton from "./NextButton";
 
 function App() {
   const [quizState, dispatch] = useReducer(quizReducer, initQuizState);
-  const { currentQuestion, points, status, timeLeft, questions } = quizState;
+  const { currentQuestion, points, status, timeLeft, questions, answer } =
+    quizState;
+  const question = questions[currentQuestion];
   //const quizItems = useFakeApi();
   useEffect(() => {
+    if (questions.length) return;
+
     async function getQuestions() {
       try {
         const res = await fetch(QUIZ_URL);
@@ -28,13 +34,14 @@ function App() {
     }
 
     setTimeout(getQuestions, 2000);
-  }, []);
+  }, [questions]);
 
   const progress: ProgressProps = {
-    curQuestion: currentQuestion + 1,
+    curQuestion: currentQuestion,
     maxQuestions: questions.length,
     curPoints: points,
     maxPoints: questions.reduce((sum, question) => sum + question.points, 0),
+    isAnswered: answer !== null,
   };
 
   return (
@@ -52,11 +59,31 @@ function App() {
           ) : null}
 
           {status === "active" ? (
-            <Quiz
-              quizItem={questions[currentQuestion]}
-              progress={progress}
-              actions={dispatch}
-              timeLeft={timeLeft}
+            <>
+              <Progress {...progress} />
+              <Question
+                key={question.id}
+                timeLeft={timeLeft}
+                actions={dispatch}
+                question={question}
+                answer={answer}
+              />
+              <NextButton
+                dispatch={dispatch}
+                isVisible={answer !== null}
+                isLastQuestion={
+                  progress.curQuestion + 1 === progress.maxQuestions
+                }
+              />
+            </>
+          ) : null}
+          {status === "finished" ? (
+            <Result
+              points={[progress.curPoints, progress.maxPoints]}
+              timeOver={timeLeft <= 0}
+              onRestart={() =>
+                dispatch({ type: "restart", defaultState: initQuizState })
+              }
             />
           ) : null}
         </Main>
