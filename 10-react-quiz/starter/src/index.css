@@ -182,6 +182,12 @@ progress {
   margin-bottom: 1.6rem;
 }
 
+.highscore {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 4.8rem;
+}
+
 .summary {
   display: flex;
   flex-direction: column;

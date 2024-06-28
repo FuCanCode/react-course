@@ -1,22 +1,32 @@
-import Header from "./Header";
-import Main from "./Main";
 //import useFakeApi from "../../data/useFakeApi";
 import { QUIZ_URL } from "../../data/useFakeApi";
 import { QuizItem, quizReducer } from "../../data/quizReducer";
 import { useEffect, useReducer } from "react";
-import Progress, { ProgressProps } from "./Progress";
-import QuizIntro from "./QuizIntro";
 import { initQuizState } from "../initQuizState";
+
+import Main from "./Main";
+import QuizIntro from "./QuizIntro";
+import Header from "./Header";
+import Progress, { ProgressProps } from "./Progress";
 import Loader from "./Loader";
 import Error from "./Error";
 import Question from "./Question";
 import Result from "./Result";
 import NextButton from "./NextButton";
+import Timer from "./Timer";
+import Footer from "./Footer";
 
 function App() {
   const [quizState, dispatch] = useReducer(quizReducer, initQuizState);
-  const { currentQuestion, points, status, timeLeft, questions, answer } =
-    quizState;
+  const {
+    currentQuestion,
+    points,
+    status,
+    timeLeft,
+    questions,
+    answer,
+    highscore,
+  } = quizState;
   const question = questions[currentQuestion];
   //const quizItems = useFakeApi();
   useEffect(() => {
@@ -63,18 +73,20 @@ function App() {
               <Progress {...progress} />
               <Question
                 key={question.id}
-                timeLeft={timeLeft}
                 actions={dispatch}
                 question={question}
                 answer={answer}
               />
-              <NextButton
-                dispatch={dispatch}
-                isVisible={answer !== null}
-                isLastQuestion={
-                  progress.curQuestion + 1 === progress.maxQuestions
-                }
-              />
+              <Footer>
+                <Timer secondsLeft={timeLeft} tickAction={dispatch} />
+                <NextButton
+                  dispatch={dispatch}
+                  isVisible={answer !== null}
+                  isLastQuestion={
+                    progress.curQuestion + 1 === progress.maxQuestions
+                  }
+                />
+              </Footer>
             </>
           ) : null}
           {status === "finished" ? (
@@ -82,8 +94,12 @@ function App() {
               points={[progress.curPoints, progress.maxPoints]}
               timeOver={timeLeft <= 0}
               onRestart={() =>
-                dispatch({ type: "restart", defaultState: initQuizState })
+                dispatch({
+                  type: "restart",
+                  defaultState: { ...initQuizState, highscore: highscore },
+                })
               }
+              highscore={highscore}
             />
           ) : null}
         </Main>

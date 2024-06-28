@@ -11,7 +11,8 @@ export interface QuizState {
   currentQuestion: number;
   answer: number | null;
   points: number;
-  timeLeft: number;
+  timeLeft: number | null;
+  highscore: number;
 }
 export type QuizAction =
   | { type: "startGame" }
@@ -24,12 +25,15 @@ export type QuizAction =
   | { type: "finish" }
   | { type: "restart"; defaultState: QuizState };
 
+const SECONDS_PER_QUESTION = 20;
+
 export function quizReducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
     case "startGame":
       return {
         ...state,
         status: "active",
+        timeLeft: state.questions.length * SECONDS_PER_QUESTION,
       };
 
     case "setQuestions":
@@ -64,15 +68,25 @@ export function quizReducer(state: QuizState, action: QuizAction): QuizState {
     case "timerTick":
       return {
         ...state,
-        timeLeft: state.timeLeft > 0 ? state.timeLeft - 1 : 0,
-        status: state.timeLeft > 0 ? "active" : "finished",
+        timeLeft: Number(state.timeLeft) > 0 ? Number(state.timeLeft) - 1 : 0,
+        status: Number(state.timeLeft) > 0 ? "active" : "finished",
       };
 
     case "finish":
-      return { ...state, status: "finished" };
+      return {
+        ...state,
+        status: "finished",
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
+      };
 
     case "restart":
-      return { ...action.defaultState };
+      return {
+        ...action.defaultState,
+        questions: state.questions,
+        status: "ready",
+        highscore: state.highscore,
+      };
 
     default:
       throw new Error("Unknown action");
