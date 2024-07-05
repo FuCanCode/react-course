@@ -3,17 +3,25 @@ import Homepage from "./pages/Homepage";
 import Pricing from "./pages/Pricing";
 import Product from "./pages/Product";
 import PageNotFound from "./pages/PageNotFound";
+import Header from "./components/Header";
+import PageNav from "./components/PageNav";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Header>
+          <PageNav />
+        </Header>
+
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
