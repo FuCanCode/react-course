@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import styles from "./PageNav.module.css";
 
 function PageNav() {
   const navLinks = [
@@ -17,15 +18,16 @@ function PageNav() {
   ];
 
   return (
-    <nav>
+    <nav className={styles.nav}>
       <ul>
         {navLinks.map((l) => (
           <li key={l.displayName}>
             <NavLink
+              /* className={({ isActive }) =>
+                `${styles.navLink} ${isActive ? styles.active : ""}`
+              } */
+              className={styles.navLink}
               to={l.path}
-              style={({ isActive }) => {
-                return { backgroundColor: isActive ? "blue" : "" };
-              }}
             >
               {l.displayName}
             </NavLink>
