@@ -1,12 +1,9 @@
 import { NavLink } from "react-router-dom";
 import styles from "./PageNav.module.css";
+import Logo from "./Logo";
 
 function PageNav() {
   const navLinks = [
-    {
-      path: "/",
-      displayName: "Home",
-    },
     {
       path: "/product",
       displayName: "Product",
@@ -15,10 +12,15 @@ function PageNav() {
       path: "/pricing",
       displayName: "Pricing",
     },
+    {
+      path: "/login",
+      displayName: "Login",
+    },
   ];
 
   return (
     <nav className={styles.nav}>
+      <Logo />
       <ul>
         {navLinks.map((l) => (
           <li key={l.displayName}>
@@ -26,7 +28,9 @@ function PageNav() {
               /* className={({ isActive }) =>
                 `${styles.navLink} ${isActive ? styles.active : ""}`
               } */
-              className={styles.navLink}
+              className={
+                l.displayName === "Login" ? styles.ctaLink : styles.navLink
+              }
               to={l.path}
             >
               {l.displayName}

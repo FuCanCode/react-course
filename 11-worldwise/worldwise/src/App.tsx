@@ -6,19 +6,17 @@ import PageNotFound from "./pages/PageNotFound";
 import Header from "./components/Header";
 import PageNav from "./components/PageNav";
 import AppLayout from "./pages/AppLayout";
+import Login from "./pages/Login";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Header>
-          <PageNav />
-        </Header>
-
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/app" element={<AppLayout />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
