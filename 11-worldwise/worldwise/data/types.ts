@@ -10,3 +10,8 @@ export interface CityProps {
   };
   id: number;
 }
+
+export interface Country {
+  country: string;
+  emoji: string;
+}

@@ -1,6 +1,6 @@
 import CityItem from "./CityItem";
 import styles from "./CityList.module.css";
-import { CityProps } from "../../data/city.type";
+import { CityProps } from "../../data/types";
 import Spinner from "./Spinner";
 import Message from "./Message";
 
