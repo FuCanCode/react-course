@@ -3,14 +3,10 @@ import CountryItem from "./CountryItem";
 import Message from "./Message";
 import styles from "./CountryList.module.css";
 import Spinner from "./Spinner";
+import { useCity } from "../contexts/CitiesContext";
 
-function CountryList({
-  cities,
-  isLoading,
-}: {
-  cities: CityProps[];
-  isLoading: boolean;
-}) {
+function CountryList() {
+  const { cities, isLoading } = useCity();
   if (isLoading) return <Spinner />;
 
   if (!cities.length) return <Message message="No countries visited yet ;(" />;

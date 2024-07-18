@@ -1,5 +1,11 @@
-import { createContext, ReactNode, useContext, useReducer } from "react";
-import { reducer } from "./reducer";
+import {
+  createContext,
+  ReactNode,
+  Reducer,
+  useContext,
+  useReducer,
+} from "react";
+import { Action, reducer, State } from "./reducer";
 import { createRandomPost } from "./utils";
 
 export interface IPost {
@@ -59,11 +65,16 @@ export const SearchContext = createContext<ISearchContext | null>(null);
   );
 } */
 
+const initState: State = {
+  posts: Array.from({ length: 30 }, () => createRandomPost()),
+  searchQuery: "",
+};
+
 export function MyContext({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, {
-    posts: Array.from({ length: 30 }, () => createRandomPost()),
-    searchQuery: "",
-  });
+  const [state, dispatch] = useReducer<Reducer<State, Action>>(
+    reducer,
+    initState
+  );
 
   const { posts, searchQuery } = state;
   // Derived state. These are the posts that will actually be displayed

@@ -3,14 +3,11 @@ import styles from "./CityList.module.css";
 import { CityProps } from "../../data/types";
 import Spinner from "./Spinner";
 import Message from "./Message";
+import { useCity } from "../contexts/CitiesContext";
 
-function Cities({
-  cities,
-  isLoading,
-}: {
-  cities: CityProps[];
-  isLoading: boolean;
-}) {
+function CityList() {
+  const { cities, isLoading } = useCity();
+
   if (isLoading) return <Spinner />;
 
   if (!cities.length)
@@ -25,4 +22,4 @@ function Cities({
   );
 }
 
-export default Cities;
+export default CityList;

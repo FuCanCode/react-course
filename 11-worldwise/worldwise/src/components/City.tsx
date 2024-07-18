@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { CityProps } from "../../data/types";
 import styles from "./City.module.css";
+import { useCity } from "../contexts/CitiesContext";
 
-const formatDate = (date) =>
+const formatDate = (date: string) =>
   new Intl.DateTimeFormat("en", {
     day: "numeric",
     month: "long",
@@ -10,7 +10,8 @@ const formatDate = (date) =>
     weekday: "long",
   }).format(new Date(date));
 
-function City({ cities }: { cities: CityProps[] }) {
+function City() {
+  const { cities } = useCity();
   // TEMP DATA
   const { id } = useParams();
 
@@ -21,6 +22,8 @@ function City({ cities }: { cities: CityProps[] }) {
     date: "2027-10-31T15:59:59.138Z",
     notes: "My favorite city so far!",
   }; */
+
+  if (!currentCity) return <h1>City not found ;(</h1>;
 
   const { cityName, emoji, date, notes } = currentCity;
 
@@ -35,7 +38,7 @@ function City({ cities }: { cities: CityProps[] }) {
 
       <div className={styles.row}>
         <h6>You went to {cityName} on</h6>
-        <p>{formatDate(date || null)}</p>
+        <p>{formatDate(date) || null}</p>
       </div>
 
       {notes && (
