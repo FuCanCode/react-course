@@ -5,8 +5,8 @@ function Button({
   type,
 }: {
   children: string;
+  type: "primary" | "back" | "position";
   action?: () => void;
-  type?: string;
 }) {
   return (
     <button

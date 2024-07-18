@@ -1,4 +1,4 @@
-import { Country } from "../../data/types";
+import { Country } from "../../../data/types";
 import styles from "./CountryItem.module.css";
 
 function CountryItem({ country }: { country: Country }) {

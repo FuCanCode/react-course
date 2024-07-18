@@ -1,20 +1,14 @@
-import {
-  useState,
-  useEffect,
-  createContext,
-  ReactNode,
-  useContext,
-} from "react";
+import { useState, useEffect, createContext, ReactNode } from "react";
 import { CityProps } from "../../data/types";
 
-const BASE_URL = "http://localhost:8000";
+import { BASE_URL } from "../appConfig";
 
 interface ICitiesContext {
   cities: CityProps[];
   isLoading: boolean;
 }
 
-const CitiesContext = createContext<ICitiesContext>({} as ICitiesContext);
+export const CitiesContext = createContext<ICitiesContext | null>(null);
 
 export function CitiesContextProvider({ children }: { children: ReactNode }) {
   const [cities, setCities] = useState<CityProps[]>([]);
@@ -40,12 +34,6 @@ export function CitiesContextProvider({ children }: { children: ReactNode }) {
       {children}
     </CitiesContext.Provider>
   );
-}
-
-export function useCity() {
-  const cityContext = useContext(CitiesContext);
-  if (!cityContext) throw Error("No access to context provider!");
-  return cityContext;
 }
 
 export default CitiesContext;

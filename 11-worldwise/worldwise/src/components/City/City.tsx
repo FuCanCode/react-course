@@ -1,6 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "./City.module.css";
-import { useCity } from "../contexts/CitiesContext";
+import { useCities } from "../../hooks/useCities";
+import { useCity } from "../../hooks/useCity";
+import Spinner from "../Spinner/Spinner";
+import Button from "../Button/Button";
 
 const formatDate = (date: string) =>
   new Intl.DateTimeFormat("en", {
@@ -11,11 +14,11 @@ const formatDate = (date: string) =>
   }).format(new Date(date));
 
 function City() {
-  const { cities } = useCity();
+  // const { cities } = useCities();
   // TEMP DATA
-  const { id } = useParams();
+  // const { id } = useParams();
 
-  const currentCity = cities.find((c) => c.id === Number(id));
+  // const currentCity = cities.find((c) => c.id === Number(id));
   /* {
     cityName: "Lisbon",
     emoji: "🇵🇹",
@@ -23,9 +26,15 @@ function City() {
     notes: "My favorite city so far!",
   }; */
 
-  if (!currentCity) return <h1>City not found ;(</h1>;
+  // if (!currentCity) return <h1>City not found ;(</h1>;
+  const navigate = useNavigate();
+  const { city, isLoading } = useCity();
 
-  const { cityName, emoji, date, notes } = currentCity;
+  if (isLoading) return <Spinner />;
+
+  if (!city) return <h1>City not found ;(</h1>;
+
+  const { cityName, emoji, date, notes } = city;
 
   return (
     <div className={styles.city}>
@@ -59,7 +68,16 @@ function City() {
         </a>
       </div>
 
-      <div>{/* <ButtonBack /> */}</div>
+      <div>
+        <Button
+          type={"back"}
+          action={() => {
+            navigate(-1);
+          }}
+        >
+          Back
+        </Button>
+      </div>
     </div>
   );
 }

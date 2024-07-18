@@ -1,12 +1,12 @@
-import CityItem from "./CityItem";
+import CityItem from "../CityItem/CityItem";
 import styles from "./CityList.module.css";
-import { CityProps } from "../../data/types";
-import Spinner from "./Spinner";
-import Message from "./Message";
-import { useCity } from "../contexts/CitiesContext";
+import { CityProps } from "../../../data/types";
+import Spinner from "../Spinner/Spinner";
+import Message from "../Message/Message";
+import { useCities } from "../../hooks/useCities";
 
 function CityList() {
-  const { cities, isLoading } = useCity();
+  const { cities, isLoading } = useCities();
 
   if (isLoading) return <Spinner />;
 

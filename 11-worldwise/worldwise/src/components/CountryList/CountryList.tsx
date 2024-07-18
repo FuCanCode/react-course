@@ -1,12 +1,12 @@
-import { CityProps, Country } from "../../data/types";
-import CountryItem from "./CountryItem";
-import Message from "./Message";
+import { CityProps, Country } from "../../../data/types";
+import CountryItem from "../CountryItem/CountryItem";
+import Message from "../Message/Message";
 import styles from "./CountryList.module.css";
-import Spinner from "./Spinner";
-import { useCity } from "../contexts/CitiesContext";
+import Spinner from "../Spinner/Spinner";
+import { useCities } from "../../hooks/useCities";
 
 function CountryList() {
-  const { cities, isLoading } = useCity();
+  const { cities, isLoading } = useCities();
   if (isLoading) return <Spinner />;
 
   if (!cities.length) return <Message message="No countries visited yet ;(" />;
