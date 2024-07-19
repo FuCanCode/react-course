@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styles from "./Button.module.css";
 function Button({
   children,
@@ -6,12 +7,18 @@ function Button({
 }: {
   children: string;
   type: "primary" | "back" | "position";
-  action?: () => void;
+  action?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }) {
+  const navigate = useNavigate();
+
   return (
     <button
       className={`${styles.btn} ${type ? styles[type] : ""}`}
-      onClick={action}
+      onClick={(e) => {
+        e.preventDefault();
+        if (action) action();
+        if (type === "back") navigate(-1);
+      }}
     >
       {children}
     </button>
