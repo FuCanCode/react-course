@@ -1,16 +1,19 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./Form.module.css";
 import Button from "../Button/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-export function convertToEmoji(countryCode) {
+export function convertToEmoji(countryCode: string) {
   const codePoints = countryCode
     .toUpperCase()
     .split("")
     .map((char) => 127397 + char.charCodeAt());
+
+  console.log(codePoints);
+
   return String.fromCodePoint(...codePoints);
 }
 
@@ -21,6 +24,30 @@ function Form() {
   const [notes, setNotes] = useState("");
 
   const navigate = useNavigate();
+
+  const [params] = useSearchParams();
+  const lat = params.get("lat");
+  const lng = params.get("lng");
+
+  useEffect(() => {
+    if (!lat || !lng) return;
+    async function getClosestPLace() {
+      try {
+        const res = await fetch(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`
+        );
+        const data: { city: string } = await res.json();
+        const { city } = data;
+
+        setCityName(city);
+      } catch (error) {
+        setCityName(
+          error instanceof Error ? error.message : "API did not work!"
+        );
+      }
+    }
+    getClosestPLace();
+  }, [lat, lng]);
 
   return (
     <form className={styles.form}>

@@ -52,7 +52,7 @@ function Map() {
         scrollWheelZoom={true}
         className={styles.map}
       >
-        <ChnageCenter position={mapPosition} />
+        <ChangeCenter position={mapPosition} />
         <DetectClick />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -79,7 +79,7 @@ function Map() {
   );
 }
 
-function ChnageCenter({ position }: { position: LatLngExpression }) {
+function ChangeCenter({ position }: { position: LatLngExpression }) {
   const map = useMap();
   map.setView(position);
 
@@ -92,7 +92,7 @@ function DetectClick() {
   useMapEvent("click", (me) => {
     const { lat, lng } = me.latlng;
 
-    navigate(`/app/form?lat=${lat}&lng=${lng}`);
+    navigate(`/app/form?lat=${lat}&lng=${lng}`, { replace: true });
   });
 
   return null;
