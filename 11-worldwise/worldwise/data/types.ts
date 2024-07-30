@@ -2,7 +2,7 @@ export interface CityProps {
   cityName: string;
   country: string;
   emoji: string;
-  date: string;
+  date: Date;
   notes: string;
   position: {
     lat: number;
@@ -14,4 +14,13 @@ export interface CityProps {
 export interface Country {
   country: string;
   emoji: string;
+}
+
+export interface GeocodingObject {
+  city: string;
+  locality: string;
+  countryName: string;
+  countryCode: string;
+  latitude: number;
+  longitude: number;
 }

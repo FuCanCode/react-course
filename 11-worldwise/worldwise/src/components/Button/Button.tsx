@@ -14,8 +14,7 @@ function Button({
   return (
     <button
       className={`${styles.btn} ${type ? styles[type] : ""}`}
-      onClick={(e) => {
-        e.preventDefault();
+      onClick={() => {
         if (action) action();
         if (type === "back") navigate(-1);
       }}
