@@ -1,63 +1,84 @@
-import { useState, useEffect, createContext, ReactNode } from "react";
+import { useEffect, createContext, ReactNode, useReducer } from "react";
 import { CityProps } from "../../data/types";
 
 import { BASE_URL } from "../appConfig";
+import { appReducer, AppState } from "../reducer/app-reducer";
 
 interface ICitiesContext {
   cities: CityProps[];
   currentCity: CityProps | null;
   isLoading: boolean;
+  error: string;
   getCity: (id: number) => Promise<void>;
   createCity: (newCity: Omit<CityProps, "id">) => Promise<void>;
+  deleteCity: (id: number) => Promise<void>;
 }
 
 export const CitiesContext = createContext<ICitiesContext | null>(null);
 
+const initialState: AppState = {
+  cities: [],
+  isLoading: false,
+  currentCity: null,
+  error: "",
+};
+
 export function CitiesContextProvider({ children }: { children: ReactNode }) {
-  const [cities, setCities] = useState<CityProps[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentCity, setCurrentCity] = useState<CityProps | null>(null);
+  // const [cities, setCities] = useState<CityProps[]>([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [currentCity, setCurrentCity] = useState<CityProps | null>(null);
+
+  const [{ isLoading, cities, currentCity, error }, dispatch] = useReducer(
+    appReducer,
+    initialState
+  );
 
   useEffect(() => {
     fetchCities();
   }, []);
 
   async function fetchCities() {
-    setIsLoading(true);
+    dispatch({ type: "loading" });
     try {
       const res = await fetch(`${BASE_URL}/cities`);
+
       const cities: CityProps[] = await res.json();
-      setCities(cities);
+
+      dispatch({ type: "cities/loaded", cities });
     } catch (error) {
-      alert("Could not load Data.");
-    } finally {
-      setIsLoading(false);
+      dispatch({
+        type: "rejected",
+        errMsg:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong on fetching the cities ;(",
+      });
     }
   }
 
   async function getCity(id: number) {
-    try {
-      setIsLoading(true);
+    if (id === currentCity?.id) return;
 
+    dispatch({ type: "loading" });
+    try {
       const res = await fetch(`${BASE_URL}/cities/${id}`);
 
       const city: CityProps = await res.json();
 
-      setCurrentCity(city);
+      dispatch({ type: "city/loaded", currentCity: city });
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Something went wrong :(";
+        error instanceof Error
+          ? error.message
+          : "Something went wrong trying to fetch the city data :(";
 
-      throw Error(message);
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: "rejected", errMsg: message });
     }
   }
 
   async function createCity(newCity: Omit<CityProps, "id">) {
+    dispatch({ type: "loading" });
     try {
-      setIsLoading(true);
-
       const res = await fetch(`${BASE_URL}/cities/`, {
         method: "POST",
         body: JSON.stringify(newCity),
@@ -66,22 +87,47 @@ export function CitiesContextProvider({ children }: { children: ReactNode }) {
         },
       });
 
-      if (!res.ok) throw Error("Something went wrong :(");
-
-      fetchCities();
+      const data: CityProps = await res.json();
+      dispatch({ type: "cities/cityAdded", newCity: data });
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Something went wrong :(";
+        error instanceof Error
+          ? error.message
+          : "Something went wrong trying to add the city :(";
 
-      throw Error(message);
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: "rejected", errMsg: message });
+    }
+  }
+
+  async function deleteCity(id: number) {
+    dispatch({ type: "loading" });
+    try {
+      await fetch(`${BASE_URL}/cities/${id}`, {
+        method: "DELETE",
+      });
+
+      dispatch({ type: "cities/cityDeleted", id });
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "There was an Error deleting the city";
+
+      dispatch({ type: "rejected", errMsg: message });
     }
   }
 
   return (
     <CitiesContext.Provider
-      value={{ cities, isLoading, currentCity, getCity, createCity }}
+      value={{
+        cities,
+        isLoading,
+        error,
+        currentCity,
+        getCity,
+        createCity,
+        deleteCity,
+      }}
     >
       {children}
     </CitiesContext.Provider>

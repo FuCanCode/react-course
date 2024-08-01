@@ -1,18 +1,6 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
-      "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
-      "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
-      },
-      "id": 73930385
-    },
-    {
       "cityName": "Madrid",
       "country": "Spain",
       "emoji": "🇪🇸",
@@ -25,124 +13,40 @@
       "id": 17806751
     },
     {
-      "cityName": "Berlin",
+      "cityName": "Amsterdam",
+      "country": "Netherlands (Kingdom of the)",
+      "date": "2024-08-01T08:16:17.909Z",
+      "emoji": "🇳🇱",
+      "notes": "",
+      "position": {
+        "lat": 52.399067302933304,
+        "lng": 4.94384765625
+      },
+      "id": 98443199
+    },
+    {
+      "cityName": "Babiak",
+      "country": "Poland",
+      "date": "2024-08-01T08:16:58.761Z",
+      "emoji": "🇵🇱",
+      "notes": "",
+      "position": {
+        "lat": 52.32191088594773,
+        "lng": 18.676757812500004
+      },
+      "id": 98443200
+    },
+    {
+      "cityName": "Hartha",
       "country": "Germany",
+      "date": "2024-08-01T09:30:31.762Z",
       "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
+      "notes": "asdads",
       "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
+        "lat": 51.11128208389564,
+        "lng": 12.978973388671875
       },
-      "id": 98443197
-    },
-    {
-      "cityName": "Dresden",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-05-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
-      "position": {
-        "lat": 51.0772193,
-        "lng": 13.7082522
-      },
-      "id": 98443444
-    },
-    {
-      "cityName": "Hohnstein",
-      "country": "Germany",
-      "date": "2024-07-29T07:11:08.852Z",
-      "emoji": "🇩🇪",
-      "notes": "War ich auch schonmal",
-      "position": {
-        "lat": 50.98101972421965,
-        "lng": 14.111766815185549
-      },
-      "id": 98443445
-    },
-    {
-      "cityName": "Niederdorfelden",
-      "country": "Germany",
-      "date": "2024-07-30T06:45:56.147Z",
-      "emoji": "🇩🇪",
-      "notes": "",
-      "position": {
-        "lat": 50.18393346184497,
-        "lng": 8.816528320312502
-      },
-      "id": 98443446
-    },
-    {
-      "cityName": "Hami Shi",
-      "country": "China",
-      "date": "2024-07-30T06:51:04.049Z",
-      "emoji": "🇨🇳",
-      "notes": "",
-      "position": {
-        "lat": 41.96765920367816,
-        "lng": 92.28515625000001
-      },
-      "id": 98443447
-    },
-    {
-      "cityName": "Quibdo",
-      "country": "Colombia",
-      "date": "2024-07-30T07:27:02.543Z",
-      "emoji": "🇨🇴",
-      "notes": "",
-      "position": {
-        "lat": 5.7307771834078745,
-        "lng": -76.59118652343751
-      },
-      "id": 98443448
-    },
-    {
-      "cityName": "Guarne",
-      "country": "Colombia",
-      "date": "2024-07-30T07:31:40.187Z",
-      "emoji": "🇨🇴",
-      "notes": "",
-      "position": {
-        "lat": 6.298918791076363,
-        "lng": -75.49255371093751
-      },
-      "id": 98443449
-    },
-    {
-      "cityName": "Achi",
-      "country": "Colombia",
-      "date": "2024-07-30T07:31:47.200Z",
-      "emoji": "🇨🇴",
-      "notes": "",
-      "position": {
-        "lat": 8.619041018922134,
-        "lng": -74.50378417968751
-      },
-      "id": 98443450
-    },
-    {
-      "cityName": "Tibu",
-      "country": "Colombia",
-      "date": "2024-07-30T07:31:47.200Z",
-      "emoji": "🇨🇴",
-      "notes": "",
-      "position": {
-        "lat": 8.749365500848814,
-        "lng": -72.72949218750001
-      },
-      "id": 98443451
-    },
-    {
-      "cityName": "Socopo",
-      "country": "Venezuela (Bolivarian Republic of)",
-      "date": "2024-07-30T07:31:47.200Z",
-      "emoji": "🇻🇪",
-      "notes": "",
-      "position": {
-        "lat": 8.227800526152265,
-        "lng": -70.84533691406251
-      },
-      "id": 98443452
+      "id": 98443201
     }
   ]
 }

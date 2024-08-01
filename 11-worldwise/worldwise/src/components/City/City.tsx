@@ -1,11 +1,11 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
 import Spinner from "../Spinner/Spinner";
 import Button from "../Button/Button";
 import { useCities } from "../../hooks/useCities";
 import { useEffect } from "react";
 
-const formatDate = (date: string) =>
+const formatDate = (date: Date) =>
   new Intl.DateTimeFormat("en", {
     day: "numeric",
     month: "long",
