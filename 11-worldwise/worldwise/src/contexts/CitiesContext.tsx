@@ -4,11 +4,7 @@ import { CityProps } from "../../data/types";
 import { BASE_URL } from "../appConfig";
 import { appReducer, AppState } from "../reducer/app-reducer";
 
-interface ICitiesContext {
-  cities: CityProps[];
-  currentCity: CityProps | null;
-  isLoading: boolean;
-  error: string;
+interface ICitiesContext extends AppState {
   getCity: (id: number) => Promise<void>;
   createCity: (newCity: Omit<CityProps, "id">) => Promise<void>;
   deleteCity: (id: number) => Promise<void>;

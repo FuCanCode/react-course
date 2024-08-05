@@ -11,27 +11,33 @@ import CountryList from "./components/CountryList/CountryList";
 import City from "./components/City/City";
 import Form from "./components/Form/Form";
 import { CitiesContextProvider } from "./contexts/CitiesContext";
+import { AuthProvider } from "./contexts/FakeAuthContext";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <CitiesContextProvider>
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/product" element={<Product />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/app" element={<AppLayout />}>
-              <Route index element={<Navigate replace={true} to="cities" />} />
-              <Route path="cities" element={<CityList />} />
-              <Route path="cities/:id" element={<City />} />
-              <Route path="countries" element={<CountryList />} />
-              <Route path="form" element={<Form />} />
-            </Route>
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </CitiesContextProvider>
+        <AuthProvider>
+          <CitiesContextProvider>
+            <Routes>
+              <Route path="/" element={<Homepage />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/product" element={<Product />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/app" element={<AppLayout />}>
+                <Route
+                  index
+                  element={<Navigate replace={true} to="cities" />}
+                />
+                <Route path="cities" element={<CityList />} />
+                <Route path="cities/:id" element={<City />} />
+                <Route path="countries" element={<CountryList />} />
+                <Route path="form" element={<Form />} />
+              </Route>
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </CitiesContextProvider>
+        </AuthProvider>
       </BrowserRouter>
     </>
   );

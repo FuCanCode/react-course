@@ -1,11 +1,20 @@
 import { useState } from "react";
 import styles from "./Login.module.css";
 import PageNav from "../components/PageNav/PageNav";
+import { useAuth } from "../hooks/useAuth";
+import Message from "../components/Message/Message";
 
 export default function Login() {
   // PRE-FILL FOR DEV PURPOSES
   const [email, setEmail] = useState("jack@example.com");
   const [password, setPassword] = useState("qwerty");
+
+  const { authError, login } = useAuth();
+
+  function handleLogin(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.preventDefault();
+    login(email, password);
+  }
 
   return (
     <main className={styles.login}>
@@ -32,9 +41,10 @@ export default function Login() {
         </div>
 
         <div>
-          <button>Login</button>
+          <button onClick={handleLogin}>Login</button>
         </div>
       </form>
+      {authError && <Message message={authError} />}
     </main>
   );
 }

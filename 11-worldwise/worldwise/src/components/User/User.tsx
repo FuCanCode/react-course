@@ -1,13 +1,14 @@
+import { User } from "../../../data/types";
 import styles from "./User.module.css";
 
-const FAKE_USER = {
+export const FAKE_USER: User = {
   name: "Jack",
   email: "jack@example.com",
   password: "qwerty",
   avatar: "https://i.pravatar.cc/100?u=zz",
 };
 
-function User() {
+function UserBox() {
   const user = FAKE_USER;
 
   function handleClick() {}
@@ -21,7 +22,7 @@ function User() {
   );
 }
 
-export default User;
+export default UserBox;
 
 /*
 CHALLENGE
