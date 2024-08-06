@@ -1,15 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import styles from "./User.module.css";
-import { useEffect } from "react";
 
 function UserBox() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-
-  /* useEffect(() => {
-    if (!user) return navigate("/login");
-  }, [user]); */
 
   if (!user) return null;
 
