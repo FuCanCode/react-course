@@ -1,17 +1,22 @@
-import { User } from "../../../data/types";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import styles from "./User.module.css";
-
-export const FAKE_USER: User = {
-  name: "Jack",
-  email: "jack@example.com",
-  password: "qwerty",
-  avatar: "https://i.pravatar.cc/100?u=zz",
-};
+import { useEffect } from "react";
 
 function UserBox() {
-  const user = FAKE_USER;
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  function handleClick() {}
+  /* useEffect(() => {
+    if (!user) return navigate("/login");
+  }, [user]); */
+
+  if (!user) return null;
+
+  function handleClick() {
+    logout();
+    navigate("/");
+  }
 
   return (
     <div className={styles.user}>

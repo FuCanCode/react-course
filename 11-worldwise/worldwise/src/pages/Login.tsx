@@ -1,17 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import PageNav from "../components/PageNav/PageNav";
 import { useAuth } from "../hooks/useAuth";
 import Message from "../components/Message/Message";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/Button/Button";
 
 export default function Login() {
   // PRE-FILL FOR DEV PURPOSES
   const [email, setEmail] = useState("jack@example.com");
   const [password, setPassword] = useState("qwerty");
 
-  const { authError, login } = useAuth();
+  const { authError, login, isLoggedIn } = useAuth();
 
-  function handleLogin(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) navigate("/app", { replace: true });
+  }, [isLoggedIn, navigate]);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     login(email, password);
   }
@@ -19,7 +27,7 @@ export default function Login() {
   return (
     <main className={styles.login}>
       <PageNav />
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <label htmlFor="email">Email address</label>
           <input
@@ -41,7 +49,7 @@ export default function Login() {
         </div>
 
         <div>
-          <button onClick={handleLogin}>Login</button>
+          <Button type="primary">Login</Button>
         </div>
       </form>
       {authError && <Message message={authError} />}

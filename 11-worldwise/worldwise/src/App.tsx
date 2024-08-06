@@ -16,8 +16,8 @@ import { AuthProvider } from "./contexts/FakeAuthContext";
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <AuthProvider>
+      <AuthProvider>
+        <BrowserRouter>
           <CitiesContextProvider>
             <Routes>
               <Route path="/" element={<Homepage />} />
@@ -37,8 +37,8 @@ function App() {
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </CitiesContextProvider>
-        </AuthProvider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </AuthProvider>
     </>
   );
 }

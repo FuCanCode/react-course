@@ -7,7 +7,7 @@ function Button({
 }: {
   children: string;
   type: "primary" | "back" | "position";
-  action?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  action?: () => void;
 }) {
   const navigate = useNavigate();
 

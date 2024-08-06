@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useReducer } from "react";
 import { authReducer, AuthState } from "../reducer/login-reducer";
-import { useNavigate } from "react-router-dom";
-import { FAKE_USER } from "../components/User/User";
+import { FAKE_USER } from "../../data/fake-user";
 
 interface IAuthContext extends AuthState {
   login: (userName: string, passwotrd: string) => void;
@@ -23,8 +22,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     initialAuthState
   );
 
-  const navigate = useNavigate();
-
   function login(userName: string, password: string): void {
     const { email: correctUserName, password: correctPassword } = FAKE_USER;
 
@@ -36,7 +33,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (userName === correctUserName && password === correctPassword) {
       dispatch({ type: "auth/loggedIn", user: FAKE_USER });
-      navigate("/app/cities");
     }
   }
 
