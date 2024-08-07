@@ -1,7 +1,9 @@
 import { useQuiz } from "../hooks/use-quiz";
 
 function NextButton() {
-  const { dispatch, currentQuestion, questions } = useQuiz();
+  const { dispatch, currentQuestion, questions, answer } = useQuiz();
+
+  if (!answer) return null;
 
   const isLastQuestion = currentQuestion + 1 === questions.length;
 

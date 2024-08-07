@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useReducer } from "react";
+import { ReactNode, createContext, useEffect, useReducer } from "react";
 import {
   QuizAction,
   QuizItem,
@@ -6,6 +6,7 @@ import {
   QuizState,
 } from "../../data/quizReducer";
 import { initQuizState } from "../initQuizState";
+import { QUIZ_URL } from "../../data/useFakeApi";
 
 interface IQuizContext extends QuizState {
   dispatch: React.Dispatch<QuizAction>;
@@ -22,6 +23,23 @@ export default function QuizContextProvider({
   children: ReactNode;
 }) {
   const [state, dispatch] = useReducer(quizReducer, initQuizState);
+
+  useEffect(() => {
+    if (state.questions.length) return;
+
+    async function getQuestions() {
+      try {
+        const res = await fetch(QUIZ_URL);
+        const data: QuizItem[] = await res.json();
+        dispatch({ type: "setQuestions", questions: data });
+      } catch (error) {
+        console.log(error);
+        dispatch({ type: "error" });
+      }
+    }
+
+    setTimeout(getQuestions, 2000);
+  }, [state.questions, dispatch]);
 
   function getCurrentQuestion() {
     return state.questions[state.currentQuestion];

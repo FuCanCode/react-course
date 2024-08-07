@@ -1,7 +1,3 @@
-import { QUIZ_URL } from "../../data/useFakeApi";
-import { QuizItem } from "../../data/quizReducer";
-import { useEffect } from "react";
-
 import Main from "./Main";
 import QuizIntro from "./QuizIntro";
 import Header from "./Header";
@@ -16,24 +12,7 @@ import Footer from "./Footer";
 import { useQuiz } from "../hooks/use-quiz";
 
 function App() {
-  const { status, questions, answer, dispatch } = useQuiz();
-
-  useEffect(() => {
-    if (questions.length) return;
-
-    async function getQuestions() {
-      try {
-        const res = await fetch(QUIZ_URL);
-        const questions: QuizItem[] = await res.json();
-        dispatch({ type: "setQuestions", questions: questions });
-      } catch (error) {
-        console.log(error);
-        dispatch({ type: "error" });
-      }
-    }
-
-    setTimeout(getQuestions, 2000);
-  }, [questions, dispatch]);
+  const { status } = useQuiz();
 
   return (
     <>
@@ -50,7 +29,7 @@ function App() {
               <Question />
               <Footer>
                 <Timer />
-                {answer !== null && <NextButton />}
+                <NextButton />
               </Footer>
             </>
           ) : null}
