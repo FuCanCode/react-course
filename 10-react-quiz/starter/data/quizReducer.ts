@@ -11,7 +11,7 @@ export interface QuizState {
   currentQuestion: number;
   answer: number | null;
   points: number;
-  timeLeft: number | null;
+  timeLeft: number;
   highscore: number;
 }
 export type QuizAction =

@@ -1,15 +1,9 @@
-import { QuizAction } from "../../data/quizReducer";
+import { useQuiz } from "../hooks/use-quiz";
 
-interface NextButtonProps {
-  dispatch: React.Dispatch<QuizAction>;
-  isVisible: boolean;
-  isLastQuestion: boolean;
-}
+function NextButton() {
+  const { dispatch, currentQuestion, questions } = useQuiz();
 
-function NextButton(props: NextButtonProps) {
-  const { dispatch, isVisible, isLastQuestion } = props;
-
-  if (!isVisible) return null;
+  const isLastQuestion = currentQuestion + 1 === questions.length;
 
   const buttonText = isLastQuestion ? "Finish" : "Next";
 

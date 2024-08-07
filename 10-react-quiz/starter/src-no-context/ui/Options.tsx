@@ -1,13 +1,16 @@
-import { useQuiz } from "../hooks/use-quiz";
+import { QuizAction, QuizItem } from "../../data/quizReducer";
 
-function Options() {
-  const { dispatch, answer, getCurrentQuestion } = useQuiz();
-
-  const { options, correctOption, points } = getCurrentQuestion();
+function Options(props: {
+  question: QuizItem;
+  actions: React.Dispatch<QuizAction>;
+  answer: number | null;
+}) {
+  const { actions, answer } = props;
+  const { options, correctOption, points } = props.question;
 
   const handleClickOption = (points: number, index: number) => {
-    dispatch({ type: "newAnswer", answer: index });
-    dispatch({ type: "addPoints", pointsToAdd: points });
+    actions({ type: "newAnswer", answer: index });
+    actions({ type: "addPoints", pointsToAdd: points });
   };
   return (
     <div className="options">

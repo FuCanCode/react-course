@@ -1,8 +1,13 @@
 import { useEffect, useRef } from "react";
-import { useQuiz } from "../hooks/use-quiz";
+import { QuizAction } from "../../data/quizReducer";
 
-function Timer() {
-  const { timeLeft, dispatch } = useQuiz();
+function Timer({
+  secondsLeft = 60 * 3,
+  tickAction,
+}: {
+  secondsLeft: number;
+  tickAction: React.Dispatch<QuizAction>;
+}) {
   const intervalRef = useRef<number>();
 
   // effect 1 controls behavior on mount/unmount
@@ -12,24 +17,24 @@ function Timer() {
       clearInterval(intervalRef.current);
     }
 
-    const id = setInterval(() => dispatch({ type: "timerTick" }), 1000);
+    const id = setInterval(() => tickAction({ type: "timerTick" }), 1000);
     intervalRef.current = id;
 
     return () => {
       clearInterval(intervalRef.current);
     };
-  }, [dispatch]);
+  }, [tickAction]);
 
   // effect 2 checks for time running out
   useEffect(() => {
-    if (timeLeft === 0) {
+    if (secondsLeft === 0) {
       clearInterval(intervalRef.current);
-      dispatch({ type: "finish" });
+      tickAction({ type: "finish" });
     }
-  }, [timeLeft, dispatch]);
+  }, [secondsLeft, tickAction]);
 
-  const displayMinutes = Math.trunc(timeLeft / 60);
-  const displaySeconds = timeLeft % 60;
+  const displayMinutes = Math.trunc(secondsLeft / 60);
+  const displaySeconds = secondsLeft % 60;
   return (
     <div className="timer">
       {displayMinutes}:{`${displaySeconds < 10 ? "0" : ""}` + displaySeconds}

@@ -1,24 +1,20 @@
-export interface ProgressProps {
-  curQuestion: number;
-  maxQuestions: number;
-  curPoints: number;
-  maxPoints: number;
-  isAnswered: boolean;
-}
-export default function Progress(props: ProgressProps) {
-  const { curQuestion, maxQuestions, curPoints, maxPoints, isAnswered } = props;
+import { useQuiz } from "../hooks/use-quiz";
+
+export default function Progress() {
+  const { currentQuestion, questions, points, getMaxPoints, answer } =
+    useQuiz();
 
   return (
     <div className="progress">
       <progress
-        max={maxQuestions}
-        value={curQuestion + Number(isAnswered)}
+        max={questions.length}
+        value={currentQuestion + Number(answer !== null)}
       ></progress>
       <p>
-        Question <strong>{curQuestion + 1}</strong>/{maxQuestions}
+        Question <strong>{currentQuestion + 1}</strong>/{questions.length}
       </p>
       <p>
-        <strong>{curPoints}</strong>/{maxPoints} points
+        <strong>{points}</strong>/{getMaxPoints()} points
       </p>
     </div>
   );

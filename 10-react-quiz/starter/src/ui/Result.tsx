@@ -1,23 +1,20 @@
-interface ResultProps {
-  points: number[];
-  timeOver: boolean;
-  onRestart: () => void;
-  highscore: number;
-}
+import { useQuiz } from "../hooks/use-quiz";
 
-function Result(props: ResultProps) {
-  const { highscore, onRestart, points, timeOver } = props;
-  const [curPoints, maxPoints] = points;
-  const percent = Math.round((curPoints / maxPoints) * 100);
+function Result() {
+  const { getMaxPoints, points, highscore, timeLeft, restartQuiz } = useQuiz();
+
+  const maxPoints = getMaxPoints();
+  const timeOver = timeLeft <= 0;
+  const percent = Math.round((points / maxPoints) * 100);
 
   return (
     <div className="summary">
       <h2>{timeOver ? "Time is over!" : "All questions completed!"}</h2>
       <h3>
-        You've finished with {curPoints} out of {maxPoints} ({percent}%) points!
+        You've finished with {points} out of {maxPoints} ({percent}%) points!
       </h3>
       <p className="highscore">(Highscore: {highscore} points)</p>
-      <button className="btn" onClick={() => onRestart()}>
+      <button className="btn" onClick={restartQuiz}>
         Restart
       </button>
     </div>
