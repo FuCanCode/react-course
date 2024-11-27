@@ -3,6 +3,7 @@ import {
   ReactNode,
   Reducer,
   useContext,
+  useMemo,
   useReducer,
 } from "react";
 import { Action, reducer, State } from "./reducer";
@@ -78,14 +79,14 @@ export function MyContext({ children }: { children: ReactNode }) {
 
   const { posts, searchQuery } = state;
   // Derived state. These are the posts that will actually be displayed
-  const searchedPosts =
-    searchQuery.length > 0
+  const searchedPosts = useMemo(()=>
+    searchQuery?.length > 0
       ? posts.filter((post) =>
           `${post.title} ${post.body}`
             .toLowerCase()
             .includes(searchQuery.toLowerCase())
         )
-      : posts;
+      : posts, [posts, searchQuery])
 
   function handleAddPost(post: IPost) {
     dispatch({ type: "addPost", newPost: post });
@@ -99,16 +100,26 @@ export function MyContext({ children }: { children: ReactNode }) {
     dispatch({ type: "typeQuery", newQuery: query });
   }
 
-  return (
-    <PostContext.Provider
-      value={{
-        posts: searchedPosts,
+  const postContextValue = useMemo(()=>{
+    return {
+      posts: searchedPosts,
         onAddPost: handleAddPost,
         onClearPosts: handleClearPosts,
-      }}
+    }
+  },[searchedPosts])
+
+  const searchContextValue = useMemo(()=>{
+    return {
+      searchQuery, setSearchQuery: handleSearchTyping
+    }
+  },[searchQuery])
+
+  return (
+    <PostContext.Provider
+      value={postContextValue}
     >
       <SearchContext.Provider
-        value={{ searchQuery, setSearchQuery: handleSearchTyping }}
+        value={ searchContextValue }
       >
         {children}
       </SearchContext.Provider>
