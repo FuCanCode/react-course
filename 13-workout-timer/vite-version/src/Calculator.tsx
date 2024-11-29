@@ -9,29 +9,32 @@ function Calculator({ workouts, allowSound }: {workouts: Workouts, allowSound: b
   const [durationBreak, setDurationBreak] = useState(5);
   const [duration, setDuration] = useState(0)
 
-   useEffect(()=>{
+  // const playSound = useCallback(function () {
+  //   if (!allowSound) return;
+  //   const sound = new Audio(clickSound);
+  //   sound.play();
+  // },[allowSound]);
+
+  useEffect(()=>{
     setDuration((number * sets * speed) / 60 + (sets - 1) * durationBreak);
-    playSound();
    },[number, sets, speed, durationBreak])
+
+   useEffect(()=>{
+    if (!allowSound || !navigator.userActivation.hasBeenActive) return;
+    const sound = new Audio(clickSound);
+      sound.play().catch(()=>console.log("Catched the audio error!"));
+   },[duration])
 
   // const duration = (number * sets * speed) / 60 + (sets - 1) * durationBreak;
   const mins = Math.floor(duration);
   const seconds = (duration - mins) * 60;
 
-  const playSound = function () {
-    if (!allowSound) return;
-    const sound = new Audio(clickSound);
-    sound.play();
-  };
-
   function handleIncr(){
     setDuration(dur=> Math.floor(dur) + 1);
-    playSound();    
   }
 
   function handleDecr(){
     setDuration(dur=> dur > 1 ? Math.ceil(dur) - 1 : 0);
-    playSound();
   }
 
   return (
