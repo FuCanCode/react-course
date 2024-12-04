@@ -66,6 +66,7 @@ function reducer(
 
 export const store = createStore(reducer);
 
+/* 
 store.dispatch({ type: "account/deposit", payload: 500 });
 
 console.log(store.getState());
@@ -78,5 +79,50 @@ store.dispatch({
 console.log(store.getState());
 
 store.dispatch({ type: "account/payLoan" });
+
+console.log(store.getState()); */
+
+function deposit(amount: number) {
+  return {
+    type: "account/deposit",
+    payload: amount,
+  } as const;
+}
+function withdrawal(amount: number) {
+  return {
+    type: "account/withdrawal",
+    payload: amount,
+  } as const;
+}
+function requestLoan(amount: number, purpose: string) {
+  return {
+    type: "account/requestLoan",
+    payload: {
+      amount,
+      purpose,
+    },
+  } as const;
+}
+function payLoan() {
+  return {
+    type: "account/payLoan",
+  } as const;
+}
+
+console.log(store.getState());
+
+store.dispatch(deposit(7576));
+
+console.log(store.getState());
+
+store.dispatch(withdrawal(5656));
+
+console.log(store.getState());
+
+store.dispatch(requestLoan(1000, "Pleite"));
+
+console.log(store.getState());
+
+store.dispatch(payLoan());
 
 console.log(store.getState());
