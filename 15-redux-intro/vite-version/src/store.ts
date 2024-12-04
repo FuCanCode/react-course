@@ -1,4 +1,4 @@
-import { createStore } from "redux";
+import { combineReducers, createStore } from "redux";
 
 interface Account {
   balance: number;
@@ -6,7 +6,7 @@ interface Account {
   loanPurpose: string;
 }
 
-const initialState: Account = {
+const initialStateAccount: Account = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
@@ -32,8 +32,8 @@ type AccountAction =
       type: "account/payLoan";
     };
 
-function reducer(
-  state: Account = initialState,
+function accountReducer(
+  state: Account = initialStateAccount,
   action: AccountAction
 ): Account {
   switch (action.type) {
@@ -64,28 +64,65 @@ function reducer(
   }
 }
 
-export const store = createStore(reducer);
+interface Customer {
+  fullName: string;
+  nationalID: string;
+  createdAt: string;
+}
 
-/* 
-store.dispatch({ type: "account/deposit", payload: 500 });
+type CustomerAction =
+  | {
+      type: "customer/createCustomer";
+      payload: { fullName: string; nationalID: string; createdAt: string };
+    }
+  | { type: "customer/updateName"; payload: string };
 
-console.log(store.getState());
+const initialStateCustomer: Customer = {
+  fullName: "",
+  nationalID: "",
+  createdAt: "",
+};
 
-store.dispatch({
-  type: "account/requestLoan",
-  payload: { amount: 500, purpose: "Gulasch" },
+function customerReducer(
+  state: Customer = initialStateCustomer,
+  action: CustomerAction
+): Customer {
+  switch (action.type) {
+    case "customer/createCustomer":
+      return {
+        ...state,
+        fullName: action.payload.fullName,
+        nationalID: action.payload.nationalID,
+        createdAt: action.payload.createdAt,
+      };
+
+    case "customer/updateName":
+      return {
+        ...state,
+        fullName: action.payload,
+      };
+
+    default:
+      return state;
+  }
+}
+
+// Collects the reducers to send it as a whole to the store
+const rootReducer = combineReducers({
+  // property name = name of the store when accessed later (store.getState.[account/customer])
+  account: accountReducer,
+  customer: customerReducer,
 });
 
-console.log(store.getState());
+export const store = createStore(rootReducer);
 
-store.dispatch({ type: "account/payLoan" });
-
-console.log(store.getState()); */
-
+// so called action creators that wraps the actions in more comfortable format
 function deposit(amount: number) {
   return {
     type: "account/deposit",
     payload: amount,
+    // need to use "as const", otherwise TS would infer the type of the type prop
+    // just as "string" but not as "account/deposit" in this case
   } as const;
 }
 function withdrawal(amount: number) {
@@ -109,20 +146,31 @@ function payLoan() {
   } as const;
 }
 
-console.log(store.getState());
-
+console.log(store.getState().account);
 store.dispatch(deposit(7576));
-
-console.log(store.getState());
-
+console.log(store.getState().account);
 store.dispatch(withdrawal(5656));
-
-console.log(store.getState());
-
+console.log(store.getState().account);
 store.dispatch(requestLoan(1000, "Pleite"));
-
-console.log(store.getState());
-
+console.log(store.getState().account);
 store.dispatch(payLoan());
+console.log(store.getState().account);
 
-console.log(store.getState());
+function createCustomer(fullName: string, nationalID: string) {
+  return {
+    type: "customer/createCustomer",
+    payload: { fullName, nationalID, createdAt: new Date().toISOString() },
+  } as const;
+}
+
+function updateName(newName: string) {
+  return {
+    type: "customer/updateName",
+    payload: newName,
+  } as const;
+}
+
+store.dispatch(createCustomer("Bernd", "ID0815"));
+console.log(store.getState().customer);
+store.dispatch(updateName("Mike"));
+console.log(store.getState().customer);
