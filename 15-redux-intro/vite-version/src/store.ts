@@ -10,4 +10,9 @@ const rootReducer = combineReducers({
 });
 
 const store = createStore(rootReducer);
+
+// https://redux.js.org/tutorials/typescript-quick-start
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type AppStore = typeof store;
 export default store;
