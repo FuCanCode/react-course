@@ -10,12 +10,13 @@ function AccountOperations() {
   const [currency, setCurrency] = useState("USD");
 
   const dispatch = useAppDispatch();
-  // const dispatch = useDispatch();
-  // const dispatch = store.dispatch;
-  const { loan } = useAppSelector((store) => store.account);
+
+  const { loan: currentLoan, loanPurpose: currentLoanPurpose } = useAppSelector(
+    (store) => store.account
+  );
 
   function handleDeposit() {
-    if (!depositAmount || Number(depositAmount) === 0) return;
+    if (!depositAmount) return;
 
     dispatch(deposit(Number(depositAmount)));
 
@@ -23,12 +24,15 @@ function AccountOperations() {
   }
 
   function handleWithdrawal() {
+    if (!withdrawalAmount) return;
     dispatch(withdrawal(Number(withdrawalAmount)));
 
     setWithdrawalAmount("");
   }
 
   function handleRequestLoan() {
+    if (!loanAmount || !loanPurpose) return;
+
     dispatch(requestLoan(Number(loanAmount), loanPurpose));
 
     setLoanAmount("");
@@ -74,7 +78,7 @@ function AccountOperations() {
           </button>
         </div>
 
-        {!loan ? (
+        {!currentLoan ? (
           <div>
             <label>Request loan</label>
             <input
@@ -92,7 +96,9 @@ function AccountOperations() {
           </div>
         ) : (
           <div>
-            <span>Pay back ${loan}</span>
+            <span>
+              Pay back ${currentLoan} ({currentLoanPurpose})
+            </span>
             <button onClick={handlePayLoan}>Pay loan</button>
           </div>
         )}
