@@ -100,4 +100,4 @@ function payLoan() {
 }
 
 export default accountReducer;
-export { deposit, withdrawal, payLoan, requestLoan };
+export { deposit, withdrawal, payLoan, requestLoan, type Account };

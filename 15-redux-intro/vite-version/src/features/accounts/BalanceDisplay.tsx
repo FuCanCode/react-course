@@ -1,4 +1,7 @@
-import { useAppSelector } from "../../hooks";
+// component is about a legacy way of connecting redux state with react components
+
+import { connect } from "react-redux";
+import { Account } from "./accountSlice";
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en", {
@@ -7,9 +10,14 @@ function formatCurrency(value: number) {
   }).format(value);
 }
 
-function BalanceDisplay() {
-  const balance = useAppSelector((store) => store.account.balance);
-  return <div className="balance">{formatCurrency(balance)}</div>;
+function BalanceDisplay({ balance }: { balance?: number }) {
+  return <div className="balance">{formatCurrency(balance!)}</div>;
 }
 
-export default BalanceDisplay;
+function mapStateToProps(state: { account: Account }) {
+  return {
+    balance: state.account.balance,
+  };
+}
+
+export default connect(mapStateToProps)(BalanceDisplay);
