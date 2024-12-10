@@ -17,8 +17,6 @@ function AccountOperations() {
     isLoading,
   } = useAppSelector((store) => store.account);
 
-  console.log(isLoading);
-
   function handleDeposit() {
     if (!depositAmount) return;
 
