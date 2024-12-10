@@ -45,7 +45,7 @@ const initialStateAccount: Account = {
 // REDUCER //////
 /////////////////
 function accountReducer(
-  state: Account = initialStateAccount,
+  state: Account | undefined = initialStateAccount,
   action: AccountAction
 ): Account {
   switch (action.type) {
