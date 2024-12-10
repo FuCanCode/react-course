@@ -1,4 +1,5 @@
-import { combineReducers, createStore } from "redux";
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import { thunk } from "redux-thunk";
 import accountReducer, { deposit } from "./features/accounts/accountSlice";
 import customerReducer, {
   createCustomer,
@@ -11,11 +12,11 @@ const rootReducer = combineReducers({
   customer: customerReducer,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(thunk));
 export default store;
 
 store.dispatch(createCustomer("Jonas Schmedtmann", "24343434"));
-store.dispatch(deposit(250));
+store.dispatch(deposit(250, "USD"));
 
 // https://redux.js.org/tutorials/typescript-quick-start
 export type RootState = ReturnType<typeof store.getState>;

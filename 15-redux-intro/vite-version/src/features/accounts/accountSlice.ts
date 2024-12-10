@@ -1,9 +1,13 @@
+import { convertToUSD } from "./convertToUSD";
+import { AppDispatch } from "../../store";
+
 // TYPES /////////////
 //////////////////////
 interface Account {
   balance: number;
   loan: number;
   loanPurpose: string;
+  isLoading: boolean;
 }
 
 type AccountAction =
@@ -24,6 +28,9 @@ type AccountAction =
     }
   | {
       type: "account/payLoan";
+    }
+  | {
+      type: "account/covertingCurrency";
     };
 
 // INITIAL STATE //
@@ -32,6 +39,7 @@ const initialStateAccount: Account = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
+  isLoading: false,
 };
 
 // REDUCER //////
@@ -42,7 +50,11 @@ function accountReducer(
 ): Account {
   switch (action.type) {
     case "account/deposit":
-      return { ...state, balance: state.balance + action.payload };
+      return {
+        ...state,
+        balance: state.balance + action.payload,
+        isLoading: false,
+      };
 
     case "account/withdrawal":
       return { ...state, balance: state.balance - action.payload };
@@ -63,6 +75,13 @@ function accountReducer(
         loanPurpose: "",
         balance: state.balance - state.loan,
       };
+
+    case "account/covertingCurrency":
+      return {
+        ...state,
+        isLoading: true,
+      };
+
     default:
       return state;
   }
@@ -70,20 +89,41 @@ function accountReducer(
   // ACTION CREATORS ////
   ///////////////////////
 } // so called action creators that wraps the actions in more comfortable format
-function deposit(amount: number) {
-  return {
-    type: "account/deposit",
-    payload: amount,
-    // need to use "as const", otherwise TS would infer the type of the type prop
-    // just as "string" but not as "account/deposit" in this case
-  } as const;
+function deposit(amount: number, currency: string) {
+  if (currency === "USD")
+    return {
+      type: "account/deposit",
+      payload: amount,
+      // need to use "as const", otherwise TS would infer the type of the type prop
+      // just as "string" but not as "account/deposit" in this case
+    } as const;
+
+  /// WORKING WITH THUNKS ///
+  //////////////////////////
+  // returning a function shows redux that an async/middleware operation is coming
+  //
+  // Genreal shape:
+  // const thunkFunction = (dispatch, getState) => {
+  //   // logic here that can dispatch actions or read state
+  // }
+  // store.dispatch(thunkFunction) instead of an action type
+
+  return async function (dispatch: AppDispatch) {
+    dispatch(covertingCurrency());
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const convertedValue = await convertToUSD(amount, currency);
+
+    dispatch(deposit(convertedValue, "USD"));
+  };
 }
+
 function withdrawal(amount: number) {
   return {
     type: "account/withdrawal",
     payload: amount,
   } as const;
 }
+
 function requestLoan(amount: number, purpose: string) {
   return {
     type: "account/requestLoan",
@@ -93,9 +133,16 @@ function requestLoan(amount: number, purpose: string) {
     },
   } as const;
 }
+
 function payLoan() {
   return {
     type: "account/payLoan",
+  } as const;
+}
+
+function covertingCurrency() {
+  return {
+    type: "account/covertingCurrency",
   } as const;
 }
 
