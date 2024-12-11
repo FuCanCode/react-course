@@ -1,37 +1,15 @@
 import { convertToUSD } from "./convertToUSD";
-import { AppDispatch } from "../../store";
+import { AppThunk } from "../../store";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 // TYPES /////////////
 //////////////////////
-interface Account {
+export interface Account {
   balance: number;
   loan: number;
   loanPurpose: string;
   isLoading: boolean;
 }
-
-type AccountAction =
-  | {
-      type: "account/deposit";
-      payload: number;
-    }
-  | {
-      type: "account/withdrawal";
-      payload: number;
-    }
-  | {
-      type: "account/requestLoan";
-      payload: {
-        amount: number;
-        purpose: string;
-      };
-    }
-  | {
-      type: "account/payLoan";
-    }
-  | {
-      type: "account/covertingCurrency";
-    };
 
 // INITIAL STATE //
 ///////////////////
@@ -44,107 +22,58 @@ const initialStateAccount: Account = {
 
 // REDUCER //////
 /////////////////
-function accountReducer(
-  state: Account | undefined = initialStateAccount,
-  action: AccountAction
-): Account {
-  switch (action.type) {
-    case "account/deposit":
-      return {
-        ...state,
-        balance: state.balance + action.payload,
-        isLoading: false,
-      };
-
-    case "account/withdrawal":
-      return { ...state, balance: state.balance - action.payload };
-
-    case "account/requestLoan":
-      if (state.loan > 0) return state;
-      return {
-        ...state,
-        balance: state.balance + action.payload.amount,
-        loan: action.payload.amount,
-        loanPurpose: action.payload.purpose,
-      };
-
-    case "account/payLoan":
-      return {
-        ...state,
-        loan: 0,
-        loanPurpose: "",
-        balance: state.balance - state.loan,
-      };
-
-    case "account/covertingCurrency":
-      return {
-        ...state,
-        isLoading: true,
-      };
-
-    default:
-      return state;
-  }
-
-  // ACTION CREATORS ////
-  ///////////////////////
-} // so called action creators that wraps the actions in more comfortable format
-function deposit(amount: number, currency: string) {
-  if (currency === "USD")
-    return {
-      type: "account/deposit",
-      payload: amount,
-      // need to use "as const", otherwise TS would infer the type of the type prop
-      // just as "string" but not as "account/deposit" in this case
-    } as const;
-
-  /// WORKING WITH THUNKS ///
-  //////////////////////////
-  // returning a function shows redux that an async/middleware operation is coming
-  //
-  // Genreal shape:
-  // const thunkFunction = (dispatch, getState) => {
-  //   // logic here that can dispatch actions or read state
-  // }
-  // store.dispatch(thunkFunction) instead of an action type
-
-  return async function (dispatch: AppDispatch) {
-    dispatch(covertingCurrency());
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    const convertedValue = await convertToUSD(amount, currency);
-
-    dispatch(deposit(convertedValue, "USD"));
-  };
-}
-
-function withdrawal(amount: number) {
-  return {
-    type: "account/withdrawal",
-    payload: amount,
-  } as const;
-}
-
-function requestLoan(amount: number, purpose: string) {
-  return {
-    type: "account/requestLoan",
-    payload: {
-      amount,
-      purpose,
+export const accountSlice = createSlice({
+  name: "account",
+  initialState: initialStateAccount,
+  reducers: {
+    deposit: (state, action: PayloadAction<number>) => {
+      state.balance += action.payload;
+      state.isLoading = false;
     },
-  } as const;
-}
 
-function payLoan() {
-  return {
-    type: "account/payLoan",
-  } as const;
-}
+    load: (state) => {
+      state.isLoading = true;
+    },
 
-function covertingCurrency() {
-  return {
-    type: "account/covertingCurrency",
-  } as const;
-}
+    withdrawal: (state, action: PayloadAction<number>) => {
+      state.balance -= action.payload;
+    },
 
-export default accountReducer;
-export { deposit, withdrawal, payLoan, requestLoan, type Account };
+    payLoan: (state) => {
+      state.balance -= state.loan;
+      state.loan = 0;
+      state.loanPurpose = "";
+    },
+
+    requestLoan: {
+      prepare: (amount: number, purpose: string) => {
+        return { payload: { amount, purpose } };
+      },
+      reducer: (
+        state,
+        action: PayloadAction<{ amount: number; purpose: string }>
+      ) => {
+        if (state.loan > 0) return;
+        state.loan = action.payload.amount;
+        state.balance += action.payload.amount;
+        state.loanPurpose = action.payload.purpose;
+      },
+    },
+  },
+});
+
+const asyncDeposit = (amount: number, currency: string): AppThunk => {
+  return async (dispatch) => {
+    if (currency === "USD") {
+      dispatch(accountSlice.actions.deposit(amount));
+    } else {
+      dispatch(accountSlice.actions.load());
+      const convertedValue = await convertToUSD(amount, currency);
+      dispatch(accountSlice.actions.deposit(convertedValue));
+    }
+  };
+};
+export { asyncDeposit as deposit };
+
+export default accountSlice.reducer;
+export const { payLoan, withdrawal, requestLoan } = accountSlice.actions;

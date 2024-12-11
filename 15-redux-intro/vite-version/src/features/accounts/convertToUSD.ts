@@ -2,7 +2,6 @@ export async function convertToUSD(
   amount: number,
   currency: string
 ): Promise<number> {
-  // set the URL
   const params = new URLSearchParams({
     base: currency,
     symbols: "USD",
@@ -12,6 +11,7 @@ export async function convertToUSD(
   url.search = params.toString();
 
   try {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     const res = await fetch(url.toString());
     const data = await res.json();
 
