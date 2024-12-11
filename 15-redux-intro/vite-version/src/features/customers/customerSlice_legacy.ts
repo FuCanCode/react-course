@@ -1,4 +1,4 @@
-// TYPES /////////////
+/* // TYPES /////////////
 //////////////////////
 interface Customer {
   fullName: string;
@@ -63,3 +63,4 @@ function updateName(newName: string) {
 
 export default customerReducer;
 export { createCustomer, updateName };
+ */
