@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { accountSlice } from "../accounts/accountSlice";
 
 // TYPES /////////////
 //////////////////////
@@ -52,5 +51,5 @@ const customerSlice = createSlice({
   },
 });
 
-export default accountSlice.reducer;
+export default customerSlice.reducer;
 export const { createCustomer, updateName } = customerSlice.actions;
