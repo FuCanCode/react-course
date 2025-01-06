@@ -5,6 +5,8 @@ import customerReducer, {
   createCustomer,
 } from "./features/customers/customerSlice";
 
+import "./teststuff";
+
 const store = configureStore({
   reducer: {
     account: accountReducer,
