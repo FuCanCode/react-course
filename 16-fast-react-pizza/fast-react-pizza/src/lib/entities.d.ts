@@ -1,5 +1,5 @@
 declare global {
-  export type IMenuItem = {
+  export type IPizza = {
     id: number;
     name: string;
     unitPrice: number;
@@ -8,7 +8,7 @@ declare global {
     soldOut: boolean;
   };
 
-  export type IMenu = IMenuItem[];
+  export type IMenu = IPizza[];
 }
 
 export {};
