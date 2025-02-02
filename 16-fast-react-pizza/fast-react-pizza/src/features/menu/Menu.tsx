@@ -11,7 +11,6 @@ export async function loader() {
 
 function Menu() {
   const menu = useLoaderData() as IMenu;
-  console.log(menu);
 
   return (
     <>
