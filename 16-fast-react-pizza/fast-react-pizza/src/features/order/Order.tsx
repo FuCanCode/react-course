@@ -6,7 +6,7 @@ import {
   formatDate,
 } from "../../utils/helpers";
 
-const order = {
+const order: IOrder = {
   id: "ABCDEF",
   customer: "Jonas",
   phone: "123456789",
