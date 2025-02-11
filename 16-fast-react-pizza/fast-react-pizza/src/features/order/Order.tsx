@@ -1,5 +1,7 @@
 // Test ID: IIDSAT
 
+import { useLoaderData, useParams } from "react-router-dom";
+import { getOrder } from "../../services/apiRestaurant";
 import {
   calcMinutesLeft,
   formatCurrency,
@@ -41,8 +43,20 @@ const order: IOrder = {
   priorityPrice: 19,
 };
 
+// the params prop is not usable with TS in the current state of react router
+export const loader = async ( /* { params }: { params: {orderId: string} } */  ) => {
+  
+  const id = window.location.pathname.split("/").at(-1)!
+  // const id = params.orderId
+
+  const data: IOrder =  await getOrder(id)
+
+  return data
+}
+
 function Order() {
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
+  
   const {
     id,
     status,
@@ -51,7 +65,7 @@ function Order() {
     orderPrice,
     estimatedDelivery,
     cart,
-  } = order;
+  } = useLoaderData() as IOrder;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
