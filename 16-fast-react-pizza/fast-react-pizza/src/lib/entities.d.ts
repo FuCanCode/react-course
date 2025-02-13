@@ -18,15 +18,18 @@ declare global {
     totalPrice: number;
   };
 
-  export type IOrder = {
-    id: string;
+  export type IOrderRequest = {
     customer: string;
     phone: string;
     address: string;
-    priority: true;
+    priority: boolean;
+    cart: ICartItem[];
+  };
+
+  export type IOrderResponse = IOrderRequest & {
+    id: string;
     status?: string;
     estimatedDelivery: string;
-    cart: ICartItem[];
     position: string;
     orderPrice: number;
     priorityPrice: number;

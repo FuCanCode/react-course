@@ -14,11 +14,11 @@ export async function getOrder(id: string) {
   const res = await fetch(`${API_URL}/order/${id}`);
   if (!res.ok) throw Error(`Couldn't find order #${id}`);
 
-  const { data }: { data: IOrder } = await res.json();
+  const { data }: { data: IOrderResponse } = await res.json();
   return data;
 }
 
-export async function createOrder(newOrder) {
+export async function createOrder(newOrder: IOrderRequest) {
   try {
     const res = await fetch(`${API_URL}/order`, {
       method: "POST",
@@ -30,13 +30,13 @@ export async function createOrder(newOrder) {
 
     if (!res.ok) throw Error();
     const { data } = await res.json();
-    return data;
+    return data as IOrderResponse;
   } catch {
     throw Error("Failed creating your order");
   }
 }
 
-export async function updateOrder(id, updateObj) {
+export async function updateOrder(id: string, updateObj: IOrderRequest) {
   try {
     const res = await fetch(`${API_URL}/order/${id}`, {
       method: "PATCH",
