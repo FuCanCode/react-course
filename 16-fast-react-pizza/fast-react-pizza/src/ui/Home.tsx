@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
 import CreateUser from "../features/user/CreateUser";
+import { selectUser } from "../features/user/userSlice";
+import { useAppSelector } from "../lib/hooks";
 import Button from "./Button";
 
 function Home() {
+  const username = useAppSelector(selectUser);
   return (
     <div className="px-4 my-10 text-center sm:my-16">
       <h1 className="mb-8 text-xl font-semibold md:text-3xl text-stone-700">
@@ -13,7 +15,11 @@ function Home() {
         </span>
       </h1>
 
-      <CreateUser />
+      {username === "" ? (
+        <CreateUser />
+      ) : (
+        <Button to="menu">go to the menu</Button>
+      )}
     </div>
   );
 }
