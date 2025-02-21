@@ -3,6 +3,8 @@ import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import type { ActionFunction } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
+import { useAppSelector } from "../../lib/hooks";
+import { selectUser } from "../user/userSlice";
 
 export interface ICreateOrderErrors {
   phone?: string;
@@ -70,6 +72,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
+  const userName = useAppSelector(selectUser);
   const errors = useActionData() as ICreateOrderErrors | undefined;
 
   const { state } = useNavigation();
@@ -84,7 +87,13 @@ function CreateOrder() {
       <Form method="post">
         <div className="flex flex-col gap-2 mb-5 sm:flex-row sm:items-center">
           <label className="sm:basis-40">First Name</label>
-          <input type="text" name="customer" required className="input" />
+          <input
+            type="text"
+            name="customer"
+            required
+            className="input"
+            defaultValue={userName}
+          />
         </div>
 
         <div className="flex flex-col gap-2 mb-5 sm:flex-row sm:items-center">

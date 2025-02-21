@@ -22,19 +22,22 @@ export default function Button(props: ButtonProps) {
       " px-4 py-2.5 md:px-6 md:py-3.5 text-sm inline-block font-semibold border-2 border-stone-300 tracking-wide uppercase transition-colors duration-300 bg-transparent rounded-full text-stone-400 hover:text-stone-800 hover:bg-stone-300 focus:bg-stone-300 focus:outline-none focus:ring focus:ring-stone-200 focus:ring-offset-2 focus:text-stone-800 disabled:cursor-not-allowed",
   };
 
+  const handleClick = () => {
+    if (!action) return;
+
+    return action();
+  };
+
   if (to)
     return (
-      <Link to={to} className={typeStyles[type]}>
+      <Link onClick={handleClick} to={to} className={typeStyles[type]}>
         {children}
       </Link>
     );
 
   return (
     <button
-      onClick={() => {
-        if (!action) return;
-        return action();
-      }}
+      onClick={handleClick}
       disabled={disabled}
       className={typeStyles[type]}
     >
