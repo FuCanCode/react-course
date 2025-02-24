@@ -1,7 +1,6 @@
 // import { useState } from "react";
-import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
+import { Form, useActionData, useNavigation } from "react-router-dom";
 import type { ActionFunction } from "react-router-dom";
-import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
 import { useAppSelector } from "../../lib/hooks";
 import { selectUser } from "../user/userSlice";

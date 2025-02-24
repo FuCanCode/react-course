@@ -1,8 +1,34 @@
 import Button from "../../ui/Button";
 import { formatCurrency } from "../../utils/helpers";
+import {
+  addPizza,
+  decreasePizzaQantity,
+  deletePizza,
+  increasePizzaQantity,
+  selectCart,
+} from "../cart/cartSlice";
+import QantitySelector from "../../ui/QuantitySelector";
+import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 
 function MenuItem({ pizza }: { pizza: IPizza }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+  const { cart } = useAppSelector(selectCart);
+  const dispatch = useAppDispatch();
+
+  const currentItem = cart.find((pizza) => pizza.pizzaId === id);
+  const isInCart = currentItem !== undefined;
+
+  const handleAddToCart = () => {
+    const item: ICartItem = {
+      name,
+      pizzaId: id,
+      quantity: 1,
+      unitPrice,
+      totalPrice: unitPrice,
+    };
+
+    dispatch(addPizza(item));
+  };
 
   return (
     <li className="flex gap-4 py-2">
@@ -24,7 +50,24 @@ function MenuItem({ pizza }: { pizza: IPizza }) {
               Sold out
             </p>
           )}
-          <Button type="small">add to cart</Button>
+          {/* If the item is sold out, don't show any buttons */}
+          {!soldOut &&
+            (!isInCart ? (
+              <Button type="small" action={handleAddToCart}>
+                add to cart
+              </Button>
+            ) : (
+              <div className="flex gap-4">
+                <QantitySelector
+                  decrease={() => dispatch(decreasePizzaQantity({ id }))}
+                  increase={() => dispatch(increasePizzaQantity({ id }))}
+                  quantity={currentItem.quantity}
+                />
+                <Button type="small" action={() => deletePizza(id)}>
+                  delete
+                </Button>
+              </div>
+            ))}
         </div>
       </div>
     </li>

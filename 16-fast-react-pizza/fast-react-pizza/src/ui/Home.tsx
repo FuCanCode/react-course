@@ -18,7 +18,7 @@ function Home() {
       {username === "" ? (
         <CreateUser />
       ) : (
-        <Button to="menu">go to the menu</Button>
+        <Button to="menu">go to the menu, {username}</Button>
       )}
     </div>
   );

@@ -1,10 +1,11 @@
 import LinkButton from "../../ui/LinkButton";
 import Button from "../../ui/Button";
 import CartItem from "./CartItem";
-import { useAppSelector } from "../../lib/hooks";
+import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { selectUser } from "../user/userSlice";
+import { clearCart, selectCart } from "./cartSlice";
 
-const fakeCart = [
+/* const fakeCart = [
   {
     pizzaId: 12,
     name: "Mediterranean",
@@ -26,11 +27,12 @@ const fakeCart = [
     unitPrice: 15,
     totalPrice: 15,
   },
-];
+]; */
 
 function Cart() {
-  const cart = fakeCart;
+  const { cart } = useAppSelector(selectCart);
   const userName = useAppSelector(selectUser) || "Mister 404";
+  const dispatch = useAppDispatch();
 
   return (
     <div className="px-4 py-3">
@@ -45,7 +47,9 @@ function Cart() {
 
       <div className="mt-6 space-x-2">
         <Button to="/order/new">Order pizzas</Button>
-        <Button type="secondary">Clear cart</Button>
+        <Button type="secondary" action={() => dispatch(clearCart())}>
+          Clear cart
+        </Button>
       </div>
     </div>
   );

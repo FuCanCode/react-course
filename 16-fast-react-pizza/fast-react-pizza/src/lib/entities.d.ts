@@ -18,6 +18,8 @@ declare global {
     totalPrice: number;
   }
 
+  export type ICart = ICartItem[];
+
   export interface ICartItemResponse {
     addIngredients: string[];
     removeIngredients: string[];
