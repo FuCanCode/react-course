@@ -1,11 +1,11 @@
-export function formatCurrency(value) {
-  return new Intl.NumberFormat("en", {
+export function formatCurrency(value: number) {
+  return new Intl.NumberFormat("de", {
     style: "currency",
     currency: "EUR",
   }).format(value);
 }
 
-export function formatDate(dateStr) {
+export function formatDate(dateStr: string) {
   return new Intl.DateTimeFormat("en", {
     day: "numeric",
     month: "short",
@@ -14,8 +14,18 @@ export function formatDate(dateStr) {
   }).format(new Date(dateStr));
 }
 
-export function calcMinutesLeft(dateStr) {
+export function calcMinutesLeft(dateStr: string) {
   const d1 = new Date().getTime();
   const d2 = new Date(dateStr).getTime();
   return Math.round((d2 - d1) / 60000);
 }
+
+export const getPosition = async () => {
+  const coords = {};
+
+  const successCallback = (whatisthis: GeolocationPosition) => {
+    console.log(whatisthis);
+  };
+
+  navigator.geolocation.getCurrentPosition(successCallback);
+};

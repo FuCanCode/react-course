@@ -2,8 +2,9 @@ import LinkButton from "../../ui/LinkButton";
 import Button from "../../ui/Button";
 import CartItem from "./CartItem";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { selectUser } from "../user/userSlice";
-import { clearCart, selectCart } from "./cartSlice";
+import { getUser } from "../user/userSlice";
+import { clearCart, getCart } from "./cartSlice";
+import EmptyCart from "./EmptyCart";
 
 /* const fakeCart = [
   {
@@ -30,9 +31,11 @@ import { clearCart, selectCart } from "./cartSlice";
 ]; */
 
 function Cart() {
-  const { cart } = useAppSelector(selectCart);
-  const userName = useAppSelector(selectUser) || "Mister 404";
+  const { cart } = useAppSelector(getCart);
+  const userName = useAppSelector(getUser) || "Mister 404";
   const dispatch = useAppDispatch();
+
+  if (!cart.length) return <EmptyCart />;
 
   return (
     <div className="px-4 py-3">

@@ -1,9 +1,16 @@
 // import { useState } from "react";
-import { Form, useActionData, useNavigation } from "react-router-dom";
+import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import type { ActionFunction } from "react-router-dom";
 import Button from "../../ui/Button";
 import { useAppSelector } from "../../lib/hooks";
-import { selectUser } from "../user/userSlice";
+import { getUser } from "../user/userSlice";
+import { clearCart, getCart, getCartTotals } from "../cart/cartSlice";
+import EmptyCart from "../cart/EmptyCart";
+import { createOrder } from "../../services/apiRestaurant";
+import { store } from "../../store/store";
+import { useState } from "react";
+import { formatCurrency } from "../../utils/helpers";
+import { useGeolocation } from "../../hooks/useGeolocation";
 
 export interface ICreateOrderErrors {
   phone?: string;
@@ -43,13 +50,14 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
 
   const data = Object.fromEntries(formData) as Record<string, string>;
+  console.log("Checkbox value: ", data.priority);
 
   const order: IOrderRequest = {
     customer: data.customer,
     phone: data.phone,
     address: data.address,
     cart: JSON.parse(data.cart),
-    priority: data.priority === "on",
+    priority: data.priority === "true",
   };
 
   console.log(order);
@@ -62,22 +70,28 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (Object.keys(errors).length > 0) return errors;
 
-  /*   console.log("Start submit");
+  console.log("Start submit");
   const { id } = await createOrder(order);
   console.log("Submit completed");
 
-  return redirect(`/order/${id}`); */
+  store.dispatch(clearCart());
+
+  return redirect(`/order/${id}`);
 };
 
 function CreateOrder() {
-  // const [withPriority, setWithPriority] = useState(false);
-  const userName = useAppSelector(selectUser);
+  const [withPriority, setWithPriority] = useState(false);
+  const { price } = useAppSelector(getCartTotals);
+  const userName = useAppSelector(getUser);
   const errors = useActionData() as ICreateOrderErrors | undefined;
+  const { getPosition, address } = useGeolocation();
 
   const { state } = useNavigation();
   const isSubmitting = state === "submitting";
 
-  const cart = fakeCart;
+  const { cart } = useAppSelector(getCart);
+
+  if (!cart.length) return <EmptyCart />;
 
   return (
     <div className="px-4 py-6">
@@ -114,6 +128,7 @@ function CreateOrder() {
               type="text"
               name="address"
               required
+              defaultValue={address || ""}
               className="w-full input"
             />
           </div>
@@ -124,8 +139,8 @@ function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={String(withPriority)}
+            onChange={(e) => setWithPriority(e.target.checked)}
             className="w-6 h-6 accent-yellow-500 focus:ring-2 focus:ring-yellow-400 focus:outline-hidden focus:ring-offset-2"
           />
           <label htmlFor="priority">Want to yo give your order priority?</label>
@@ -134,7 +149,13 @@ function CreateOrder() {
 
         <div>
           <Button type="primary" disabled={isSubmitting}>
-            {isSubmitting ? "Placing your Order..." : "Order now"}
+            {isSubmitting
+              ? "Placing your Order..."
+              : `Order now for ${formatCurrency(withPriority ? price * 1.2 : price)}`}
+          </Button>
+
+          <Button action={getPosition} type="primary">
+            get position
           </Button>
         </div>
       </Form>

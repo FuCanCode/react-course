@@ -1,22 +1,16 @@
 import Button from "../../ui/Button";
 import { formatCurrency } from "../../utils/helpers";
-import {
-  addPizza,
-  decreasePizzaQantity,
-  deletePizza,
-  increasePizzaQantity,
-  selectCart,
-} from "../cart/cartSlice";
+import { addPizza, getCurrentQuantityById } from "../cart/cartSlice";
 import QantitySelector from "../../ui/QuantitySelector";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
+import DeleteItemButton from "../cart/DeleteButton";
 
 function MenuItem({ pizza }: { pizza: IPizza }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
-  const { cart } = useAppSelector(selectCart);
+  const quantity = useAppSelector(getCurrentQuantityById({ id }));
   const dispatch = useAppDispatch();
 
-  const currentItem = cart.find((pizza) => pizza.pizzaId === id);
-  const isInCart = currentItem !== undefined;
+  const isInCart = quantity > 0;
 
   const handleAddToCart = () => {
     const item: ICartItem = {
@@ -57,15 +51,9 @@ function MenuItem({ pizza }: { pizza: IPizza }) {
                 add to cart
               </Button>
             ) : (
-              <div className="flex gap-4">
-                <QantitySelector
-                  decrease={() => dispatch(decreasePizzaQantity({ id }))}
-                  increase={() => dispatch(increasePizzaQantity({ id }))}
-                  quantity={currentItem.quantity}
-                />
-                <Button type="small" action={() => deletePizza(id)}>
-                  delete
-                </Button>
+              <div className="flex items-center gap-3 sm:gap-8">
+                <QantitySelector id={id} quantity={quantity} />
+                <DeleteItemButton pizzaId={id} />
               </div>
             ))}
         </div>

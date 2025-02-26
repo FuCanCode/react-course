@@ -2,15 +2,15 @@
 
 ## Requirements
 
-- [ ] simple application where users can order **one or more pizzas from a menu**
-- [ ] no user account required; login via Name before using the app
+- [x] simple application where users can order **one or more pizzas from a menu**
+- [x] no user account required; login via Name before using the app
 - [x] menu can change and should be loaded from an API
-- [ ] a cart which can hold multiple pizzas
-- [ ] required order infos: **name, phone number, address**
-- [ ] enable priority orders for 20% of cart price
-- [ ] orders are made by sending a **POST request** with user data + pizzas
+- [x] a cart which can hold multiple pizzas
+- [x] required order infos: **name, phone number, address**
+- [x] enable priority orders for 20% of cart price
+- [x] orders are made by sending a **POST request** with user data + pizzas
 - [ ] payment on delivery
-- [ ] each order gets unique ID for reference
+- [x] each order gets unique ID for reference
 - [ ] mark their orders with priority even after order has been placed
 
 ## Feature categories
