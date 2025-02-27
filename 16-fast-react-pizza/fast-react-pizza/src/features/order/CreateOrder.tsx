@@ -1,16 +1,14 @@
-// import { useState } from "react";
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import type { ActionFunction } from "react-router-dom";
 import Button from "../../ui/Button";
-import { useAppSelector } from "../../lib/hooks";
-import { getUser } from "../user/userSlice";
+import { useAppDispatch, useAppSelector } from "../../lib/hooks";
+import { getUser, provideAddress } from "../user/userSlice";
 import { clearCart, getCart, getCartTotals } from "../cart/cartSlice";
 import EmptyCart from "../cart/EmptyCart";
 import { createOrder } from "../../services/apiRestaurant";
 import { store } from "../../store/store";
 import { useState } from "react";
 import { formatCurrency } from "../../utils/helpers";
-import { useGeolocation } from "../../hooks/useGeolocation";
 
 export interface ICreateOrderErrors {
   phone?: string;
@@ -22,7 +20,7 @@ const isValidPhone = (str: string) =>
     str,
   );
 
-const fakeCart = [
+/* const fakeCart = [
   {
     pizzaId: 12,
     name: "Mediterranean",
@@ -44,7 +42,7 @@ const fakeCart = [
     unitPrice: 15,
     totalPrice: 15,
   },
-];
+]; */
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -82,10 +80,16 @@ export const action: ActionFunction = async ({ request }) => {
 function CreateOrder() {
   const [withPriority, setWithPriority] = useState(false);
   const { price } = useAppSelector(getCartTotals);
-  const userName = useAppSelector(getUser);
+  const {
+    address,
+    position,
+    status: addressStatus,
+    userName,
+  } = useAppSelector(getUser);
   const errors = useActionData() as ICreateOrderErrors | undefined;
-  const { getPosition, address } = useGeolocation();
-
+  // const { getPosition, address } = useGeolocation();
+  const dispatch = useAppDispatch();
+  const isLoadingAddress = addressStatus === "loading";
   const { state } = useNavigation();
   const isSubmitting = state === "submitting";
 
@@ -121,7 +125,7 @@ function CreateOrder() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 mb-5 sm:flex-row sm:items-center">
+        <div className="relative flex flex-col gap-2 mb-5 sm:flex-row sm:items-center">
           <label className="sm:basis-40">Address</label>
           <div className="grow">
             <input
@@ -130,8 +134,27 @@ function CreateOrder() {
               required
               defaultValue={address || ""}
               className="w-full input"
+              disabled={isLoadingAddress}
             />
+            {errors?.phone && (
+              <p className="p-2 mt-2 text-xs text-red-700 bg-red-100 rounden-md">
+                {errors.phone}
+              </p>
+            )}
           </div>
+          {!address && (
+            <span className="absolute right-[5px] z-50">
+              <Button
+                action={() => {
+                  dispatch(provideAddress());
+                }}
+                type="small"
+                disabled={isLoadingAddress}
+              >
+                get position
+              </Button>
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-5 mb-12">
@@ -148,14 +171,10 @@ function CreateOrder() {
         <input type="hidden" name="cart" value={JSON.stringify(cart)} />
 
         <div>
-          <Button type="primary" disabled={isSubmitting}>
+          <Button type="primary" disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting
               ? "Placing your Order..."
               : `Order now for ${formatCurrency(withPriority ? price * 1.2 : price)}`}
-          </Button>
-
-          <Button action={getPosition} type="primary">
-            get position
           </Button>
         </div>
       </Form>

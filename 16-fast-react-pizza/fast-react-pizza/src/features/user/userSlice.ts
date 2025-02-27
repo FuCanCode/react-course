@@ -1,12 +1,37 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store/store";
+import { getAddress } from "../../services/apiGeocoding";
+import { action } from "../order/CreateOrder";
+
+export const provideAddress = createAsyncThunk(
+  "user/provideAddress",
+  async () => {
+    const { address, position } = await fetchAddress();
+
+    return { address, position };
+  },
+);
 
 interface User {
   userName: string;
+  address: string;
+  status: "idle" | "loading";
+  position: {
+    latitude: number | undefined;
+    longitude: number | undefined;
+  };
+  error: string;
 }
 
 const initialState: User = {
   userName: "",
+  address: "",
+  status: "idle",
+  error: "",
+  position: {
+    latitude: undefined,
+    longitude: undefined,
+  },
 };
 
 const userSlice = createSlice({
@@ -17,16 +42,35 @@ const userSlice = createSlice({
       state.userName = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(provideAddress.pending, (state) => {
+      state.status = "loading";
+    });
+
+    builder.addCase(provideAddress.fulfilled, (state, action) => {
+      state.address = action.payload.address;
+      state.position = action.payload.position;
+      state.status = "idle";
+    });
+
+    builder.addCase(provideAddress.rejected, (state, action) => {
+      state.error =
+        action.error.message || "Something went wrong on getting the address.";
+      state.status = "idle";
+    });
+  },
 });
 
 export const { setName } = userSlice.actions;
 
-export const getUser = (state: RootState) => state.user.userName;
+export const getUser = (state: RootState) => state.user;
+export const getUserName = (state: RootState) => state.user.userName;
+export const getUserAddress = (state: RootState) => state.user.address;
 
 export default userSlice.reducer;
 
-/* function getPosition() {
-  return new Promise(function (resolve, reject) {
+function getPosition() {
+  return new Promise<GeolocationPosition>(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject);
   });
 }
@@ -46,4 +90,3 @@ async function fetchAddress() {
   // 3) Then we return an object with the data that we are interested in
   return { position, address };
 }
- */

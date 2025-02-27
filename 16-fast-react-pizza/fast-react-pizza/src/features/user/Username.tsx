@@ -1,8 +1,8 @@
 import { useAppSelector } from "../../lib/hooks";
-import { getUser } from "./userSlice";
+import { getUserName } from "./userSlice";
 
 export default function Username() {
-  const name = useAppSelector(getUser);
+  const name = useAppSelector(getUserName);
 
   if (!name) return null;
 

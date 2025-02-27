@@ -2,7 +2,7 @@ import LinkButton from "../../ui/LinkButton";
 import Button from "../../ui/Button";
 import CartItem from "./CartItem";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { getUser } from "../user/userSlice";
+import { getUserName } from "../user/userSlice";
 import { clearCart, getCart } from "./cartSlice";
 import EmptyCart from "./EmptyCart";
 
@@ -32,7 +32,7 @@ import EmptyCart from "./EmptyCart";
 
 function Cart() {
   const { cart } = useAppSelector(getCart);
-  const userName = useAppSelector(getUser) || "Mister 404";
+  const userName = useAppSelector(getUserName) || "Mister 404";
   const dispatch = useAppDispatch();
 
   if (!cart.length) return <EmptyCart />;
