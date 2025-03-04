@@ -1,6 +1,6 @@
 // Test ID: IIDSAT
 
-import { LoaderFunction, useLoaderData } from "react-router-dom";
+import { LoaderFunction, useFetcher, useLoaderData } from "react-router-dom";
 import { getOrder } from "../../services/apiRestaurant";
 import {
   calcMinutesLeft,
@@ -8,6 +8,7 @@ import {
   formatDate,
 } from "../../utils/helpers";
 import OrderItem from "./OrderItem";
+import { useEffect, useState } from "react";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const id = params.orderId;
@@ -21,6 +22,18 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 function Order() {
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
+  /* const [menu, setMenu] = useState<IMenu>();
+  const fetcher = useFetcher();
+
+  useEffect(() => {
+    if (!menu && !fetcher.data) {
+      fetcher.load("/menu");
+    } else {
+      console.log(fetcher.data);
+    }
+  }, [fetcher]);
+
+  console.log(menu); */
 
   const {
     id,

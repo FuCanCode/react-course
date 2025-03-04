@@ -2,7 +2,7 @@ import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import type { ActionFunction } from "react-router-dom";
 import Button from "../../ui/Button";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { getUser, provideAddress } from "../user/userSlice";
+import { getUser, getUserPosition, provideAddress } from "../user/userSlice";
 import { clearCart, getCart, getCartTotals } from "../cart/cartSlice";
 import EmptyCart from "../cart/EmptyCart";
 import { createOrder } from "../../services/apiRestaurant";
@@ -56,6 +56,7 @@ export const action: ActionFunction = async ({ request }) => {
     address: data.address,
     cart: JSON.parse(data.cart),
     priority: data.priority === "true",
+    position: JSON.parse(data.position),
   };
 
   console.log(order);
@@ -82,9 +83,9 @@ function CreateOrder() {
   const { price } = useAppSelector(getCartTotals);
   const {
     address,
-    position,
     status: addressStatus,
     userName,
+    error: addressError,
   } = useAppSelector(getUser);
   const errors = useActionData() as ICreateOrderErrors | undefined;
   // const { getPosition, address } = useGeolocation();
@@ -94,6 +95,7 @@ function CreateOrder() {
   const isSubmitting = state === "submitting";
 
   const { cart } = useAppSelector(getCart);
+  const position = useAppSelector(getUserPosition);
 
   if (!cart.length) return <EmptyCart />;
 
@@ -136,14 +138,14 @@ function CreateOrder() {
               className="w-full input"
               disabled={isLoadingAddress}
             />
-            {errors?.phone && (
+            {addressStatus === "error" && (
               <p className="p-2 mt-2 text-xs text-red-700 bg-red-100 rounden-md">
-                {errors.phone}
+                {addressError}
               </p>
             )}
           </div>
           {!address && (
-            <span className="absolute right-[5px] z-50">
+            <span className="absolute right-[5px] z-50 top-[5px]">
               <Button
                 action={() => {
                   dispatch(provideAddress());
@@ -169,6 +171,7 @@ function CreateOrder() {
           <label htmlFor="priority">Want to yo give your order priority?</label>
         </div>
         <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+        <input type="hidden" name="position" value={JSON.stringify(position)} />
 
         <div>
           <Button type="primary" disabled={isSubmitting || isLoadingAddress}>

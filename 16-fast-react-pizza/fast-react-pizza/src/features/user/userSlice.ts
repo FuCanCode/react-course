@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store/store";
 import { getAddress } from "../../services/apiGeocoding";
-import { action } from "../order/CreateOrder";
 
 export const provideAddress = createAsyncThunk(
   "user/provideAddress",
@@ -15,7 +14,7 @@ export const provideAddress = createAsyncThunk(
 interface User {
   userName: string;
   address: string;
-  status: "idle" | "loading";
+  status: "idle" | "loading" | "error";
   position: {
     latitude: number | undefined;
     longitude: number | undefined;
@@ -56,7 +55,7 @@ const userSlice = createSlice({
     builder.addCase(provideAddress.rejected, (state, action) => {
       state.error =
         action.error.message || "Something went wrong on getting the address.";
-      state.status = "idle";
+      state.status = "error";
     });
   },
 });
@@ -66,6 +65,7 @@ export const { setName } = userSlice.actions;
 export const getUser = (state: RootState) => state.user;
 export const getUserName = (state: RootState) => state.user.userName;
 export const getUserAddress = (state: RootState) => state.user.address;
+export const getUserPosition = (state: RootState) => state.user.position;
 
 export default userSlice.reducer;
 

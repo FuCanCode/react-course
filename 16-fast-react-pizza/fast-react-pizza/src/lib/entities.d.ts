@@ -36,6 +36,10 @@ declare global {
     address: string;
     priority: boolean;
     cart: ICartItem[];
+    position?: {
+      latitude: number;
+      longitude: number;
+    };
   }
 
   export interface IOrderResponse extends Omit<IOrderRequest, "cart"> {
