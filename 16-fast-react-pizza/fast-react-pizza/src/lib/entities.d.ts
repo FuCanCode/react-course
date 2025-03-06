@@ -36,10 +36,7 @@ declare global {
     address: string;
     priority: boolean;
     cart: ICartItem[];
-    position?: {
-      latitude: number;
-      longitude: number;
-    };
+    position?: string;
   }
 
   export interface IOrderResponse extends Omit<IOrderRequest, "cart"> {
@@ -47,9 +44,13 @@ declare global {
     status?: string;
     cart: ICartItemResponse[];
     estimatedDelivery: string;
-    position: string;
+    position?: string;
     orderPrice: number;
     priorityPrice: number;
+  }
+
+  export interface IOrderUpdate {
+    priority: boolean;
   }
 }
 

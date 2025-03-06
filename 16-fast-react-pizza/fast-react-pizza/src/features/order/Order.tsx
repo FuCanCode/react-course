@@ -9,11 +9,12 @@ import {
 } from "../../utils/helpers";
 import OrderItem from "./OrderItem";
 import { useEffect } from "react";
+import UpdateOrder from "./UpdateOrder";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const id = params.orderId;
 
-  if (!id) throw new Error("The loader did't get an ID.");
+  if (!id) throw new Error("The loader didn't get an ID.");
 
   const data: IOrderResponse = await getOrder(id);
 
@@ -30,6 +31,8 @@ function Order() {
     }
   }, [fetcher]);
 
+  const order = useLoaderData() as IOrderResponse;
+
   const {
     id,
     status,
@@ -38,7 +41,7 @@ function Order() {
     orderPrice,
     estimatedDelivery,
     cart,
-  } = useLoaderData() as IOrderResponse;
+  } = order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
@@ -96,6 +99,7 @@ function Order() {
           To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}
         </p>
       </div>
+      <UpdateOrder order={order} />
     </div>
   );
 }

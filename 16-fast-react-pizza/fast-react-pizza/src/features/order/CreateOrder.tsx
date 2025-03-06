@@ -17,7 +17,7 @@ export interface ICreateOrderErrors {
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str: string) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
-    str,
+    str
   );
 
 /* const fakeCart = [
@@ -56,7 +56,7 @@ export const action: ActionFunction = async ({ request }) => {
     address: data.address,
     cart: JSON.parse(data.cart),
     priority: data.priority === "true",
-    position: JSON.parse(data.position),
+    position: data.position,
   };
 
   console.log(order);
@@ -171,13 +171,23 @@ function CreateOrder() {
           <label htmlFor="priority">Want to yo give your order priority?</label>
         </div>
         <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-        <input type="hidden" name="position" value={JSON.stringify(position)} />
+        <input
+          type="hidden"
+          name="position"
+          value={
+            position.longitude && position.latitude
+              ? `${position.latitude},${position.longitude}`
+              : ""
+          }
+        />
 
         <div>
           <Button type="primary" disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting
               ? "Placing your Order..."
-              : `Order now for ${formatCurrency(withPriority ? price * 1.2 : price)}`}
+              : `Order now for ${formatCurrency(
+                  withPriority ? price * 1.2 : price
+                )}`}
           </Button>
         </div>
       </Form>
