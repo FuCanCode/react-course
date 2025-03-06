@@ -13,9 +13,12 @@ function OrderItem(props: OrderItemProps) {
   return (
     <li className="py-3">
       <div className="flex justify-between gap-4 text-sm items-between">
+        <div className="space-y-3">
         <p>
           <span className="font-bold">{quantity}&times;</span> {name}
         </p>
+        {ingredients && <p className="italic capitalize font-light">{ingredients.join(", ")}</p>}
+        </div>
         <p className="font-bold">{formatCurrency(totalPrice)}</p>
       </div>
     </li>

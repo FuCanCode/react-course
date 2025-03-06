@@ -22,18 +22,18 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 function Order() {
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
-  /* const [menu, setMenu] = useState<IMenu>();
+  const [menu, setMenu] = useState<IMenu>();
   const fetcher = useFetcher();
 
   useEffect(() => {
-    if (!menu && !fetcher.data) {
+    if (!menu && !fetcher.data && fetcher.state === "idle") {
       fetcher.load("/menu");
     } else {
-      console.log(fetcher.data);
+      if (fetcher.data) setMenu(fetcher.data)
     }
   }, [fetcher]);
 
-  console.log(menu); */
+  console.log(menu);
 
   const {
     id,
@@ -76,7 +76,7 @@ function Order() {
 
       <ul className="border-t border-b divide-y divide-stone-200">
         {cart.map((item) => (
-          <OrderItem item={item} key={item.pizzaId} />
+          <OrderItem item={item} key={item.pizzaId} ingredients={menu?.find(menuItem => menuItem.id === item.pizzaId)?.ingredients}/>
         ))}
       </ul>
 
