@@ -8,7 +8,7 @@ import {
   formatDate,
 } from "../../utils/helpers";
 import OrderItem from "./OrderItem";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const id = params.orderId;
@@ -22,18 +22,13 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 function Order() {
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
-  const [menu, setMenu] = useState<IMenu>();
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<IMenu>();
 
   useEffect(() => {
-    if (!menu && !fetcher.data && fetcher.state === "idle") {
+    if (!fetcher.data && fetcher.state === "idle") {
       fetcher.load("/menu");
-    } else {
-      if (fetcher.data) setMenu(fetcher.data)
     }
   }, [fetcher]);
-
-  console.log(menu);
 
   const {
     id,
@@ -76,7 +71,15 @@ function Order() {
 
       <ul className="border-t border-b divide-y divide-stone-200">
         {cart.map((item) => (
-          <OrderItem item={item} key={item.pizzaId} ingredients={menu?.find(menuItem => menuItem.id === item.pizzaId)?.ingredients}/>
+          <OrderItem
+            item={item}
+            key={item.pizzaId}
+            isLoadingIngredients={fetcher.state === "loading"}
+            ingredients={
+              fetcher.data?.find((menuItem) => menuItem.id === item.pizzaId)
+                ?.ingredients
+            }
+          />
         ))}
       </ul>
 
