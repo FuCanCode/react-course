@@ -44,3 +44,17 @@ const Link = styled.a`
     color: var(--color-brand-600);
   }
 `;
+
+export default function MainNav() {
+  const navLinks = ["home", "bookings", "cabins", "users", "settings"];
+
+  return (
+    <NavList>
+      {navLinks.map((l) => (
+        <li>
+          <Link href={`/${l}`}>{l[0].toUpperCase() + l.slice(1)}</Link>
+        </li>
+      ))}
+    </NavList>
+  );
+}
