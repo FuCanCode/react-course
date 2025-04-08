@@ -1,9 +1,26 @@
 import AppRouter from "./routes/router";
 import { GlobalStyles } from "./styles/GlobalStyles";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+    },
+  },
+});
 
 function App() {
-
-  return <><GlobalStyles /><AppRouter /></>;
+  return (
+    <>
+      <QueryClientProvider client={queryClient}>
+        <GlobalStyles />
+        <AppRouter />
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </>
+  );
 }
 
 export default App;

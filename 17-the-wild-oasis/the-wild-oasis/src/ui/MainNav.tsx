@@ -1,4 +1,12 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import {
+  HiOutlineCalendarDays,
+  HiOutlineCog8Tooth,
+  HiOutlineHome,
+  HiOutlineHomeModern,
+  HiOutlineUsers,
+} from "react-icons/hi2";
 
 const NavList = styled.ul`
   display: flex;
@@ -6,7 +14,7 @@ const NavList = styled.ul`
   gap: 0.8rem;
 `;
 
-const Link = styled.a`
+const StyledNavLink = styled(NavLink)`
   &:link,
   &:visited {
     display: flex;
@@ -45,16 +53,31 @@ const Link = styled.a`
   }
 `;
 
-export default function MainNav() {
-  const navLinks = ["home", "bookings", "cabins", "users", "settings"];
+const navLinks = [
+  { path: "dashboard", displayName: "Home", icon: <HiOutlineHome /> },
+  {
+    path: "bookings",
+    displayName: "Boolings",
+    icon: <HiOutlineCalendarDays />,
+  },
+  { path: "cabins", displayName: "Cabins", icon: <HiOutlineHomeModern /> },
+  { path: "users", displayName: "Users", icon: <HiOutlineUsers /> },
+  { path: "settings", displayName: "Settings", icon: <HiOutlineCog8Tooth /> },
+];
 
+export default function MainNav() {
   return (
-    <NavList>
-      {navLinks.map((l) => (
-        <li>
-          <Link href={`/${l}`}>{l[0].toUpperCase() + l.slice(1)}</Link>
-        </li>
-      ))}
-    </NavList>
+    <nav>
+      <NavList>
+        {navLinks.map(({ displayName, path, icon }, i) => (
+          <li key={i}>
+            <StyledNavLink to={path} >
+              {icon}
+              {displayName}
+            </StyledNavLink>
+          </li>
+        ))}
+      </NavList>
+    </nav>
   );
 }

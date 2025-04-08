@@ -3,10 +3,12 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Bookings from "../pages/Bookings";
 import Cabins from "../pages/Cabins";
+import Users from "../pages/Users";
 import PageNotFound from "../pages/PageNotFound";
 import ProtectedRoutes from "./ProtectedRoutes";
 import Account from "../pages/Account";
 import AppLayout from "../ui/AppLayout";
+import Settings from "../pages/Settings";
 
 export default function AppRouter() {
   return (
@@ -21,6 +23,8 @@ export default function AppRouter() {
             <Route path="bookings" element={<Bookings />} />
             <Route path="cabins" element={<Cabins />} />
             <Route path="account" element={<Account />} />
+            <Route path="users" element={<Users />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Route>
 
