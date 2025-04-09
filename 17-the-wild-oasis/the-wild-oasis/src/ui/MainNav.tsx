@@ -57,7 +57,7 @@ const navLinks = [
   { path: "dashboard", displayName: "Home", icon: <HiOutlineHome /> },
   {
     path: "bookings",
-    displayName: "Boolings",
+    displayName: "Bookings",
     icon: <HiOutlineCalendarDays />,
   },
   { path: "cabins", displayName: "Cabins", icon: <HiOutlineHomeModern /> },
@@ -71,7 +71,7 @@ export default function MainNav() {
       <NavList>
         {navLinks.map(({ displayName, path, icon }, i) => (
           <li key={i}>
-            <StyledNavLink to={path} >
+            <StyledNavLink to={path}>
               {icon}
               {displayName}
             </StyledNavLink>

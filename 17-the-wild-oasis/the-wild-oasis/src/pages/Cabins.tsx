@@ -8,7 +8,7 @@ function Cabins() {
       <Row $layout="horizontal">
         <Heading as="h1">All cabins</Heading>
       </Row>
-      <Row $layout="horizontal">
+      <Row>
         <CabinTable />
       </Row>
     </>
