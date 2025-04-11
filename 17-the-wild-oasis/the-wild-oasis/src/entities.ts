@@ -9,6 +9,8 @@ type Cabin = {
   regularPrice: number;
 };
 
+type NewCabin = Omit<Cabin, "id" | "created_at">;
+
 type Guest = {
   countryFlag?: string;
   email: string;
@@ -45,4 +47,4 @@ type Settings = {
   minBookingLength: number;
 };
 
-export type { Cabin, Guest, Booking, Settings };
+export type { Cabin, NewCabin, Guest, Booking, Settings };
